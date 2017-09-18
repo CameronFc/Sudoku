@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     
     // The controller we talk to that handles all the business of the app
     let delegate : GameControllerDelegate!
@@ -20,28 +20,22 @@ class ViewController: UIViewController {
         
         view.backgroundColor = .cyan
         let gridViewController = GridViewController()
-        gridViewController.view.backgroundColor = .green
+        let boardView = gridViewController.view!
         view.addSubview(gridViewController.view)
-        gridViewController.view.translatesAutoresizingMaskIntoConstraints = false
-        gridViewController.view.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -50).isActive = true
-        gridViewController.view.heightAnchor.constraint(equalTo: view.heightAnchor, constant: -50).isActive = true
-        gridViewController.view.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        gridViewController.view.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        gridViewController.view.setNeedsUpdateConstraints()
         
+        boardView.translatesAutoresizingMaskIntoConstraints = false // GET WRECKED STORYBOARD
+        boardView.backgroundColor = .green
         
-        let label = UILabel()
-        view.addSubview(label)
-        label.text = "Test"
-        label.backgroundColor = .red
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor).isActive = true
-        label.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 50.0).isActive = true
-        label.setNeedsUpdateConstraints()
+        // MARK : Constraints
+        NSLayoutConstraint.activate([
+            boardView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -50),
+            boardView.widthAnchor.constraint(equalTo: boardView.heightAnchor), // Make sure the board is always square!
+            boardView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            boardView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        boardView.setNeedsUpdateConstraints()
         
-        view.setNeedsLayout()
-        
-        
+        view.setNeedsUpdateConstraints()
     }
 
     override func didReceiveMemoryWarning() {
