@@ -8,25 +8,41 @@
 
 import UIKit
 
-class GridViewController: UIViewController {
+final class GridViewController: UIViewController {
+    
+    var gridView : GridView<UIView>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         
-        for x in 0..<9 {
-            for y in 0..<9 {
-                let gridCell = UILabel()
-                gridCell.text = "\(x * 9 + y)"
-                view.addSubview(gridCell)
-                gridCell.translatesAutoresizingMaskIntoConstraints = false
-                gridCell.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor).isActive = true
-                gridCell.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: CGFloat(x * 50)).isActive = true
-                gridCell.backgroundColor = .red
-                gridCell.setNeedsUpdateConstraints()
+        var cellContainers = [UIView]()
+        
+        for y in 0..<9 {
+            for x in 0..<9 {
+                let gridLabel = UILabel()
+                let cellContainer = UIView()
+                cellContainer.addSubview(gridLabel)
+                
+                // MARK: Constraints
+                NSLayoutConstraint.activate([
+                    gridLabel.leadingAnchor.constraint(equalTo: cellContainer.leadingAnchor),
+                    gridLabel.topAnchor.constraint(equalTo: cellContainer.topAnchor)
+                    ])
+                gridLabel.translatesAutoresizingMaskIntoConstraints = false
+                gridLabel.setNeedsUpdateConstraints()
+                
+                gridLabel.text = ""//"\(y * 9 + x)"
+                gridLabel.backgroundColor = .red
+                
+                cellContainers.append(cellContainer)
             }
         }
+        
+        gridView = GridView<UIView>(frame: view.frame, cells: cellContainers, numCells: (9,9), options: [])
+        view.addSubview(gridView!)
+        
         view.setNeedsUpdateConstraints()
     }
 
