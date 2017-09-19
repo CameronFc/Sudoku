@@ -32,6 +32,8 @@ final class BoardViewController: UICollectionViewController {
         self.collectionView?.minimumZoomScale = 0.5
         self.collectionView?.maximumZoomScale = 2.0
         
+        self.collectionView?.pinchGestureRecognizer?.isEnabled = false
+        
         //collectionView?.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             (collectionView?.trailingAnchor.constraint(equalTo: view.trailingAnchor))!,
@@ -41,6 +43,8 @@ final class BoardViewController: UICollectionViewController {
             ])
         
         collectionView?.layer.borderWidth = 3.0
+        
+        collectionView?.isUserInteractionEnabled = false
         
         board = Board(size: 9)
         collectionView?.backgroundColor = .green
@@ -127,6 +131,11 @@ extension BoardViewController {
     }
     
     override func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return view
+        return nil
     }
+   /*
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        return false
+    }
+ */
 }
