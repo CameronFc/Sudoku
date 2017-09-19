@@ -14,9 +14,16 @@ fileprivate let sectionInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
 final class BoardViewController: UICollectionViewController {
     
     var board : Board?
+    
+    override func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return self.view
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.collectionView?.minimumZoomScale = 0.5
+        self.collectionView?.maximumZoomScale = 3.0
         
         //collectionView?.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
