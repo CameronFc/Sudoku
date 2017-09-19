@@ -10,17 +10,19 @@ import UIKit
 
 final class GridViewController: UIViewController {
     
-    var gridView : GridView<UIView>?
+    var gridView : UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        gridView = UICollectionView(frame: view.frame)
 
         // Do any additional setup after loading the view.
         
         var cellContainers = [UIView]()
         
-        for y in 0..<9 {
-            for x in 0..<9 {
+        for _ in 0..<9 {
+            for _ in 0..<9 {
                 let gridLabel = UILabel()
                 let cellContainer = UIView()
                 cellContainer.addSubview(gridLabel)
@@ -40,7 +42,7 @@ final class GridViewController: UIViewController {
             }
         }
         
-        gridView = GridView<UIView>(frame: view.frame, cells: cellContainers, numCells: (9,9), options: [])
+        //gridView = GridView<UIView>(frame: view.frame, cells: cellContainers, numCells: (9,9), options: [])
         view.addSubview(gridView!)
         
         view.setNeedsUpdateConstraints()

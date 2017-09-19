@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7E110D7E1F6C9BF6006B5626 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E110D7D1F6C9BF6006B5626 /* GridView.swift */; };
+		7E110D801F704658006B5626 /* BoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E110D7F1F704658006B5626 /* BoardViewController.swift */; };
 		7EAE3C1B1F6C32D4006195AB /* MainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAE3C1A1F6C32D4006195AB /* MainController.swift */; };
 		7EAE3C1D1F6C3346006195AB /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAE3C1C1F6C3346006195AB /* Persistence.swift */; };
 		7EAE3C1F1F6C3426006195AB /* UIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAE3C1E1F6C3426006195AB /* UIController.swift */; };
@@ -41,6 +42,7 @@
 
 /* Begin PBXFileReference section */
 		7E110D7D1F6C9BF6006B5626 /* GridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
+		7E110D7F1F704658006B5626 /* BoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardViewController.swift; sourceTree = "<group>"; };
 		7EAE3C1A1F6C32D4006195AB /* MainController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainController.swift; sourceTree = "<group>"; };
 		7EAE3C1C1F6C3346006195AB /* Persistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		7EAE3C1E1F6C3426006195AB /* UIController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIController.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				7EAE3C2A1F6C3B65006195AB /* GridCell.swift */,
 				7EAE3C2C1F6C3BA1006195AB /* GridViewController.swift */,
 				7E110D7D1F6C9BF6006B5626 /* GridView.swift */,
+				7E110D7F1F704658006B5626 /* BoardViewController.swift */,
 			);
 			path = Sudoku;
 			sourceTree = "<group>";
@@ -288,6 +291,7 @@
 				7EAE3C1F1F6C3426006195AB /* UIController.swift in Sources */,
 				7E110D7E1F6C9BF6006B5626 /* GridView.swift in Sources */,
 				7EAE3C2B1F6C3B65006195AB /* GridCell.swift in Sources */,
+				7E110D801F704658006B5626 /* BoardViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
