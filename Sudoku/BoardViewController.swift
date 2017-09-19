@@ -14,17 +14,23 @@ fileprivate let sectionInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
 final class BoardViewController: UICollectionViewController {
     
     var board : Board?
-    fileprivate var scale : CGFloat?
+    
+    var superScrollView : UIView?
+    
+    init(superScrollView : UIView, collectionViewLayout layout: UICollectionViewLayout) {
+        self.superScrollView = superScrollView
+        super.init(collectionViewLayout: layout)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.collectionView?.minimumZoomScale = 0.5
         self.collectionView?.maximumZoomScale = 2.0
-        
-        scale = 1.0
-        let recognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(gesture:)))
-        collectionView?.addGestureRecognizer(recognizer)
         
         //collectionView?.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -89,7 +95,7 @@ extension BoardViewController : UICollectionViewDelegateFlowLayout {
         let availableWidth = view.frame.width - paddingSpace
         let widthPerItem = CGFloat(availableWidth / 9.0)
         
-        return CGSize(width : widthPerItem * scale!, height : widthPerItem * scale!)
+        return CGSize(width : widthPerItem, height : widthPerItem)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -116,25 +122,11 @@ extension BoardViewController : UICollectionViewDelegateFlowLayout {
 
 // Scrolling
 extension BoardViewController {
-
-    /*
- 
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
     override func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return view
-    }
-    */
-    
-    override func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        self.view.setNeedsUpdateConstraints()
-    }
-    
-    func handlePinchGesture(gesture : UIPinchGestureRecognizer) {
-        var scaleStart : CGFloat = 1.0
-        if(gesture.state == .began) {
-            scaleStart = scale!
-        } else if (gesture.state == .changed) {
-            scale = scaleStart * gesture.scale
-            collectionView?.collectionViewLayout.invalidateLayout()
-        }
     }
 }
