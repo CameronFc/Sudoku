@@ -40,8 +40,8 @@ final class ViewController: UIViewController {
         scrollView.addSubview(dumpsterView)
         dumpsterView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            dumpsterView.widthAnchor.constraint(greaterThanOrEqualToConstant: 100),
-            dumpsterView.heightAnchor.constraint(greaterThanOrEqualToConstant: 100),
+            //dumpsterView.widthAnchor.constraint(greaterThanOrEqualToConstant: 100),
+            //dumpsterView.heightAnchor.constraint(greaterThanOrEqualToConstant: 100),
             dumpsterView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             dumpsterView.topAnchor.constraint(equalTo: scrollView.topAnchor)
         ])
@@ -136,7 +136,7 @@ extension ViewController : UIGestureRecognizerDelegate {
 extension ViewController : UIScrollViewDelegate {
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return dumpsterView
+        return boardView
     }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
