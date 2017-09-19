@@ -14,16 +14,17 @@ fileprivate let sectionInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
 final class BoardViewController: UICollectionViewController {
     
     var board : Board?
-    
-    override func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return self.view
-    }
+    fileprivate var scale : CGFloat?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.collectionView?.minimumZoomScale = 0.5
-        self.collectionView?.maximumZoomScale = 3.0
+        self.collectionView?.maximumZoomScale = 2.0
+        
+        scale = 1.0
+        let recognizer = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(gesture:)))
+        collectionView?.addGestureRecognizer(recognizer)
         
         //collectionView?.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -44,8 +45,6 @@ final class BoardViewController: UICollectionViewController {
         // Register cell classes
         self.collectionView!.register(GridCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         self.collectionView?.reloadData()
-
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
@@ -53,79 +52,33 @@ final class BoardViewController: UICollectionViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-   /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
+    override func viewWillLayoutSubviews() {
+        //print("doing viewWillLayoutSubviews in boardController")
+        super.viewWillLayoutSubviews()
     }
-    */
+}
 
-    // MARK: UICollectionViewDataSource
-
+// MARK: UICollectionViewDataSource
+extension BoardViewController {
+    
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
         //return board?.totalItems ?? 0
         return 81
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-        //let cell = GridCell(frame : view.frame)
         if let gridCell = cell as? GridCell {
             gridCell.label.text = "\(arc4random_uniform(9) + 1)"
             return gridCell
         }
-        // Configure the cell
         return cell
     }
-    
-    override func viewWillLayoutSubviews() {
-        print("doing viewWillLayoutSubviews in boardController")
-        super.viewWillLayoutSubviews()
-    }
-    
-    
-
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */
-
 }
 
 extension BoardViewController : UICollectionViewDelegateFlowLayout {
@@ -136,7 +89,7 @@ extension BoardViewController : UICollectionViewDelegateFlowLayout {
         let availableWidth = view.frame.width - paddingSpace
         let widthPerItem = CGFloat(availableWidth / 9.0)
         
-        return CGSize(width : widthPerItem, height : widthPerItem)
+        return CGSize(width : widthPerItem * scale!, height : widthPerItem * scale!)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -159,4 +112,29 @@ extension BoardViewController : UICollectionViewDelegateFlowLayout {
         return CGSize(width : 0, height : 0)
     }
     
+}
+
+// Scrolling
+extension BoardViewController {
+
+    /*
+ 
+    override func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return view
+    }
+    */
+    
+    override func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        self.view.setNeedsUpdateConstraints()
+    }
+    
+    func handlePinchGesture(gesture : UIPinchGestureRecognizer) {
+        var scaleStart : CGFloat = 1.0
+        if(gesture.state == .began) {
+            scaleStart = scale!
+        } else if (gesture.state == .changed) {
+            scale = scaleStart * gesture.scale
+            collectionView?.collectionViewLayout.invalidateLayout()
+        }
+    }
 }
