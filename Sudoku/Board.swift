@@ -6,22 +6,25 @@
 //  Copyright © 2017 Cameron Francis. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 final class Board {
     
     let width : Int
-    private var boardArray : [Int?]
+    var totalItems : Int {
+        return (width * width)
+    }
+    var boardArray : [Int?]
     
     init(size : Int) {
         boardArray = [Int?]()
         width = size
-        for _ in 0..<(size * size) {
+        for _ in 0..<totalItems {
             boardArray.append(nil)
         }
     }
     
-    func at(_ x : Int, _ y : Int) -> Int? {
+    private func at(_ x : Int, _ y : Int) -> Int? {
         guard x < boardArray.count
             && x >= 0
             && y < boardArray.count
@@ -35,3 +38,5 @@ final class Board {
         return self.at(x, y)
     }
 }
+
+

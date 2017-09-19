@@ -12,6 +12,10 @@ final class ViewController: UIViewController {
     
     // The controller we talk to that handles all the business of the app
     let delegate : GameControllerDelegate!
+    
+    var boardView : UIView!
+    
+    var boardViewController : BoardViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,21 +23,22 @@ final class ViewController: UIViewController {
         //delegate.newGame()
         
         view.backgroundColor = .cyan
-        let gridViewController = GridViewController()
-        let boardView = gridViewController.view!
-        view.addSubview(gridViewController.view)
-        
+        let viewLayout = UICollectionViewFlowLayout()
+        //viewLayout.itemSize = CGSize(width: 20, height: 20)
+        boardViewController = BoardViewController(collectionViewLayout: viewLayout)
+        boardView = boardViewController!.view!
+        view.addSubview(boardView)
+       
         boardView.translatesAutoresizingMaskIntoConstraints = false // GET WRECKED STORYBOARD
-        boardView.backgroundColor = .green
-        
         // MARK : Constraints
         NSLayoutConstraint.activate([
-            boardView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -50),
+            boardView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -5),
             boardView.widthAnchor.constraint(equalTo: boardView.heightAnchor), // Make sure the board is always square!
             boardView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             boardView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
         boardView.setNeedsUpdateConstraints()
+        
         
         view.setNeedsUpdateConstraints()
     }
@@ -41,6 +46,17 @@ final class ViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewWillLayoutSubviews() {
+        boardViewController?.collectionView?.reloadData()
+        super.viewWillLayoutSubviews()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        print("After layoutSubviews in ViewController")
+        print("ViewController's child, UICollectionViewContainer, has frame: \(boardView.frame)'")
+        super.viewDidLayoutSubviews()
     }
     
     init(delegate : GameControllerDelegate) {
