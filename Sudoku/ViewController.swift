@@ -19,6 +19,8 @@ final class ViewController: UIViewController {
     var dumpsterView : UIView!
     
     var boardViewController : BoardViewController?
+    
+    var lastLoaction : CGPoint = CGPoint(x: 0, y: 0)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,12 +82,24 @@ final class ViewController: UIViewController {
         scrollView.maximumZoomScale = 2.0
         scrollView.bouncesZoom = false
         scrollView.delegate = self
-        let panRecogizer = UIPanGestureRecognizer(target: self, action: #selector(panHandler))
-        scrollView.gestureRecognizers?.append(panRecogizer)
+        //let panRecogizer = UIPanGestureRecognizer(target: self, action: #selector(panHandler))
+        //let touchRecognizer = UIGestureRecognizer(target: self, action: #selector(touchHandler))
+        //scrollView.addGestureRecognizer(panRecogizer)
+        //scrollView.addGestureRecognizer(touchRecognizer)
+    }
+    
+    func touchHandler(recognizer : UIGestureRecognizer) {
+        print("Touch handler called!")
+        if(recognizer.state == .began) {
+            print(boardView.center)
+        }
+        //lastLoaction = boardView.center
     }
     
     func panHandler(recognizer : UIPanGestureRecognizer) {
-        print("Just detected pan event")
+        let translation = recognizer.translation(in: view)
+        boardView.center = CGPoint(x: lastLoaction.x + translation.x, y: lastLoaction.y + translation.y)
+        print(boardView.center)
     }
 
     override func didReceiveMemoryWarning() {
