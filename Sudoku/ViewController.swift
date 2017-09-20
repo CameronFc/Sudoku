@@ -54,7 +54,9 @@ final class ViewController: UIViewController {
             boardView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             boardView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             boardView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            boardView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+            boardView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
+            boardView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            boardView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
         ])
         boardView.setNeedsUpdateConstraints()
         boardView.backgroundColor = .yellow
@@ -74,9 +76,16 @@ final class ViewController: UIViewController {
         //let recognizer = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(gesture:)))
         //recognizer.delegate = self
         //view.addGestureRecognizer(recognizer)
-        scrollView.minimumZoomScale = 0.5
+        scrollView.minimumZoomScale = 1.0
         scrollView.maximumZoomScale = 2.0
+        scrollView.bouncesZoom = false
         scrollView.delegate = self
+        let panRecogizer = UIPanGestureRecognizer(target: self, action: #selector(panHandler))
+        scrollView.gestureRecognizers?.append(panRecogizer)
+    }
+    
+    func panHandler(recognizer : UIPanGestureRecognizer) {
+        print("Just detected pan event")
     }
 
     override func didReceiveMemoryWarning() {
