@@ -35,10 +35,9 @@ final class BoardViewController: UICollectionViewController {
         
         self.collectionView?.removeGestureRecognizer((collectionView?.pinchGestureRecognizer)!)
         
-        collectionView?.allowsMultipleSelection = true
+        collectionView?.allowsMultipleSelection = false
         
         //self.collectionView?.pinchGestureRecognizer?.isEnabled = false
-        
         
         collectionView?.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -104,6 +103,12 @@ extension BoardViewController {
         print("Selected \(indexPath.description)")
         if let selectedCell = collectionView.cellForItem(at: indexPath) as? GridCell {
             selectedCell.layer.borderColor = UIColor.magenta.cgColor
+        }
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if let selectedCell = collectionView.cellForItem(at: indexPath) as? GridCell {
+            selectedCell.layer.borderColor = UIColor.black.cgColor
         }
     }
     

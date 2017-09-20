@@ -18,9 +18,14 @@ final class ViewController: UIViewController {
     
     var dumpsterView : UIView!
     
+    var scrollView : UIScrollView!
+    
     var boardViewController : BoardViewController?
     
     var lastLoaction : CGPoint = CGPoint(x: 0, y: 0)
+    
+    var scrollViewWidthConstraint : NSLayoutConstraint?
+    var scrollViewHeightConstraint : NSLayoutConstraint?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,12 +37,13 @@ final class ViewController: UIViewController {
         let viewLayout = UICollectionViewFlowLayout()
         //viewLayout.itemSize = CGSize(width: 20, height: 20)
         
-        let scrollView = UIScrollView()
+        scrollView = UIScrollView()
         boardViewController = BoardViewController(superScrollView : scrollView, collectionViewLayout: viewLayout)
         boardView = boardViewController!.view!
         view.addSubview(scrollView)
         scrollView.addSubview(boardView)
         
+        /*
         dumpsterView = UIView()
         scrollView.addSubview(dumpsterView)
         dumpsterView.translatesAutoresizingMaskIntoConstraints = false
@@ -49,7 +55,8 @@ final class ViewController: UIViewController {
         ])
         dumpsterView.setNeedsLayout()
         dumpsterView.backgroundColor = .brown
-       
+        */
+        
         boardView.translatesAutoresizingMaskIntoConstraints = false
         // MARK : Constraints
         NSLayoutConstraint.activate([
@@ -65,11 +72,12 @@ final class ViewController: UIViewController {
        
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -5),
             scrollView.widthAnchor.constraint(equalTo: scrollView.heightAnchor), // Make sure the board is always square!
             scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             scrollView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+        scrollViewWidthConstraint = scrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -5)
+        scrollViewHeightConstraint = scrollView.heightAnchor.constraint(equalTo: view.heightAnchor, constant : -5)
         scrollView.setNeedsUpdateConstraints()
         scrollView.backgroundColor = .blue
         
@@ -110,6 +118,13 @@ final class ViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         boardViewController?.collectionView?.reloadData()
         super.viewWillLayoutSubviews()
+        if(view.bounds.width < view.bounds.height) {
+            scrollViewHeightConstraint!.isActive = false
+            scrollViewWidthConstraint!.isActive = true
+        } else {
+            scrollViewWidthConstraint!.isActive = false
+            scrollViewHeightConstraint!.isActive = true
+        }
     }
     
     override func viewDidLayoutSubviews() {
