@@ -47,7 +47,7 @@ final class BoardViewController: UICollectionViewController {
             (collectionView?.topAnchor.constraint(equalTo: view.topAnchor))!
             ])
         
-        collectionView?.layer.borderWidth = 3.0
+        //collectionView?.layer.borderWidth = 3.0
         
         //collectionView?.isUserInteractionEnabled = false
         
@@ -102,7 +102,11 @@ extension BoardViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("Selected \(indexPath.description)")
         if let selectedCell = collectionView.cellForItem(at: indexPath) as? GridCell {
-            selectedCell.layer.borderColor = UIColor.magenta.cgColor
+            if(selectedCell.layer.borderColor == UIColor.magenta.cgColor) {
+                selectedCell.layer.borderColor = UIColor.black.cgColor
+            } else {
+                selectedCell.layer.borderColor = UIColor.magenta.cgColor
+            }
         }
     }
     

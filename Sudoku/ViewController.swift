@@ -59,30 +59,46 @@ final class ViewController: UIViewController {
         dumpsterView.backgroundColor = .brown
         */
         
-        boardView.translatesAutoresizingMaskIntoConstraints = false
+        //boardView.translatesAutoresizingMaskIntoConstraints = false
         // MARK : Constraints
+        
         NSLayoutConstraint.activate([
-            boardView.widthAnchor.constraint(equalTo: boardView.heightAnchor)
+            //boardView.widthAnchor.constraint(equalTo: boardView.heightAnchor)
+            boardView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            boardView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            boardView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            boardView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
         ])
-        boardViewCenterXConstraint = boardView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
-        boardViewCenterYConstraint = boardView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor)
-        boardViewCenterXConstraint?.isActive = true
-        boardViewCenterYConstraint?.isActive = true
+        
+        
+        //boardViewCenterXConstraint = boardView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
+        //boardViewCenterYConstraint = boardView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor)
+        //boardViewCenterXConstraint?.isActive = true
+        //boardViewCenterYConstraint?.isActive = true
+        boardView.translatesAutoresizingMaskIntoConstraints = false
+        boardView.widthAnchor.constraint(equalToConstant: 320).isActive = true
+        boardView.heightAnchor.constraint(equalToConstant: 320).isActive = true
         
         boardView.setNeedsUpdateConstraints()
         boardView.backgroundColor = .yellow
        
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            scrollView.widthAnchor.constraint(equalTo: scrollView.heightAnchor), // Make sure the board is always square!
-            scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            scrollView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            scrollView.heightAnchor.constraint(equalTo: view.heightAnchor)
+            //scrollView.widthAnchor.constraint(equalTo: scrollView.heightAnchor), // Make sure the board is always square!
+            //scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            //scrollView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            //scrollView.heightAnchor.constraint(equalTo: view.heightAnchor)
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-        boardViewWidthConstraint = boardView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -5)
-        boardViewHeightConstraint = boardView.heightAnchor.constraint(equalTo: view.heightAnchor, constant : -5)
+        //boardViewWidthConstraint = boardView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -5)
+        //boardViewHeightConstraint = boardView.heightAnchor.constraint(equalTo: view.heightAnchor, constant : -5)
         scrollView.setNeedsUpdateConstraints()
         scrollView.backgroundColor = .blue
+        //scrollView.contentOffset = CGPoint(x : 320, y : 0)
+        scrollView.contentSize = CGSize(width: 320 * 2, height : 320 * 2)
         
         view.setNeedsUpdateConstraints()
         
@@ -121,6 +137,7 @@ final class ViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         boardViewController?.collectionView?.reloadData()
         super.viewWillLayoutSubviews()
+        /*
         if(view.bounds.width < view.bounds.height) {
             boardViewHeightConstraint!.isActive = false
             boardViewWidthConstraint!.isActive = true
@@ -128,12 +145,30 @@ final class ViewController: UIViewController {
             boardViewWidthConstraint!.isActive = false
             boardViewHeightConstraint!.isActive = true
         }
+        */
     }
     
     override func viewDidLayoutSubviews() {
         print("After layoutSubviews in ViewController")
         print("ViewController's child, UICollectionViewContainer, has frame: \(boardView.frame)'")
         super.viewDidLayoutSubviews()
+        
+        let scrollViewBounds = scrollView.bounds
+        let containerViewBounds = boardView.bounds
+        
+        var scrollViewInsets = UIEdgeInsetsMake(0, 0, 0, 0)
+        scrollViewInsets.top = scrollViewBounds.size.height/2.0
+        scrollViewInsets.top -= containerViewBounds.size.height/2.0
+        
+        scrollViewInsets.bottom = scrollViewBounds.size.height/2.0
+        scrollViewInsets.bottom -= containerViewBounds.size.height/2.0
+        scrollViewInsets.bottom += 1
+        
+        scrollViewInsets.left = containerViewBounds.size.width/2.0
+        scrollViewInsets.right = containerViewBounds.size.width/2.0
+        
+        scrollView.contentInset = scrollViewInsets
+        
     }
     
     init(delegate : GameControllerDelegate) {
