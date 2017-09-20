@@ -24,8 +24,10 @@ final class ViewController: UIViewController {
     
     var lastLoaction : CGPoint = CGPoint(x: 0, y: 0)
     
-    var scrollViewWidthConstraint : NSLayoutConstraint?
-    var scrollViewHeightConstraint : NSLayoutConstraint?
+    var boardViewWidthConstraint : NSLayoutConstraint?
+    var boardViewHeightConstraint : NSLayoutConstraint?
+    var boardViewCenterXConstraint : NSLayoutConstraint?
+    var boardViewCenterYConstraint : NSLayoutConstraint?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,13 +62,13 @@ final class ViewController: UIViewController {
         boardView.translatesAutoresizingMaskIntoConstraints = false
         // MARK : Constraints
         NSLayoutConstraint.activate([
-            boardView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            boardView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            boardView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            boardView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
-            boardView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            boardView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
+            boardView.widthAnchor.constraint(equalTo: boardView.heightAnchor)
         ])
+        boardViewCenterXConstraint = boardView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
+        boardViewCenterYConstraint = boardView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor)
+        boardViewCenterXConstraint?.isActive = true
+        boardViewCenterYConstraint?.isActive = true
+        
         boardView.setNeedsUpdateConstraints()
         boardView.backgroundColor = .yellow
        
@@ -74,10 +76,11 @@ final class ViewController: UIViewController {
         NSLayoutConstraint.activate([
             scrollView.widthAnchor.constraint(equalTo: scrollView.heightAnchor), // Make sure the board is always square!
             scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            scrollView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            scrollView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            scrollView.heightAnchor.constraint(equalTo: view.heightAnchor)
         ])
-        scrollViewWidthConstraint = scrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -5)
-        scrollViewHeightConstraint = scrollView.heightAnchor.constraint(equalTo: view.heightAnchor, constant : -5)
+        boardViewWidthConstraint = boardView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -5)
+        boardViewHeightConstraint = boardView.heightAnchor.constraint(equalTo: view.heightAnchor, constant : -5)
         scrollView.setNeedsUpdateConstraints()
         scrollView.backgroundColor = .blue
         
@@ -119,11 +122,11 @@ final class ViewController: UIViewController {
         boardViewController?.collectionView?.reloadData()
         super.viewWillLayoutSubviews()
         if(view.bounds.width < view.bounds.height) {
-            scrollViewHeightConstraint!.isActive = false
-            scrollViewWidthConstraint!.isActive = true
+            boardViewHeightConstraint!.isActive = false
+            boardViewWidthConstraint!.isActive = true
         } else {
-            scrollViewWidthConstraint!.isActive = false
-            scrollViewHeightConstraint!.isActive = true
+            boardViewWidthConstraint!.isActive = false
+            boardViewHeightConstraint!.isActive = true
         }
     }
     
@@ -173,19 +176,22 @@ extension ViewController : UIGestureRecognizerDelegate {
 
 extension ViewController : UIScrollViewDelegate {
     
+    func updateConstraintsForSize(_ size: CGSize) {
+        let yOffset = max(0, (size.height - scrollView.frame.height) / 2)
+        boardViewCenterYConstraint?.constant = yOffset
+    }
+    
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return boardView
     }
     
-    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        print("")
-    }
-    
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        print("We just zoomed!")
+        updateConstraintsForSize(boardView.bounds.size)
+        //print("We just zoomed!")
+        scrollView.setNeedsLayout()
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        print("Wow! Just ended zooming!")
+        //print("Wow! Just ended zooming!")
     }
 }
