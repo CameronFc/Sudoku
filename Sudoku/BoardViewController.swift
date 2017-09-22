@@ -19,8 +19,10 @@ final class BoardViewController: UICollectionViewController {
     
     var gameController : GameController?
     
-    init(superScrollView : UIView, collectionViewLayout layout: UICollectionViewLayout) {
-        self.superScrollView = superScrollView
+    var numberPickerView : UIView?
+    
+    init(numberPickerView : UIView, collectionViewLayout layout: UICollectionViewLayout) {
+        self.numberPickerView = numberPickerView
         super.init(collectionViewLayout: layout)
     }
     
@@ -53,6 +55,7 @@ final class BoardViewController: UICollectionViewController {
             ])
         
         collectionView?.layer.borderWidth = 1.0
+        collectionView?.layer.cornerRadius = 2.0
         
         //collectionView?.isUserInteractionEnabled = false
         
@@ -66,6 +69,7 @@ final class BoardViewController: UICollectionViewController {
         self.collectionView!.register(GridCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         self.collectionView?.reloadData()
     }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -75,6 +79,10 @@ final class BoardViewController: UICollectionViewController {
     override func viewWillLayoutSubviews() {
         //print("doing viewWillLayoutSubviews in boardController")
         super.viewWillLayoutSubviews()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
     }
 }
 
@@ -96,6 +104,7 @@ extension BoardViewController {
         if let gridCell = cell as? GridCell {
             let cellText = (gameController?.gameBoard?.boardArray[indexPath.row])?.description ?? " "
             gridCell.label.text = cellText
+            gridCell.label.font = UIFont(name: "Helvetica-Bold", size: 18)
             //let gestureRecognizer = UITapGestureRecognizer(target: gridCell, action: #selector(GridCell.tapHandler(recognizer:)))
             //gridCell.addGestureRecognizer(gestureRecognizer)
             //gestureRecognizer.delegate = self
@@ -114,6 +123,8 @@ extension BoardViewController {
             } else {
                 selectedCell.layer.borderColor = UIColor.magenta.cgColor
             }
+            numberPickerView?.center = selectedCell.center
+            numberPickerView?.center.y -= 150
         }
     }
     

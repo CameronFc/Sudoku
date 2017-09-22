@@ -150,13 +150,13 @@ class GameController {
             cellsToKeepAlive.append(index)
         }
         
-        print(cellsToKeepAlive)
+        //print(cellsToKeepAlive)
         for _ in 0..<numToRemove{
             let rand = Int(arc4random_uniform(UInt32(cellsToKeepAlive.count)))
-            print(rand)
+            //print(rand)
             cellsToKeepAlive.remove(at: rand)
         }
-        print(cellsToKeepAlive)
+        //print(cellsToKeepAlive)
         
         for index in 0..<board.boardArray.count {
             if !cellsToKeepAlive.contains(index) {
