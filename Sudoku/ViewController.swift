@@ -76,8 +76,8 @@ final class ViewController: UIViewController {
         //boardViewCenterXConstraint?.isActive = true
         //boardViewCenterYConstraint?.isActive = true
         boardView.translatesAutoresizingMaskIntoConstraints = false
-        boardView.widthAnchor.constraint(equalToConstant: 320).isActive = true
-        boardView.heightAnchor.constraint(equalToConstant: 320).isActive = true
+        boardView.widthAnchor.constraint(equalToConstant: 326).isActive = true
+        boardView.heightAnchor.constraint(equalToConstant: 326).isActive = true
         
         boardView.setNeedsUpdateConstraints()
         boardView.backgroundColor = .yellow
