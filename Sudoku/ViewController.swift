@@ -16,8 +16,6 @@ final class ViewController: UIViewController {
     
     var boardView : UIView!
     
-    var dumpsterView : UIView!
-    
     var scrollView : UIScrollView!
     
     var boardViewController : BoardViewController?
@@ -39,25 +37,28 @@ final class ViewController: UIViewController {
         let viewLayout = UICollectionViewFlowLayout()
         //viewLayout.itemSize = CGSize(width: 20, height: 20)
         
+        let numberPickerLayout = UICollectionViewFlowLayout()
+        let numberPickerViewController = NumberPickerViewController(collectionViewLayout: numberPickerLayout)
+        let numberPickerView = numberPickerViewController.view!
+        let numberPickerBorderWidth = 1.0
+        let numberPickerCellWidth = 50.0
+        let totalPickerWidth = CGFloat(3 * numberPickerCellWidth + 4 * numberPickerBorderWidth)
+        numberPickerView.backgroundColor = .magenta
+        
+        numberPickerView.layer.zPosition = 1 // Always on top
+        numberPickerView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            numberPickerView.widthAnchor.constraint(equalToConstant: totalPickerWidth),
+            numberPickerView.heightAnchor.constraint(equalToConstant: totalPickerWidth),
+        ])
+        numberPickerView.setNeedsUpdateConstraints()
+        
         scrollView = UIScrollView()
-        boardViewController = BoardViewController(superScrollView : scrollView, collectionViewLayout: viewLayout)
+        scrollView.addSubview(numberPickerView)
+        boardViewController = BoardViewController(numberPickerView : numberPickerView, collectionViewLayout: viewLayout)
         boardView = boardViewController!.view!
         view.addSubview(scrollView)
         scrollView.addSubview(boardView)
-        
-        /*
-        dumpsterView = UIView()
-        scrollView.addSubview(dumpsterView)
-        dumpsterView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            //dumpsterView.widthAnchor.constraint(greaterThanOrEqualToConstant: 100),
-            //dumpsterView.heightAnchor.constraint(greaterThanOrEqualToConstant: 100),
-            dumpsterView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            dumpsterView.topAnchor.constraint(equalTo: scrollView.topAnchor)
-        ])
-        dumpsterView.setNeedsLayout()
-        dumpsterView.backgroundColor = .brown
-        */
         
         //boardView.translatesAutoresizingMaskIntoConstraints = false
         // MARK : Constraints
@@ -70,14 +71,16 @@ final class ViewController: UIViewController {
             boardView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
         ])
         
-        
         //boardViewCenterXConstraint = boardView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
         //boardViewCenterYConstraint = boardView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor)
         //boardViewCenterXConstraint?.isActive = true
         //boardViewCenterYConstraint?.isActive = true
         boardView.translatesAutoresizingMaskIntoConstraints = false
-        boardView.widthAnchor.constraint(equalToConstant: 326).isActive = true
-        boardView.heightAnchor.constraint(equalToConstant: 326).isActive = true
+        let boardCellSize = 36.0
+        let borderSize = 1.0
+        let totalBoardSize = CGFloat(boardCellSize * 9 + borderSize * 2)
+        boardView.widthAnchor.constraint(equalToConstant: totalBoardSize).isActive = true
+        boardView.heightAnchor.constraint(equalToConstant: totalBoardSize).isActive = true
         
         boardView.setNeedsUpdateConstraints()
         boardView.backgroundColor = .yellow
@@ -113,6 +116,7 @@ final class ViewController: UIViewController {
         //let touchRecognizer = UIGestureRecognizer(target: self, action: #selector(touchHandler))
         //scrollView.addGestureRecognizer(panRecogizer)
         //scrollView.addGestureRecognizer(touchRecognizer)
+        
     }
     
     func touchHandler(recognizer : UIGestureRecognizer) {
@@ -135,7 +139,7 @@ final class ViewController: UIViewController {
     }
     
     override func viewWillLayoutSubviews() {
-        boardViewController?.collectionView?.reloadData()
+        //boardViewController?.collectionView?.reloadData()
         super.viewWillLayoutSubviews()
         /*
         if(view.bounds.width < view.bounds.height) {
