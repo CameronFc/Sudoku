@@ -9,13 +9,15 @@
 import UIKit
 
 private let reuseIdentifier = "GridCell"
-fileprivate let sectionInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
+fileprivate let sectionInsets = UIEdgeInsetsMake(1.0, 1.0, 1.0, 1.0)
 
 final class BoardViewController: UICollectionViewController {
     
     var board : Board?
     
     var superScrollView : UIView?
+    
+    var gameController : GameController?
     
     init(superScrollView : UIView, collectionViewLayout layout: UICollectionViewLayout) {
         self.superScrollView = superScrollView
@@ -35,6 +37,9 @@ final class BoardViewController: UICollectionViewController {
         
         self.collectionView?.removeGestureRecognizer((collectionView?.pinchGestureRecognizer)!)
         
+        gameController = GameController()
+        gameController?.gameBoard = gameController?.generateUnsolvedBoard(difficulty: .normal)
+        
         collectionView?.allowsMultipleSelection = false
         
         //self.collectionView?.pinchGestureRecognizer?.isEnabled = false
@@ -47,7 +52,7 @@ final class BoardViewController: UICollectionViewController {
             (collectionView?.topAnchor.constraint(equalTo: view.topAnchor))!
             ])
         
-        //collectionView?.layer.borderWidth = 3.0
+        collectionView?.layer.borderWidth = 1.0
         
         //collectionView?.isUserInteractionEnabled = false
         
@@ -89,7 +94,8 @@ extension BoardViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         if let gridCell = cell as? GridCell {
-            gridCell.label.text = "\(arc4random_uniform(9) + 1)"
+            let cellText = (gameController?.gameBoard?.boardArray[indexPath.row])?.description ?? " "
+            gridCell.label.text = cellText
             //let gestureRecognizer = UITapGestureRecognizer(target: gridCell, action: #selector(GridCell.tapHandler(recognizer:)))
             //gridCell.addGestureRecognizer(gestureRecognizer)
             //gestureRecognizer.delegate = self
@@ -101,6 +107,7 @@ extension BoardViewController {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("Selected \(indexPath.description)")
+        print(collectionView.frame)
         if let selectedCell = collectionView.cellForItem(at: indexPath) as? GridCell {
             if(selectedCell.layer.borderColor == UIColor.magenta.cgColor) {
                 selectedCell.layer.borderColor = UIColor.black.cgColor
@@ -122,11 +129,12 @@ extension BoardViewController : UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let paddingSpace = sectionInsets.left * (9 + 1)
-        let availableWidth = view.frame.width - paddingSpace
-        let widthPerItem = CGFloat(availableWidth / 9.0)
+        //let paddingSpace = 0.0 //sectionInsets.left * (9 + 1)
+        let availableWidth = view.frame.width //- paddingSpace
+        let widthPerItem = CGFloat((availableWidth / 9.0))
+        //print(indexPath.row)
         
-        return CGSize(width : widthPerItem, height : widthPerItem)
+        return CGSize(width : floor(widthPerItem), height : floor(widthPerItem))
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -134,11 +142,11 @@ extension BoardViewController : UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return sectionInsets.left
+        return 0.0 //sectionInsets.left
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return sectionInsets.left
+        return 0.0 //sectionInsets.left
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
