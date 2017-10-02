@@ -21,9 +21,10 @@ final class BoardViewController: UICollectionViewController {
     
     var numberPickerView : UIView?
     
-    init(numberPickerView : UIView, collectionViewLayout layout: UICollectionViewLayout) {
+    init(numberPickerView : UIView) {
         self.numberPickerView = numberPickerView
-        super.init(collectionViewLayout: layout)
+        let viewLayout = UICollectionViewFlowLayout()
+        super.init(collectionViewLayout: viewLayout)
     }
     
     required init?(coder aDecoder: NSCoder) {
