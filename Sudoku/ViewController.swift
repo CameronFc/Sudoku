@@ -16,6 +16,8 @@ final class ViewController: UIViewController {
     
     var boardView : UIView!
     
+    var boardCollectionView : UICollectionView!
+    
     var scrollView : UIScrollView!
     
     var numberPickerView : UIView!
@@ -55,6 +57,7 @@ final class ViewController: UIViewController {
         scrollView = UIScrollView()
         boardViewController = BoardViewController(numberPickerView : numberPickerView)
         boardView = boardViewController!.view!
+        boardCollectionView = boardViewController!.collectionView!
         view.addSubview(scrollView)
         scrollView.addSubview(boardView)
         scrollView.addSubview(numberPickerView)
@@ -63,7 +66,7 @@ final class ViewController: UIViewController {
         
         //boardView.translatesAutoresizingMaskIntoConstraints = false
         // MARK : Constraints
-        
+        /*
         NSLayoutConstraint.activate([
             //boardView.widthAnchor.constraint(equalTo: boardView.heightAnchor)
             boardView.topAnchor.constraint(equalTo: scrollView.topAnchor),
@@ -71,7 +74,7 @@ final class ViewController: UIViewController {
             boardView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             boardView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
         ])
-        
+        */
         //boardViewCenterXConstraint = boardView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
         //boardViewCenterYConstraint = boardView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor)
         //boardViewCenterXConstraint?.isActive = true
@@ -88,23 +91,23 @@ final class ViewController: UIViewController {
        
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            //scrollView.widthAnchor.constraint(equalTo: scrollView.heightAnchor), // Make sure the board is always square!
-            //scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            //scrollView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            //scrollView.heightAnchor.constraint(equalTo: view.heightAnchor)
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-        //boardViewWidthConstraint = boardView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -5)
-        //boardViewHeightConstraint = boardView.heightAnchor.constraint(equalTo: view.heightAnchor, constant : -5)
         scrollView.setNeedsUpdateConstraints()
         scrollView.backgroundColor = .blue
-        //scrollView.contentOffset = CGPoint(x : 320, y : 0)
         
-        // Keeps content centered on load.
-        scrollView.contentSize = CGSize(width: 320 * 2, height : 320 * 2)
+        let containerViewBounds = boardView.bounds
+        var scrollViewInsets = UIEdgeInsetsMake(0, 0, 0, 0)
+        scrollViewInsets.top = 320.0 //containerViewBounds.size.height
+        scrollViewInsets.bottom = 320.0 //containerViewBounds.size.height
+        scrollViewInsets.left = containerViewBounds.size.width/2.0
+        scrollViewInsets.right = containerViewBounds.size.width/2.0
+        scrollView.contentInset = scrollViewInsets
+        scrollView.contentOffset = CGPoint(x : 0.0, y : 160 - view.bounds.height / 2)
+        scrollView.contentSize = CGSize(width: 320, height : 320)
         
         view.setNeedsUpdateConstraints()
         
@@ -112,20 +115,8 @@ final class ViewController: UIViewController {
         scrollView.maximumZoomScale = 2.0
         scrollView.bouncesZoom = false
         scrollView.delegate = self
-    }
-    
-    func touchHandler(recognizer : UIGestureRecognizer) {
-        print("Touch handler called!")
-        if(recognizer.state == .began) {
-            print(boardView.center)
-        }
-        //lastLoaction = boardView.center
-    }
-    
-    func panHandler(recognizer : UIPanGestureRecognizer) {
-        let translation = recognizer.translation(in: view)
-        boardView.center = CGPoint(x: lastLoaction.x + translation.x, y: lastLoaction.y + translation.y)
-        print(boardView.center)
+        
+        numberPickerView.isHidden = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -152,21 +143,9 @@ final class ViewController: UIViewController {
         print("ViewController's child, UICollectionViewContainer, has frame: \(boardView.frame)'")
         super.viewDidLayoutSubviews()
         
-        let scrollViewBounds = scrollView.bounds
-        let containerViewBounds = boardView.bounds
+        // Give the board an appropriate ammount of space on each side so we can pan around
         
-        var scrollViewInsets = UIEdgeInsetsMake(0, 0, 0, 0)
-        scrollViewInsets.top = scrollViewBounds.size.height/2.0
-        scrollViewInsets.top -= containerViewBounds.size.height/2.0
-        
-        scrollViewInsets.bottom = scrollViewBounds.size.height/2.0
-        scrollViewInsets.bottom -= containerViewBounds.size.height/2.0
-        scrollViewInsets.bottom += 1
-        
-        scrollViewInsets.left = containerViewBounds.size.width/2.0
-        scrollViewInsets.right = containerViewBounds.size.width/2.0
-        
-        scrollView.contentInset = scrollViewInsets
+        //let scrollViewBounds = scrollView.bounds
         
     }
     
@@ -192,14 +171,19 @@ extension ViewController : UIScrollViewDelegate {
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         //print("We just zoomed!")
         scrollView.setNeedsLayout()
+        boardViewController?.customZoomScale = scrollView.zoomScale
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         //print("Wow! Just ended zooming!")
     }
     
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        numberPickerView.isHidden = true
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        //numberPickerView.center = CGPoint(x: 10, y: 20)
-        //numberPickerView.layoutSubviews()
+        numberPickerView.isHidden = true
+        boardViewController?.deselectAllCells()
     }
 }

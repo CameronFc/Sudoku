@@ -21,6 +21,9 @@ final class BoardViewController: UICollectionViewController {
     
     var numberPickerView : UIView?
     
+    // Gives us access to scrollView's zoom scale
+    public var customZoomScale : CGFloat = 1.0
+    
     init(numberPickerView : UIView) {
         self.numberPickerView = numberPickerView
         let viewLayout = UICollectionViewFlowLayout()
@@ -41,13 +44,14 @@ final class BoardViewController: UICollectionViewController {
         
         
         collectionView?.translatesAutoresizingMaskIntoConstraints = false
+        /*
         NSLayoutConstraint.activate([
             (collectionView?.trailingAnchor.constraint(equalTo: view.trailingAnchor))!,
             (collectionView?.bottomAnchor.constraint(equalTo: view.bottomAnchor))!,
             (collectionView?.leadingAnchor.constraint(equalTo: view.leadingAnchor))!,
             (collectionView?.topAnchor.constraint(equalTo: view.topAnchor))!
             ])
-        
+        */
         collectionView?.layer.borderWidth = 1.0
         collectionView?.layer.cornerRadius = 2.0
         
@@ -76,6 +80,15 @@ final class BoardViewController: UICollectionViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
     }
+    
+    public func deselectAllCells() {
+        let indexPaths = collectionView!.indexPathsForVisibleItems
+        for indexPath in indexPaths {
+            if let cell = collectionView!.cellForItem(at: indexPath) as? GridCell {
+                cell.layer.borderColor = UIColor.black.cgColor
+            }
+        }
+    }
 }
 
 // MARK: UICollectionViewDataSource
@@ -102,17 +115,19 @@ extension BoardViewController {
         return cell
     }
     
-    
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("Selected \(indexPath.description)")
         print(collectionView.frame)
+        // Hack back the picker
+        numberPickerView?.isHidden = false
         if let selectedCell = collectionView.cellForItem(at: indexPath) as? GridCell {
             if(selectedCell.layer.borderColor == UIColor.magenta.cgColor) {
                 selectedCell.layer.borderColor = UIColor.black.cgColor
             } else {
                 selectedCell.layer.borderColor = UIColor.magenta.cgColor
             }
-            numberPickerView?.center = selectedCell.center
+            numberPickerView?.center.x = selectedCell.center.x * customZoomScale
+            numberPickerView?.center.y = selectedCell.center.y * customZoomScale
             numberPickerView?.center.y -= 150
         }
     }
@@ -122,7 +137,6 @@ extension BoardViewController {
             selectedCell.layer.borderColor = UIColor.black.cgColor
         }
     }
-    
 }
 
 extension BoardViewController : UICollectionViewDelegateFlowLayout {
