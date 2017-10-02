@@ -34,11 +34,9 @@ final class ViewController: UIViewController {
         scale = 1.0
         
         view.backgroundColor = .cyan
-        let viewLayout = UICollectionViewFlowLayout()
         //viewLayout.itemSize = CGSize(width: 20, height: 20)
         
-        let numberPickerLayout = UICollectionViewFlowLayout()
-        let numberPickerViewController = NumberPickerViewController(collectionViewLayout: numberPickerLayout)
+        let numberPickerViewController = NumberPickerViewController()
         let numberPickerView = numberPickerViewController.view!
         let numberPickerBorderWidth = 1.0
         let numberPickerCellWidth = 50.0
@@ -55,7 +53,7 @@ final class ViewController: UIViewController {
         
         scrollView = UIScrollView()
         scrollView.addSubview(numberPickerView)
-        boardViewController = BoardViewController(numberPickerView : numberPickerView, collectionViewLayout: viewLayout)
+        boardViewController = BoardViewController(numberPickerView : numberPickerView)
         boardView = boardViewController!.view!
         view.addSubview(scrollView)
         scrollView.addSubview(boardView)
