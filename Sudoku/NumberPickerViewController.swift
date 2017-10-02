@@ -20,8 +20,7 @@ class NumberPickerViewController: UICollectionViewController {
     
     @available (*, unavailable)
     required init?(coder aDecoder: NSCoder) {
-        assertionFailure("Not yet implemented.")
-        super.init(coder: aDecoder)
+        fatalError("Not yet implemented.")
     }
     
     override func viewDidLoad() {
@@ -38,8 +37,6 @@ class NumberPickerViewController: UICollectionViewController {
         collectionView?.layer.cornerRadius = 2.0
         
         collectionView!.backgroundColor = .orange
-
-        // Do any additional setup after loading the view.
     }
     
     /*
@@ -60,6 +57,7 @@ class NumberPickerViewController: UICollectionViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -103,7 +101,7 @@ extension NumberPickerViewController : UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         //let paddingSpace = 0.0 //sectionInsets.left * (9 + 1)
-        let availableWidth = view.frame.width //- paddingSpace
+        let availableWidth = view.frame.width - 2 //- paddingSpace
         let widthPerItem = CGFloat((availableWidth / 3.0))
         return CGSize(width : floor(widthPerItem), height : floor(widthPerItem))
     }
