@@ -18,6 +18,8 @@ final class ViewController: UIViewController {
     
     var scrollView : UIScrollView!
     
+    var numberPickerView : UIView!
+    
     var boardViewController : BoardViewController?
     
     var lastLoaction : CGPoint = CGPoint(x: 0, y: 0)
@@ -37,13 +39,13 @@ final class ViewController: UIViewController {
         //viewLayout.itemSize = CGSize(width: 20, height: 20)
         
         let numberPickerViewController = NumberPickerViewController()
-        let numberPickerView = numberPickerViewController.view!
+        numberPickerView = numberPickerViewController.view!
         let numberPickerBorderWidth = 1.0
-        let numberPickerCellWidth = 50.0
-        let totalPickerWidth = CGFloat(3 * numberPickerCellWidth + 4 * numberPickerBorderWidth)
+        let numberPickerCellWidth = 70.0//50.0
+        let totalPickerWidth = CGFloat(3 * numberPickerCellWidth + 6 * numberPickerBorderWidth)
         numberPickerView.backgroundColor = .magenta
         
-        numberPickerView.layer.zPosition = 1 // Always on top
+        //numberPickerView.layer.zPosition = 1 // Always on top
         numberPickerView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             numberPickerView.widthAnchor.constraint(equalToConstant: totalPickerWidth),
@@ -52,11 +54,13 @@ final class ViewController: UIViewController {
         numberPickerView.setNeedsUpdateConstraints()
         
         scrollView = UIScrollView()
-        scrollView.addSubview(numberPickerView)
         boardViewController = BoardViewController(numberPickerView : numberPickerView)
         boardView = boardViewController!.view!
         view.addSubview(scrollView)
         scrollView.addSubview(boardView)
+        scrollView.addSubview(numberPickerView)
+        self.addChildViewController(numberPickerViewController)
+        numberPickerViewController.didMove(toParentViewController: self)
         
         //boardView.translatesAutoresizingMaskIntoConstraints = false
         // MARK : Constraints
@@ -99,7 +103,7 @@ final class ViewController: UIViewController {
         scrollView.setNeedsUpdateConstraints()
         scrollView.backgroundColor = .blue
         //scrollView.contentOffset = CGPoint(x : 320, y : 0)
-        scrollView.contentSize = CGSize(width: 320 * 2, height : 320 * 2)
+        //scrollView.contentSize = CGSize(width: 320 * 2, height : 320 * 2)
         
         view.setNeedsUpdateConstraints()
         
@@ -114,7 +118,6 @@ final class ViewController: UIViewController {
         //let touchRecognizer = UIGestureRecognizer(target: self, action: #selector(touchHandler))
         //scrollView.addGestureRecognizer(panRecogizer)
         //scrollView.addGestureRecognizer(touchRecognizer)
-        
     }
     
     func touchHandler(recognizer : UIGestureRecognizer) {
@@ -214,8 +217,8 @@ extension ViewController : UIGestureRecognizerDelegate {
 extension ViewController : UIScrollViewDelegate {
     
     func updateConstraintsForSize(_ size: CGSize) {
-        let yOffset = max(0, (size.height - scrollView.frame.height) / 2)
-        boardViewCenterYConstraint?.constant = yOffset
+        //let yOffset = max(0, (size.height - scrollView.frame.height) / 2)
+        //boardViewCenterYConstraint?.constant = yOffset
     }
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
@@ -230,5 +233,10 @@ extension ViewController : UIScrollViewDelegate {
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         //print("Wow! Just ended zooming!")
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        //numberPickerView.center = CGPoint(x: 10, y: 20)
+        //numberPickerView.layoutSubviews()
     }
 }
