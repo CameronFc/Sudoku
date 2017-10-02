@@ -157,20 +157,3 @@ extension BoardViewController : UICollectionViewDelegateFlowLayout {
         return CGSize(width : 0, height : 0)
     }
 }
-
-// Scrolling
-extension BoardViewController : UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-    
-    override func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return view
-    }
-    
-   /*
-    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        return false
-    }
- */
-}
