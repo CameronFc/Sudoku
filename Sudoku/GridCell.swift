@@ -43,9 +43,6 @@ class GridCell: UICollectionViewCell {
         // Drawing code
     }
     */
-    static func tapHandler(recognizer: UIGestureRecognizer) {
-        print("Our little cell detected a touch! How nice.")
-    }
 }
 
 

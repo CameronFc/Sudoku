@@ -31,7 +31,6 @@ final class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         //delegate.newGame()
         scale = 1.0
         
@@ -107,17 +106,10 @@ final class ViewController: UIViewController {
         
         view.setNeedsUpdateConstraints()
         
-        //let recognizer = UIPinchGestureRecognizer(target: self, action: #selector(handlePinchGesture(gesture:)))
-        //recognizer.delegate = self
-        //view.addGestureRecognizer(recognizer)
         scrollView.minimumZoomScale = 1.0
         scrollView.maximumZoomScale = 2.0
         scrollView.bouncesZoom = false
         scrollView.delegate = self
-        //let panRecogizer = UIPanGestureRecognizer(target: self, action: #selector(panHandler))
-        //let touchRecognizer = UIGestureRecognizer(target: self, action: #selector(touchHandler))
-        //scrollView.addGestureRecognizer(panRecogizer)
-        //scrollView.addGestureRecognizer(touchRecognizer)
     }
     
     func touchHandler(recognizer : UIGestureRecognizer) {
@@ -187,46 +179,15 @@ final class ViewController: UIViewController {
         delegate = nil
         super.init(coder: aDecoder)
     }
-
-
-}
-
-// MARK : GESTURES
-extension ViewController : UIGestureRecognizerDelegate {
-    
-    func handlePinchGesture(gesture : UIPinchGestureRecognizer) {
-        //print("FUQ \(self.scale as Any)")
-        var scaleStart : CGFloat = 1.0
-        if(gesture.state == .began) {
-            scaleStart = scale!
-        } else if (gesture.state == .changed) {
-            scale = scaleStart * gesture.scale
-        } else if (gesture.state == .ended) {
-            print("Ended pinch gesture.")
-        }
-    }
-    
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-    
-    
 }
 
 extension ViewController : UIScrollViewDelegate {
-    
-    func updateConstraintsForSize(_ size: CGSize) {
-        //let yOffset = max(0, (size.height - scrollView.frame.height) / 2)
-        //boardViewCenterYConstraint?.constant = yOffset
-    }
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return boardView
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        updateConstraintsForSize(boardView.bounds.size)
         //print("We just zoomed!")
         scrollView.setNeedsLayout()
     }

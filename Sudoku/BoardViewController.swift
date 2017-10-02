@@ -34,18 +34,11 @@ final class BoardViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.collectionView?.minimumZoomScale = 1.0
-        self.collectionView?.maximumZoomScale = 2.0
-        self.collectionView?.bouncesZoom = false
-        
-        self.collectionView?.removeGestureRecognizer((collectionView?.pinchGestureRecognizer)!)
-        
         gameController = GameController()
         gameController?.gameBoard = gameController?.generateUnsolvedBoard(difficulty: .normal)
         
         collectionView?.allowsMultipleSelection = false
         
-        //self.collectionView?.pinchGestureRecognizer?.isEnabled = false
         
         collectionView?.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -58,7 +51,6 @@ final class BoardViewController: UICollectionViewController {
         collectionView?.layer.borderWidth = 1.0
         collectionView?.layer.cornerRadius = 2.0
         
-        //collectionView?.isUserInteractionEnabled = false
         
         board = Board(size: 9)
         collectionView?.backgroundColor = .green
@@ -105,9 +97,6 @@ extension BoardViewController {
             let cellText = (gameController?.gameBoard?.boardArray[indexPath.row])?.description ?? " "
             gridCell.label.text = cellText
             gridCell.label.font = UIFont(name: "Helvetica-Bold", size: 18)
-            //let gestureRecognizer = UITapGestureRecognizer(target: gridCell, action: #selector(GridCell.tapHandler(recognizer:)))
-            //gridCell.addGestureRecognizer(gestureRecognizer)
-            //gestureRecognizer.delegate = self
             return gridCell
         }
         return cell
@@ -167,7 +156,6 @@ extension BoardViewController : UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         return CGSize(width : 0, height : 0)
     }
-    
 }
 
 // Scrolling
@@ -180,10 +168,6 @@ extension BoardViewController : UIGestureRecognizerDelegate {
         return view
     }
     
-    override func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        print(collectionView?.gestureRecognizers?.description ?? "NO")
-        print("Just zoomed in the boardController")
-    }
    /*
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         return false
