@@ -102,7 +102,9 @@ final class ViewController: UIViewController {
         scrollView.setNeedsUpdateConstraints()
         scrollView.backgroundColor = .blue
         //scrollView.contentOffset = CGPoint(x : 320, y : 0)
-        //scrollView.contentSize = CGSize(width: 320 * 2, height : 320 * 2)
+        
+        // Keeps content centered on load.
+        scrollView.contentSize = CGSize(width: 320 * 2, height : 320 * 2)
         
         view.setNeedsUpdateConstraints()
         
