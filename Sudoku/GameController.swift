@@ -276,7 +276,7 @@ extension GameState {
         }
     }
     
-    func changeCellNumber(at index : Int, value : Int) {
+    func changeCellNumber(at index : Int, value : Int?) {
         //print("Trying to change the board state to \(value) @ \(index). Permanent here is \(gameBoard.permanents[index])")
         // Only allow changing non-permanents
         if(gameBoard.permanents[index] == nil) {

@@ -162,7 +162,7 @@ extension BoardViewController : UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         //let paddingSpace = 0.0 //sectionInsets.left * (9 + 1)
-        let availableWidth = view.frame.width //- paddingSpace
+        let availableWidth = 326.0//view.frame.width //- paddingSpace
         let widthPerItem = CGFloat((availableWidth / 9.0))
         //print(indexPath.row)
         
