@@ -15,7 +15,7 @@ final class ViewController: UIViewController {
     
     var boardView : UIView!
     
-    let gameStateDelegate : GameControllerDelegate!
+    let gameStateDelegate : GameState!
     
     var boardCollectionView : UICollectionView!
     
@@ -150,7 +150,7 @@ final class ViewController: UIViewController {
         
     }
     
-    init(delegate : GameControllerDelegate) {
+    init(delegate : GameState) {
         self.gameStateDelegate = delegate
         super.init(nibName: nil, bundle: nil)
     }

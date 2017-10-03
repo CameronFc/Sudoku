@@ -14,9 +14,11 @@ class GameController {
     var gameBoard : Board!
     
     private var boardSize : Int
+    var delegates : [GameStateDelegate] // List of views that subscribe to updates
     
     init() {
         boardSize = 9
+        delegates = [GameStateDelegate]()
         let _ = generateFullSolvedBoard()
     }
     
@@ -254,14 +256,37 @@ class GameController {
     }
 }
 
-extension GameController : GameControllerDelegate {}
+extension GameController : GameState {}
 
 // Exposes game state to views.
-protocol GameControllerDelegate {
+protocol GameState {
     var gameBoard : Board! { get }
+    var delegates : [GameStateDelegate] { get set }
     func getValidChoicesFromCell(index : Int) -> [Int]
 }
 
+extension GameState {
+    
+    func notifiyDelegates() {
+        for delegate in delegates {
+            delegate.gameStateDidChange()
+        }
+    }
+    
+    func changeCellNumber(at index : Int, value : Int) {
+        //print("Trying to change the board state to \(value) @ \(index). Permanent here is \(gameBoard.permanents[index])")
+        // Only allow changing non-permanents
+        if(gameBoard.permanents[index] == nil) {
+            gameBoard.boardArray[index] = value
+        }
+        notifiyDelegates()
+    }
+}
+
+// Views subscribe to the gameController through this protocol to be notified of updates to the gameState.
+protocol GameStateDelegate {
+    func gameStateDidChange()
+}
 
 
 

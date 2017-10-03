@@ -13,13 +13,15 @@ fileprivate let sectionInsets = UIEdgeInsetsMake(1.0, 1.0, 1.0, 1.0)
 
 class NumberPickerViewController: UICollectionViewController {
     
-    var gameStateDelegate : GameControllerDelegate!
+    var gameStateDelegate : GameState!
     
-    init(delegate : GameControllerDelegate) {
+    init(delegate : GameState) {
         let numberPickerLayout = UICollectionViewFlowLayout()
         gameStateDelegate = delegate
         super.init(collectionViewLayout: numberPickerLayout)
     }
+    
+    var selectedBoardCell = 0
     
     @available (*, unavailable)
     required init?(coder aDecoder: NSCoder) {
@@ -86,7 +88,7 @@ class NumberPickerViewController: UICollectionViewController {
             } else {
                 selectedCell.layer.borderColor = UIColor.magenta.cgColor
             }
-            gameStateDelegate.gameBoard.boardArray[0] = indexPath.row + 1
+            gameStateDelegate.changeCellNumber(at: selectedBoardCell, value: indexPath.row + 1)
         }
     }
     

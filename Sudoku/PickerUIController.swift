@@ -56,10 +56,14 @@ extension PickerUIController {
         for index in 0..<cellStatuses.count {
             setCellStatus(at: index, status: .unselectable)
         }
-        print(indices)
+        //print(indices)
         for index in indices {
             setCellStatus(at: index, status: .selectable)
         }
+    }
+    
+    func setSelectedBoardCell(at index : Int) {
+        numberPickerDelegate.selectedBoardCell = index
     }
 }
 
