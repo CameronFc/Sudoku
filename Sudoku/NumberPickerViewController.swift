@@ -82,13 +82,25 @@ class NumberPickerViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let validChoices = gameStateDelegate.getValidChoicesFromCell(index : selectedBoardCell)
+        let chosenNumber = indexPath.row + 1
+        if(!validChoices.contains(chosenNumber)) {
+            return // Don't do anything if the number chosen from the picker is invalid
+        }
+        
         if let selectedCell = collectionView.cellForItem(at: indexPath) as? GridCell {
             if(selectedCell.layer.borderColor == UIColor.magenta.cgColor) {
                 selectedCell.layer.borderColor = UIColor.black.cgColor
             } else {
                 selectedCell.layer.borderColor = UIColor.magenta.cgColor
             }
-            gameStateDelegate.changeCellNumber(at: selectedBoardCell, value: indexPath.row + 1)
+            // Choosing the same number removes it
+            if(chosenNumber == gameStateDelegate.gameBoard.boardArray[selectedBoardCell]) {
+                gameStateDelegate.changeCellNumber(at: selectedBoardCell, value: nil)
+            } else {
+                gameStateDelegate.changeCellNumber(at: selectedBoardCell, value: chosenNumber)
+            }
         }
     }
     
