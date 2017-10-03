@@ -31,7 +31,7 @@ class SudokuTests: XCTestCase {
         //print(board.column(8))
         //print(board.region(7))
         
-        XCTAssert(gameController.boardIsFull(board: board))
+        XCTAssert(gameController.boardIsFull())
     }
     
     func testSubsectionValidation() {
@@ -59,8 +59,10 @@ class SudokuTests: XCTestCase {
         let board2 = Board(size: 9, initArray : boardInit)
         
         //Board with duplicates in same region, row should fail
-        XCTAssert(!gameController.boardIsSolved(board: board1))
-        XCTAssert(gameController.boardIsSolved(board: board2))
+        gameController.gameBoard = board1
+        XCTAssert(!gameController.boardIsSolved())
+        gameController.gameBoard = board2
+        XCTAssert(gameController.boardIsSolved())
     }
     
     func testBoardRegions() {
@@ -98,15 +100,17 @@ class SudokuTests: XCTestCase {
         testBoard2.boardArray[1] = 2
         testBoard2.boardArray[12] = 1 // in next row and region
         
-        XCTAssert(!gameController.boardIsNotInvalid(board: testBoard1))
-        XCTAssert(gameController.boardIsNotInvalid(board: testBoard2))
+        gameController.gameBoard = testBoard1
+        XCTAssert(!gameController.boardIsNotInvalid())
+        gameController.gameBoard = testBoard2
+        XCTAssert(gameController.boardIsNotInvalid())
     }
     
     func testBoardGenerationSolved() {
         let gameController = GameController()
         let board = gameController.generateFullSolvedBoard()
         print(board.description())
-        XCTAssert(gameController.boardIsSolved(board: board))
+        XCTAssert(gameController.boardIsSolved())
     }
     
     func testBoardGenerationUnsolved() {
