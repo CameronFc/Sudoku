@@ -55,6 +55,7 @@ final class ViewController: UIViewController {
             numberPickerView.heightAnchor.constraint(equalToConstant: totalPickerWidth),
         ])
         numberPickerView.setNeedsUpdateConstraints()
+        numberPickerView.isHidden = true
         
         scrollView = UIScrollView()
         boardViewController = BoardViewController(delegate : gameStateDelegate, pickerUIDelegate : pickerUIController)

@@ -115,26 +115,32 @@ extension BoardViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Selected \(indexPath.description)")
-        print(collectionView.frame)
-        // Hack back the picker
-        pickerUIDelegate?.isHidden = false
+        //print("Selected \(indexPath.description)")
+        //print(collectionView.frame)
         if let selectedCell = collectionView.cellForItem(at: indexPath) as? GridCell {
             if(selectedCell.layer.borderColor == UIColor.magenta.cgColor) {
                 selectedCell.layer.borderColor = UIColor.black.cgColor
             } else {
                 selectedCell.layer.borderColor = UIColor.magenta.cgColor
             }
-            // Move the picker to the correct spot
-            var newCenter = CGPoint(x : selectedCell.center.x * customZoomScale, y : selectedCell.center.y * customZoomScale)
-            newCenter.y -= 150
-            pickerUIDelegate?.repositionPicker(center: newCenter)
             
             // Set the background color of the picker cells to indicate invalid choices
             var validChoices = gameState!.getValidChoicesFromCell(index: indexPath.row)
             validChoices = validChoices.map { $0 - 1} //Convert items from 1...9 to 0...8; Numbers to cellIndices
             pickerUIDelegate?.setSelectableCells(for: validChoices)
+           
+            // Move the picker to the correct spot and show it if necessary
+            if(validChoices.count > 0 ) {
+                var newCenter = CGPoint(x : selectedCell.center.x * customZoomScale, y : selectedCell.center.y * customZoomScale)
+                newCenter.y -= 150
+                pickerUIDelegate?.repositionPicker(center: newCenter)
+                pickerUIDelegate?.isHidden = false
+            } else {
+                // Hide the picker if we select a permanent or a filled cell
+                pickerUIDelegate?.isHidden = true
+            }
         }
+        collectionView.reloadItems(at: [IndexPath(row : 0, section : 0)])
     }
     
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {

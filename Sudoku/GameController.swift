@@ -126,6 +126,7 @@ class GameController {
     }
     
     enum Difficulty {
+        case superEasy
         case easy
         case normal
         case hard
@@ -142,6 +143,8 @@ class GameController {
             range = (20, 35)
         case .hard:
             range = (10, 15)
+        case .superEasy:
+            range = (85, 90)
         }
         
         let randRange : Int = Int(arc4random_uniform(UInt32(range.high - range.low))) + range.low

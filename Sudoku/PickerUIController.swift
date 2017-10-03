@@ -20,7 +20,7 @@ class PickerUIController {
     
     fileprivate var cellStatuses : [Int : CellStatus]
     
-    var isHidden = true {
+    var isHidden : Bool {
         didSet {
             numberPickerDelegate.view.isHidden = isHidden
         }
@@ -28,6 +28,7 @@ class PickerUIController {
     
     init(numberPickerDelegate : NumberPickerViewController) {
         self.numberPickerDelegate = numberPickerDelegate
+        self.isHidden = true
         cellStatuses = [Int : CellStatus]()
         for index in 0..<9 {
             cellStatuses[index] = .unselectable
