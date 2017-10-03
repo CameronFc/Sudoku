@@ -10,16 +10,16 @@ import Foundation
 
 class GameController {
     
-    var gameBoard : Board?
+    var gameBoard : Board!
     private var boardSize : Int
     
     init() {
         boardSize = 9
-        gameBoard = generateFullSolvedBoard()
+        let _ = generateFullSolvedBoard()
     }
     
-    func boardIsFull(board : Board) -> Bool{
-        for item in board.boardArray {
+    func boardIsFull() -> Bool{
+        for item in gameBoard.boardArray {
             guard let _ = item else {
                 return false
             }
@@ -40,24 +40,24 @@ class GameController {
         return board
     }
     
-    func boardIsSolved(board : Board) -> Bool {
-        assert(board.width == 9, "Only implemented for normal-sized boards.")
-        for y in 0..<board.width {
-            let subArray = board.row(y)
+    func boardIsSolved() -> Bool {
+        assert(gameBoard.width == 9, "Only implemented for normal-sized boards.")
+        for y in 0..<gameBoard.width {
+            let subArray = gameBoard.row(y)
             if (!isValid(subArray: subArray)) {
                 return false
             }
         }
         
-        for x in 0..<board.width {
-            let subArray = board.column(x)
+        for x in 0..<gameBoard.width {
+            let subArray = gameBoard.column(x)
             if (!isValid(subArray: subArray)) {
                 return false
             }
         }
         
-        for region in 0..<board.width {
-            let subArray = board.region(region)
+        for region in 0..<gameBoard.width {
+            let subArray = gameBoard.region(region)
             if (!isValid(subArray: subArray)) {
                 return false
             }
@@ -65,24 +65,24 @@ class GameController {
         return true
     }
     
-    func boardIsNotInvalid(board : Board) -> Bool {
-        assert(board.width == 9, "Only implemented for normal-sized boards.")
-        for y in 0..<board.width {
-            let subArray = board.row(y)
+    func boardIsNotInvalid() -> Bool {
+        assert(gameBoard.width == 9, "Only implemented for normal-sized boards.")
+        for y in 0..<gameBoard.width {
+            let subArray = gameBoard.row(y)
             if (!isNotInvalid(subArray: subArray)) {
                 return false
             }
         }
         
-        for x in 0..<board.width {
-            let subArray = board.column(x)
+        for x in 0..<gameBoard.width {
+            let subArray = gameBoard.column(x)
             if (!isNotInvalid(subArray: subArray)) {
                 return false
             }
         }
         
-        for region in 0..<board.width {
-            let subArray = board.region(region)
+        for region in 0..<gameBoard.width {
+            let subArray = gameBoard.region(region)
             if (!isNotInvalid(subArray: subArray)) {
                 return false
             }
@@ -205,8 +205,8 @@ class GameController {
             }
             guesses[currentCellIndex] = ((guesses[currentCellIndex]) % (boardSize)) + 1
             //let guess = guesses[currentCellIndex]
-            let board = Board(size : 9, initArray : Array(guesses[0...currentCellIndex]))
-            if(boardIsNotInvalid(board: board)) {
+            gameBoard = Board(size : 9, initArray : Array(guesses[0...currentCellIndex]))
+            if(boardIsNotInvalid()) {
                 currentCellIndex += 1
                 continue
             } else {
