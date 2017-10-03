@@ -248,7 +248,10 @@ class GameController {
         let placesToCheck = [gameBoard.column(rcr.row), gameBoard.row(rcr.column), gameBoard.region(rcr.region)]
         // Take each sesction and remove nils, then flatten for array of all invalid choices.
         let filteredPlaces = (placesToCheck.map { $0.filter { $0 != nil }}) as! [[Int]]
-        let flattened = Set<Int>(filteredPlaces.flatMap { $0 })
+        var flattened = Set<Int>(filteredPlaces.flatMap { $0 })
+        if let currentCellNumber = gameBoard.boardArray[index] {
+            flattened = flattened.subtracting([currentCellNumber])// Choosing the same number is permitted.
+        }
         var validChoices : Set = [1,2,3,4,5,6,7,8,9]
         // Remove invalid choices.
         validChoices = validChoices.subtracting(validChoices.intersection(flattened))
