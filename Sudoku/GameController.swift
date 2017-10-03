@@ -10,7 +10,9 @@ import Foundation
 
 class GameController {
     
+    // TODO: Remove this and all mutations, move board code to a Board Controller
     var gameBoard : Board!
+    
     private var boardSize : Int
     
     init() {
@@ -222,4 +224,32 @@ class GameController {
         
         return Board(size : boardSize, initArray : guesses)
     }
+    
+    func setBoardPermanents() {
+        gameBoard.permanents = [Int : Int]()
+        for index in 0..<gameBoard.totalItems {
+            if let cellValue = gameBoard.boardArray[index] {
+                gameBoard.permanents[index] = cellValue
+            }
+        }
+    }
+    
+    func getValidChoicesFromCell(index : Int) -> [Int] {
+        if let _ = gameBoard.permanents[index] {
+            return []
+        }
+        return [1, 2, 3]
+    }
 }
+
+extension GameController : GameControllerDelegate {}
+
+// Exposes game state to views.
+protocol GameControllerDelegate {
+    var gameBoard : Board! { get }
+    func getValidChoicesFromCell(index : Int) -> [Int]
+}
+
+
+
+

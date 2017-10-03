@@ -13,8 +13,11 @@ fileprivate let sectionInsets = UIEdgeInsetsMake(1.0, 1.0, 1.0, 1.0)
 
 class NumberPickerViewController: UICollectionViewController {
     
-    init() {
+    var gameStateDelegate : GameControllerDelegate!
+    
+    init(delegate : GameControllerDelegate) {
         let numberPickerLayout = UICollectionViewFlowLayout()
+        gameStateDelegate = delegate
         super.init(collectionViewLayout: numberPickerLayout)
     }
     

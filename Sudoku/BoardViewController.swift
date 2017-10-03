@@ -17,15 +17,16 @@ final class BoardViewController: UICollectionViewController {
     
     var superScrollView : UIView?
     
-    var gameController : GameController?
+    var gameState : GameControllerDelegate?
     
     var numberPickerView : UIView?
     
     // Gives us access to scrollView's zoom scale
     public var customZoomScale : CGFloat = 1.0
     
-    init(numberPickerView : UIView) {
+    init(delegate : GameControllerDelegate, numberPickerView : UIView) {
         self.numberPickerView = numberPickerView
+        gameState = delegate
         let viewLayout = UICollectionViewFlowLayout()
         super.init(collectionViewLayout: viewLayout)
     }
@@ -37,8 +38,6 @@ final class BoardViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        gameController = GameController()
-        gameController?.gameBoard = gameController?.generateUnsolvedBoard(difficulty: .normal)
         
         collectionView?.allowsMultipleSelection = false
         
@@ -107,7 +106,7 @@ extension BoardViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         if let gridCell = cell as? GridCell {
-            let cellText = (gameController?.gameBoard?.boardArray[indexPath.row])?.description ?? " "
+            let cellText = (gameState?.gameBoard?.boardArray[indexPath.row])?.description ?? " "
             gridCell.label.text = cellText
             gridCell.label.font = UIFont(name: "Helvetica-Bold", size: 18)
             return gridCell
