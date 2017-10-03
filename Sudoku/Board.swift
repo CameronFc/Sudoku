@@ -77,8 +77,6 @@ final class Board {
         return out
     }
     
-    
-    
     func description() -> String {
         var out = ""
         for index in 0..<totalItems {
