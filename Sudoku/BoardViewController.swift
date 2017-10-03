@@ -110,7 +110,11 @@ extension BoardViewController {
         if let gridCell = cell as? GridCell {
             let cellText = (gameState?.gameBoard?.boardArray[indexPath.row])?.description ?? " "
             gridCell.label.text = cellText
-            gridCell.label.font = UIFont(name: "Helvetica-Bold", size: 18)
+            if (gameState?.gameBoard.permanents[indexPath.row] != nil) {
+                gridCell.label.font = UIFont(name: "Helvetica-Bold", size: 20)
+            } else {
+                gridCell.label.font = UIFont(name: "Helvetica", size: 18)
+            }
             gridCell.layer.borderColor = UIColor.black.cgColor
             return gridCell
         }
@@ -134,7 +138,7 @@ extension BoardViewController {
             pickerUIDelegate?.setSelectedBoardCell(at: indexPath.row)
            
             // Move the picker to the correct spot and show it if necessary
-            if(validChoices.count > 0 ) {
+            if(gameState?.gameBoard.permanents[indexPath.row] == nil) {
                 var newCenter = CGPoint(x : selectedCell.center.x * customZoomScale, y : selectedCell.center.y * customZoomScale)
                 newCenter.y -= 150
                 pickerUIDelegate?.repositionPicker(center: newCenter)
