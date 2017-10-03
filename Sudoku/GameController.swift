@@ -241,17 +241,13 @@ class GameController {
         }
         let rcr = gameBoard.getRowColRegion(from: index)
         let placesToCheck = [gameBoard.column(rcr.row), gameBoard.row(rcr.column), gameBoard.region(rcr.region)]
+        // Take each sesction and remove nils, then flatten for array of all invalid choices.
         let filteredPlaces = (placesToCheck.map { $0.filter { $0 != nil }}) as! [[Int]]
-        let flattened = filteredPlaces.flatMap { $0 }
-        var validChoices = [1,2,3,4,5,6,7,8,9]
-        // Remove invalid choices
-        for possibleNumber in 1...9 {
-            if flattened.contains(possibleNumber) {
-                let choiceIndex = validChoices.index(of: possibleNumber)!
-                validChoices.remove(at : choiceIndex)
-            }
-        }
-        return validChoices
+        let flattened = Set<Int>(filteredPlaces.flatMap { $0 })
+        var validChoices : Set = [1,2,3,4,5,6,7,8,9]
+        // Remove invalid choices.
+        validChoices = validChoices.subtracting(validChoices.intersection(flattened))
+        return Array(validChoices)
     }
 }
 
