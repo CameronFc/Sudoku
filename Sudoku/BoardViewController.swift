@@ -17,18 +17,20 @@ final class BoardViewController: UICollectionViewController {
     
     var superScrollView : UIView?
     
-    var gameState : GameControllerDelegate?
+    var gameState : GameState?
     
     var pickerUIDelegate : PickerUIController?
     
     // Gives us access to scrollView's zoom scale
     public var customZoomScale : CGFloat = 1.0
     
-    init(delegate : GameControllerDelegate, pickerUIDelegate : PickerUIController) {
+    init(delegate : GameState, pickerUIDelegate : PickerUIController) {
         self.pickerUIDelegate = pickerUIDelegate
         gameState = delegate
         let viewLayout = UICollectionViewFlowLayout()
         super.init(collectionViewLayout: viewLayout)
+        // Subscribe to game state updates
+        gameState?.delegates.append(self)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -109,6 +111,7 @@ extension BoardViewController {
             let cellText = (gameState?.gameBoard?.boardArray[indexPath.row])?.description ?? " "
             gridCell.label.text = cellText
             gridCell.label.font = UIFont(name: "Helvetica-Bold", size: 18)
+            gridCell.layer.borderColor = UIColor.black.cgColor
             return gridCell
         }
         return cell
@@ -128,6 +131,7 @@ extension BoardViewController {
             var validChoices = gameState!.getValidChoicesFromCell(index: indexPath.row)
             validChoices = validChoices.map { $0 - 1} //Convert items from 1...9 to 0...8; Numbers to cellIndices
             pickerUIDelegate?.setSelectableCells(for: validChoices)
+            pickerUIDelegate?.setSelectedBoardCell(at: indexPath.row)
            
             // Move the picker to the correct spot and show it if necessary
             if(validChoices.count > 0 ) {
@@ -140,7 +144,6 @@ extension BoardViewController {
                 pickerUIDelegate?.isHidden = true
             }
         }
-        collectionView.reloadItems(at: [IndexPath(row : 0, section : 0)])
     }
     
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -182,3 +185,11 @@ extension BoardViewController : UICollectionViewDelegateFlowLayout {
         return CGSize(width : 0, height : 0)
     }
 }
+
+extension BoardViewController : GameStateDelegate {
+    func gameStateDidChange() {
+        //print("The gameState is letting us know that it has updated.")
+        collectionView?.reloadData()
+    }
+}
+
