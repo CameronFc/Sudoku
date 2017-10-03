@@ -56,7 +56,7 @@ final class ViewController: UIViewController {
         numberPickerView.setNeedsUpdateConstraints()
         
         scrollView = UIScrollView()
-        boardViewController = BoardViewController(delegate : gameStateDelegate, numberPickerView : numberPickerView)
+        boardViewController = BoardViewController(delegate : gameStateDelegate, numberPickerViewController : numberPickerViewController)
         boardView = boardViewController!.view!
         boardCollectionView = boardViewController!.collectionView!
         view.addSubview(scrollView)

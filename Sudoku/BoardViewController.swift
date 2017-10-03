@@ -19,13 +19,15 @@ final class BoardViewController: UICollectionViewController {
     
     var gameState : GameControllerDelegate?
     
-    var numberPickerView : UIView?
+    var numberPickerViewController : NumberPickerViewController!
+    var numberPickerView : UIView!
     
     // Gives us access to scrollView's zoom scale
     public var customZoomScale : CGFloat = 1.0
     
-    init(delegate : GameControllerDelegate, numberPickerView : UIView) {
-        self.numberPickerView = numberPickerView
+    init(delegate : GameControllerDelegate, numberPickerViewController : NumberPickerViewController) {
+        self.numberPickerViewController = numberPickerViewController
+        numberPickerView = numberPickerViewController.view!
         gameState = delegate
         let viewLayout = UICollectionViewFlowLayout()
         super.init(collectionViewLayout: viewLayout)
@@ -128,6 +130,21 @@ extension BoardViewController {
             numberPickerView?.center.x = selectedCell.center.x * customZoomScale
             numberPickerView?.center.y = selectedCell.center.y * customZoomScale
             numberPickerView?.center.y -= 150
+            numberPickerViewController.selectedBoardCell = indexPath.row
+            
+            let pickerView = (numberPickerViewController.collectionView)!
+            let validChoices = gameState!.getValidChoicesFromCell(index: indexPath.row)
+            for subIndexPath in pickerView.indexPathsForVisibleItems {
+                // The number that appears in the picker. [1 .. 9]
+                let pickerNumber = subIndexPath.row + 1
+                if let pickerCell = pickerView.cellForItem(at : subIndexPath) {
+                        if(validChoices.contains(pickerNumber)) {
+                            pickerCell.backgroundColor = .red
+                        } else {
+                            pickerCell.backgroundColor = .gray
+                        }
+                }
+            }
         }
     }
     

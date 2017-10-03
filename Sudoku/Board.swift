@@ -80,6 +80,14 @@ final class Board {
         return out
     }
     
+    func getRowColRegion(from index : Int) -> (row : Int, column : Int, region : Int) {
+        return (
+            row : index % 9,
+            column : index / 9,
+            region : ((index / 9) / 3) * 3 + ((index % 9) / 3)
+        )
+    }
+    
     func description() -> String {
         var out = ""
         for index in 0..<totalItems {
