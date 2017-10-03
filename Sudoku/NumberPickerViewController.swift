@@ -15,8 +15,6 @@ class NumberPickerViewController: UICollectionViewController {
     
     var gameStateDelegate : GameControllerDelegate!
     
-    public var selectedBoardCell : Int?
-    
     init(delegate : GameControllerDelegate) {
         let numberPickerLayout = UICollectionViewFlowLayout()
         gameStateDelegate = delegate
@@ -63,7 +61,6 @@ class NumberPickerViewController: UICollectionViewController {
 
     
     // MARK: UICollectionViewDataSource
-
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -130,4 +127,34 @@ extension NumberPickerViewController : UICollectionViewDelegateFlowLayout {
         return CGSize(width : 0, height : 0)
     }
 }
+
+extension NumberPickerViewController {
+    
+    func setCellBackground(at index : Int, color : UIColor) {
+        // cellForItemAt does not like to play nice with custom indexPaths.. so hack instead!
+        let indexPaths = (collectionView?.indexPathsForVisibleItems)!
+        for indexPath in indexPaths {
+            if indexPath.row != index {
+                continue
+            }
+            if let pickerCell = collectionView?.cellForItem(at: indexPath){
+                pickerCell.backgroundColor = color
+            } else {
+                print("COULD NOT GET CELL TO CHANGE COLOR.")
+            }
+        }
+    }
+    
+    func setAllCellBackgrounds(color : UIColor) {
+        for cell in collectionView!.visibleCells {
+            if let pickerCell = cell as? GridCell {
+                pickerCell.backgroundColor = color
+            }
+        }
+    }
+}
+
+
+
+
 
