@@ -12,9 +12,10 @@ final class ViewController: UIViewController {
     
     fileprivate var scale : CGFloat?
     // The controller we talk to that handles all the business of the app
-    let delegate : GameControllerDelegate!
     
     var boardView : UIView!
+    
+    let gameStateDelegate : GameControllerDelegate!
     
     var boardCollectionView : UICollectionView!
     
@@ -39,7 +40,7 @@ final class ViewController: UIViewController {
         view.backgroundColor = .cyan
         //viewLayout.itemSize = CGSize(width: 20, height: 20)
         
-        let numberPickerViewController = NumberPickerViewController()
+        let numberPickerViewController = NumberPickerViewController(delegate : gameStateDelegate)
         numberPickerView = numberPickerViewController.view!
         let numberPickerBorderWidth = 1.0
         let numberPickerCellWidth = 70.0//50.0
@@ -55,7 +56,7 @@ final class ViewController: UIViewController {
         numberPickerView.setNeedsUpdateConstraints()
         
         scrollView = UIScrollView()
-        boardViewController = BoardViewController(numberPickerView : numberPickerView)
+        boardViewController = BoardViewController(delegate : gameStateDelegate, numberPickerView : numberPickerView)
         boardView = boardViewController!.view!
         boardCollectionView = boardViewController!.collectionView!
         view.addSubview(scrollView)
@@ -150,15 +151,14 @@ final class ViewController: UIViewController {
     }
     
     init(delegate : GameControllerDelegate) {
-        self.delegate = delegate
+        self.gameStateDelegate = delegate
         super.init(nibName: nil, bundle: nil)
     }
     
     // Need to implement this to inject MainController into this file - But we never use this method!
     @available (*, unavailable)
     required init?(coder aDecoder: NSCoder) {
-        delegate = nil
-        super.init(coder: aDecoder)
+        fatalError("Not implemented.")
     }
 }
 

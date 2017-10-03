@@ -17,8 +17,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         window = UIWindow()
-        let gameController = MainController()
-        let viewController = ViewController(delegate: gameController)
+        let gameController = GameController()
+        gameController.gameBoard = gameController.generateUnsolvedBoard(difficulty: .normal)
+        gameController.setBoardPermanents() // DON"T KILL PLEASE
+        let viewController = ViewController(delegate : gameController)
         //let navController = UINavigationController(rootViewController: viewController)
         window?.rootViewController = viewController
         window?.makeKeyAndVisible()

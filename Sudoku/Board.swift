@@ -15,10 +15,12 @@ final class Board {
         return (width * width)
     }
     var boardArray : [Int?]
+    var permanents : [Int : Int] // Index, Value
     
     init(size : Int) {
         boardArray = [Int?]()
         width = size
+        permanents = [Int : Int]()
         for _ in 0..<totalItems {
             boardArray.append(nil)
         }
@@ -27,6 +29,7 @@ final class Board {
     init(size : Int, initArray : [Int?]) {
         boardArray = [Int?]()
         width = size
+        permanents = [Int : Int]()
         if(initArray.count > totalItems) {
             assert(false, "Can't pass \(initArray.count) items to board with total size \(totalItems)")
         }
