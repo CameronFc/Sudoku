@@ -15,6 +15,8 @@ class NumberPickerViewController: UICollectionViewController {
     
     var gameStateDelegate : GameControllerDelegate!
     
+    public var selectedBoardCell : Int?
+    
     init(delegate : GameControllerDelegate) {
         let numberPickerLayout = UICollectionViewFlowLayout()
         gameStateDelegate = delegate
@@ -75,8 +77,7 @@ class NumberPickerViewController: UICollectionViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         if let gridCell = cell as? GridCell {
             gridCell.label.text = "\(indexPath.row + 1)"
-            gridCell.backgroundColor = .cyan
-            return gridCell
+            gridCell.backgroundColor = .gray
         }
         return cell
     }
@@ -88,6 +89,7 @@ class NumberPickerViewController: UICollectionViewController {
             } else {
                 selectedCell.layer.borderColor = UIColor.magenta.cgColor
             }
+            
         }
     }
     
