@@ -42,6 +42,7 @@ final class ViewController: UIViewController {
         
         let numberPickerViewController = NumberPickerViewController(delegate : gameStateDelegate)
         numberPickerView = numberPickerViewController.view!
+        let pickerUIController = PickerUIController(numberPickerDelegate: numberPickerViewController)
         let numberPickerBorderWidth = 1.0
         let numberPickerCellWidth = 70.0//50.0
         let totalPickerWidth = CGFloat(3 * numberPickerCellWidth + 6 * numberPickerBorderWidth)
@@ -56,7 +57,7 @@ final class ViewController: UIViewController {
         numberPickerView.setNeedsUpdateConstraints()
         
         scrollView = UIScrollView()
-        boardViewController = BoardViewController(delegate : gameStateDelegate, numberPickerViewController : numberPickerViewController)
+        boardViewController = BoardViewController(delegate : gameStateDelegate, pickerUIDelegate : pickerUIController)
         boardView = boardViewController!.view!
         boardCollectionView = boardViewController!.collectionView!
         view.addSubview(scrollView)
@@ -116,8 +117,6 @@ final class ViewController: UIViewController {
         scrollView.maximumZoomScale = 2.0
         scrollView.bouncesZoom = false
         scrollView.delegate = self
-        
-        numberPickerView.isHidden = true
     }
 
     override func didReceiveMemoryWarning() {

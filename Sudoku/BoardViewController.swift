@@ -19,15 +19,13 @@ final class BoardViewController: UICollectionViewController {
     
     var gameState : GameControllerDelegate?
     
-    var numberPickerViewController : NumberPickerViewController!
-    var numberPickerView : UIView!
+    var pickerUIDelegate : PickerUIController?
     
     // Gives us access to scrollView's zoom scale
     public var customZoomScale : CGFloat = 1.0
     
-    init(delegate : GameControllerDelegate, numberPickerViewController : NumberPickerViewController) {
-        self.numberPickerViewController = numberPickerViewController
-        numberPickerView = numberPickerViewController.view!
+    init(delegate : GameControllerDelegate, pickerUIDelegate : PickerUIController) {
+        self.pickerUIDelegate = pickerUIDelegate
         gameState = delegate
         let viewLayout = UICollectionViewFlowLayout()
         super.init(collectionViewLayout: viewLayout)
@@ -120,31 +118,22 @@ extension BoardViewController {
         print("Selected \(indexPath.description)")
         print(collectionView.frame)
         // Hack back the picker
-        numberPickerView?.isHidden = false
+        pickerUIDelegate?.isHidden = false
         if let selectedCell = collectionView.cellForItem(at: indexPath) as? GridCell {
             if(selectedCell.layer.borderColor == UIColor.magenta.cgColor) {
                 selectedCell.layer.borderColor = UIColor.black.cgColor
             } else {
                 selectedCell.layer.borderColor = UIColor.magenta.cgColor
             }
-            numberPickerView?.center.x = selectedCell.center.x * customZoomScale
-            numberPickerView?.center.y = selectedCell.center.y * customZoomScale
-            numberPickerView?.center.y -= 150
-            numberPickerViewController.selectedBoardCell = indexPath.row
+            // Move the picker to the correct spot
+            var newCenter = CGPoint(x : selectedCell.center.x * customZoomScale, y : selectedCell.center.y * customZoomScale)
+            newCenter.y -= 150
+            pickerUIDelegate?.repositionPicker(center: newCenter)
             
-            let pickerView = (numberPickerViewController.collectionView)!
-            let validChoices = gameState!.getValidChoicesFromCell(index: indexPath.row)
-            for subIndexPath in pickerView.indexPathsForVisibleItems {
-                // The number that appears in the picker. [1 .. 9]
-                let pickerNumber = subIndexPath.row + 1
-                if let pickerCell = pickerView.cellForItem(at : subIndexPath) {
-                        if(validChoices.contains(pickerNumber)) {
-                            pickerCell.backgroundColor = .red
-                        } else {
-                            pickerCell.backgroundColor = .gray
-                        }
-                }
-            }
+            // Set the background color of the picker cells to indicate invalid choices
+            var validChoices = gameState!.getValidChoicesFromCell(index: indexPath.row)
+            validChoices = validChoices.map { $0 - 1} //Convert items from 1...9 to 0...8; Numbers to cellIndices
+            pickerUIDelegate?.setSelectableCells(for: validChoices)
         }
     }
     
