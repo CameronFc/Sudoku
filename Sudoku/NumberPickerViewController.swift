@@ -86,7 +86,7 @@ class NumberPickerViewController: UICollectionViewController {
             } else {
                 selectedCell.layer.borderColor = UIColor.magenta.cgColor
             }
-            
+            gameStateDelegate.gameBoard.boardArray[0] = indexPath.row + 1
         }
     }
     

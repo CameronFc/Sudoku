@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         window = UIWindow()
         let gameController = GameController()
-        gameController.gameBoard = gameController.generateUnsolvedBoard(difficulty: .normal)
+        gameController.gameBoard = gameController.generateUnsolvedBoard(difficulty: .superEasy)
         gameController.setBoardPermanents() // DON"T KILL PLEASE
         let viewController = ViewController(delegate : gameController)
         //let navController = UINavigationController(rootViewController: viewController)

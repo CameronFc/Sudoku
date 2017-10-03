@@ -12,3 +12,9 @@ import Foundation
  This file is responsible for handling changes in the UIState,
  and managing animations.
  */
+
+
+/*
+ The numberPickerController handles what happens when a user touches to change a number on the board.
+ numberPickerController must then update the board state, and tell the boardViewController to reload its data source.
+*/
