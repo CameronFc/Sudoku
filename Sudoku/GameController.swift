@@ -12,12 +12,14 @@ class GameController {
     
     // TODO: Remove this and all mutations, move board code to a Board Controller
     var gameBoard : Board!
+    var finished : Bool
     
     private var boardSize : Int
     var delegates : [GameStateDelegate] // List of views that subscribe to updates
     
     init() {
         boardSize = 9
+        finished = false
         delegates = [GameStateDelegate]()
         let _ = generateFullSolvedBoard()
     }
@@ -146,7 +148,7 @@ class GameController {
         case .hard:
             range = (10, 15)
         case .superEasy:
-            range = (85, 90)
+            range = (95, 98)
         }
         
         let randRange : Int = Int(arc4random_uniform(UInt32(range.high - range.low))) + range.low
@@ -263,32 +265,40 @@ extension GameController : GameState {}
 
 // Exposes game state to views.
 protocol GameState {
+    var finished : Bool { get set }
     var gameBoard : Board! { get }
     var delegates : [GameStateDelegate] { get set }
     func getValidChoicesFromCell(index : Int) -> [Int]
+    func boardIsSolved() -> Bool
 }
 
 extension GameState {
     
     func notifiyDelegates() {
         for delegate in delegates {
-            delegate.gameStateDidChange()
+            delegate.gameStateDidChange(finished : self.finished)
         }
     }
     
-    func changeCellNumber(at index : Int, value : Int?) {
+    mutating func changeCellNumber(at index : Int, value : Int?) {
         //print("Trying to change the board state to \(value) @ \(index). Permanent here is \(gameBoard.permanents[index])")
         // Only allow changing non-permanents
         if(gameBoard.permanents[index] == nil) {
             gameBoard.boardArray[index] = value
         }
+        if(boardIsSolved()) {
+            self.finished = true
+        } else {
+            self.finished = false
+        }
+        
         notifiyDelegates()
     }
 }
 
 // Views subscribe to the gameController through this protocol to be notified of updates to the gameState.
 protocol GameStateDelegate {
-    func gameStateDidChange()
+    func gameStateDidChange(finished : Bool)
 }
 
 

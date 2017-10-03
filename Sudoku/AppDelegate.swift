@@ -21,8 +21,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         gameController.gameBoard = gameController.generateUnsolvedBoard(difficulty: .superEasy)
         gameController.setBoardPermanents() // DON"T KILL PLEASE
         let viewController = ViewController(delegate : gameController)
-        //let navController = UINavigationController(rootViewController: viewController)
-        window?.rootViewController = viewController
+        
+        let navController = UINavigationController(rootViewController: viewController)
+        viewController.navControllerDelegate = navController
+        
+        
+        window?.rootViewController = navController
         window?.makeKeyAndVisible()
         return true
         

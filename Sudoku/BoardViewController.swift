@@ -191,7 +191,7 @@ extension BoardViewController : UICollectionViewDelegateFlowLayout {
 }
 
 extension BoardViewController : GameStateDelegate {
-    func gameStateDidChange() {
+    func gameStateDidChange(finished : Bool) {
         //print("The gameState is letting us know that it has updated.")
         collectionView?.reloadData()
     }

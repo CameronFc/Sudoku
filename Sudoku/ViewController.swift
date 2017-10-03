@@ -15,7 +15,7 @@ final class ViewController: UIViewController {
     
     var boardView : UIView!
     
-    let gameStateDelegate : GameState!
+    var gameStateDelegate : GameState!
     
     var boardCollectionView : UICollectionView!
     
@@ -24,6 +24,10 @@ final class ViewController: UIViewController {
     var numberPickerView : UIView!
     
     var boardViewController : BoardViewController?
+    
+    var navControllerDelegate : UINavigationController?
+    
+    var victoryViewController : VictoryViewController?
     
     var lastLoaction : CGPoint = CGPoint(x: 0, y: 0)
     
@@ -36,6 +40,7 @@ final class ViewController: UIViewController {
         super.viewDidLoad()
         //delegate.newGame()
         scale = 1.0
+        
         
         view.backgroundColor = .cyan
         //viewLayout.itemSize = CGSize(width: 20, height: 20)
@@ -66,6 +71,9 @@ final class ViewController: UIViewController {
         scrollView.addSubview(numberPickerView)
         self.addChildViewController(numberPickerViewController)
         numberPickerViewController.didMove(toParentViewController: self)
+        
+        victoryViewController = VictoryViewController()
+        //navControllerDelegate?.pushViewController(victoryViewController!, animated: true)
         
         //boardView.translatesAutoresizingMaskIntoConstraints = false
         // MARK : Constraints
@@ -153,6 +161,7 @@ final class ViewController: UIViewController {
     init(delegate : GameState) {
         self.gameStateDelegate = delegate
         super.init(nibName: nil, bundle: nil)
+        gameStateDelegate.delegates.append(self)
     }
     
     // Need to implement this to inject MainController into this file - But we never use this method!
@@ -185,5 +194,13 @@ extension ViewController : UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         numberPickerView.isHidden = true
         boardViewController?.deselectAllCells()
+    }
+}
+
+extension ViewController : GameStateDelegate {
+    func gameStateDidChange(finished : Bool) {
+        if(finished) {
+            navControllerDelegate?.pushViewController(victoryViewController!, animated: true)
+        }
     }
 }
