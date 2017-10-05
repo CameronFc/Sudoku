@@ -38,17 +38,12 @@ final class BoardViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         collectionView?.allowsMultipleSelection = false
         collectionView?.translatesAutoresizingMaskIntoConstraints = false
         collectionView?.layer.borderWidth = 1.0
         collectionView?.layer.cornerRadius = 2.0
         collectionView?.backgroundColor = .green
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Register cell classes
+        
         self.collectionView!.register(GridCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         self.collectionView?.reloadData()
     }
@@ -66,6 +61,11 @@ final class BoardViewController: UICollectionViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
     }
+    
+}
+
+// MARK : Auxillary methods
+extension BoardViewController {
     
     public func deselectAllCells() {
         let indexPaths = collectionView!.indexPathsForVisibleItems
@@ -125,10 +125,9 @@ extension BoardViewController {
                 var newCenter = CGPoint(x : selectedCell.center.x * customZoomScale, y : selectedCell.center.y * customZoomScale)
                 newCenter.y -= 150
                 pickerUIDelegate?.repositionPicker(center: newCenter)
-                pickerUIDelegate?.isHidden = false
             } else {
                 // Hide the picker if we select a permanent or a filled cell
-                pickerUIDelegate?.isHidden = true
+                pickerUIDelegate?.hidePicker()
             }
         }
     }
@@ -174,5 +173,10 @@ extension BoardViewController : GameStateDelegate {
         //print("The gameState is letting us know that it has updated.")
         collectionView?.reloadData()
     }
+}
+
+
+extension BoardViewController : UINavigationControllerDelegate {
+    
 }
 
