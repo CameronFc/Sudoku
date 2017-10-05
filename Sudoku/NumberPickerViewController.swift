@@ -48,6 +48,11 @@ class NumberPickerViewController: UICollectionViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        print("Number picker view is going to appear.")
+        super.viewWillAppear(animated)
+    }
+    
 
 }
 
@@ -67,6 +72,7 @@ extension NumberPickerViewController {
         if let gridCell = cell as? GridCell {
             gridCell.label.text = "\(indexPath.row + 1)"
             gridCell.backgroundColor = .gray
+            gridCell.layer.cornerRadius = 3.0
         }
         return cell
     }

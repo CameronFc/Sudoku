@@ -25,15 +25,10 @@ final class ViewController: UIViewController {
     
     var navControllerDelegate : UINavigationController?
     
+    var pickerUIController : PickerUIController?
+    
     var victoryViewController : VictoryViewController?
     
-    var lastLoaction : CGPoint = CGPoint(x: 0, y: 0)
-    
-    var boardViewWidthConstraint : NSLayoutConstraint?
-    var boardViewHeightConstraint : NSLayoutConstraint?
-    var boardViewCenterXConstraint : NSLayoutConstraint?
-    var boardViewCenterYConstraint : NSLayoutConstraint?
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -41,11 +36,12 @@ final class ViewController: UIViewController {
         
         let numberPickerViewController = NumberPickerViewController(delegate : gameStateDelegate)
         numberPickerView = numberPickerViewController.view!
-        let pickerUIController = PickerUIController(numberPickerDelegate: numberPickerViewController)
+        pickerUIController = PickerUIController(numberPickerDelegate: numberPickerViewController)
         let numberPickerBorderWidth = 1.0
-        let numberPickerCellWidth = 70.0//50.0
-        let totalPickerWidth = CGFloat(3 * numberPickerCellWidth + 6 * numberPickerBorderWidth)
+        let numberPickerCellWidth = 50.0
+        let totalPickerWidth = CGFloat(3 * numberPickerCellWidth + 2 * numberPickerBorderWidth)
         numberPickerView.backgroundColor = .magenta
+        numberPickerView.layer.cornerRadius = 3.0
         
         //numberPickerView.layer.zPosition = 1 // Always on top
         numberPickerView.translatesAutoresizingMaskIntoConstraints = false
@@ -57,7 +53,7 @@ final class ViewController: UIViewController {
         numberPickerView.isHidden = true
         
         scrollView = UIScrollView()
-        boardViewController = BoardViewController(delegate : gameStateDelegate, pickerUIDelegate : pickerUIController)
+        boardViewController = BoardViewController(delegate : gameStateDelegate, pickerUIDelegate : pickerUIController!)
         boardView = boardViewController!.view!
         boardCollectionView = boardViewController!.collectionView!
         view.addSubview(scrollView)
@@ -104,6 +100,13 @@ final class ViewController: UIViewController {
         scrollView.maximumZoomScale = 2.0
         scrollView.bouncesZoom = false
         scrollView.delegate = self
+        
+        // MARK : Animations
+        let transition = CATransition()
+        transition.duration = 0.5
+        transition.timingFunction = CAMediaTimingFunction(name : kCAMediaTimingFunctionEaseInEaseOut)
+        transition.type = kCATransitionFromBottom
+        navControllerDelegate?.view.layer.add(transition, forKey: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -151,11 +154,11 @@ extension ViewController : UIScrollViewDelegate {
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        numberPickerView.isHidden = true
+        pickerUIController?.hidePicker()
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        numberPickerView.isHidden = true
+        pickerUIController?.hidePicker()
         boardViewController?.deselectAllCells()
     }
 }
@@ -166,7 +169,7 @@ extension ViewController : GameStateDelegate {
             if(navControllerDelegate!.viewControllers.contains(victoryViewController!)) {
                 navControllerDelegate?.show(victoryViewController!, sender: true)
             } else {
-                navControllerDelegate?.pushViewController(victoryViewController!, animated: true)
+                navControllerDelegate?.pushViewController(victoryViewController!, animated: false)
             }
         }
     }

@@ -114,7 +114,7 @@ class MenuViewController: UIViewController {
         if(navControllerDelegate!.viewControllers.contains(viewController!)) {
             navControllerDelegate?.show(viewController!, sender: self)
         } else {
-            navControllerDelegate?.pushViewController(viewController!, animated: true)
+            navControllerDelegate?.pushViewController(viewController!, animated: false)
         }
         //navControllerDelegate?.setNavigationBarHidden(true, animated: false)
         

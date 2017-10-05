@@ -70,6 +70,21 @@ extension PickerUIController {
 // External controls for manipulating the pickerView
 extension PickerUIController {
     func repositionPicker(center : CGPoint) {
+        self.isHidden = false
         numberPickerDelegate.view.center = center
+        numberPickerDelegate.view.center.y += 50
+        numberPickerDelegate.view.alpha = 0.1
+        UIView.animate(withDuration: 0.3, delay : 0.0, options : [.curveEaseInOut], animations: { [unowned self] in
+            self.numberPickerDelegate.view.center.y -= 50
+            self.numberPickerDelegate.view.alpha = 1.0
+            }, completion : nil)
+    }
+    
+    func hidePicker() {
+        UIView.animate(withDuration: 0.1, delay : 0.0, options : [.curveEaseIn], animations: { [unowned self] in
+            self.numberPickerDelegate.view.alpha = 0.0
+        }, completion : { (someBool) in
+            self.isHidden = true
+        })
     }
 }
