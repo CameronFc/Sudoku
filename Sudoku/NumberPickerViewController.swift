@@ -43,30 +43,20 @@ class NumberPickerViewController: UICollectionViewController {
         collectionView!.backgroundColor = .orange
     }
     
-    /*
-     MARK : RANTING
-     Use grid cells
-     Has a total width of ~ 3 * 36
-     Same kind of spacing as the board, 1 section 9 rows
-     Also has same border - 1 px. Rounder corners.
-     This controller does not control where the numberPicker is drawn.
-     This controller is responsible for making sure that picker is drawn correctly within its own bounds.
-     This controller is responsible for handling the tap event that lets the user add a number to the board.
-     This controller is responsible for making certain numbers greyed out.
-     Probably going to need a delegateProtocol to handle some of the board interactions - like looking up what numbers can be entered.
-    */
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
     
-    // MARK: UICollectionViewDataSource
+
+}
+
+// Mark : UICollectionViewDataSource
+extension NumberPickerViewController {
+    
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
-
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 9
@@ -109,14 +99,12 @@ class NumberPickerViewController: UICollectionViewController {
             selectedCell.layer.borderColor = UIColor.black.cgColor
         }
     }
-
 }
 
 extension NumberPickerViewController : UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //let paddingSpace = 0.0 //sectionInsets.left * (9 + 1)
-        let availableWidth = view.frame.width - 2 //- paddingSpace
+        let availableWidth = view.frame.width - 2
         let widthPerItem = CGFloat((availableWidth / 3.0))
         return CGSize(width : floor(widthPerItem), height : floor(widthPerItem))
     }

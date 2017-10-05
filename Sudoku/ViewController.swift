@@ -10,11 +10,9 @@ import UIKit
 
 final class ViewController: UIViewController {
     
-    fileprivate var scale : CGFloat?
-    // The controller we talk to that handles all the business of the app
-    
     var boardView : UIView!
     
+    // The controller we talk to that handles all the business of the app
     var gameStateDelegate : GameState!
     
     var boardCollectionView : UICollectionView!
@@ -38,11 +36,8 @@ final class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        //delegate.newGame()
-        scale = 1.0
         
         view.backgroundColor = .cyan
-        //viewLayout.itemSize = CGSize(width: 20, height: 20)
         
         let numberPickerViewController = NumberPickerViewController(delegate : gameStateDelegate)
         numberPickerView = numberPickerViewController.view!
@@ -72,23 +67,7 @@ final class ViewController: UIViewController {
         numberPickerViewController.didMove(toParentViewController: self)
         
         victoryViewController = VictoryViewController()
-        //navControllerDelegate?.pushViewController(victoryViewController!, animated: true)
         
-        //boardView.translatesAutoresizingMaskIntoConstraints = false
-        // MARK : Constraints
-        /*
-        NSLayoutConstraint.activate([
-            //boardView.widthAnchor.constraint(equalTo: boardView.heightAnchor)
-            boardView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            boardView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            boardView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            boardView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
-        ])
-        */
-        //boardViewCenterXConstraint = boardView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
-        //boardViewCenterYConstraint = boardView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor)
-        //boardViewCenterXConstraint?.isActive = true
-        //boardViewCenterYConstraint?.isActive = true
         boardView.translatesAutoresizingMaskIntoConstraints = false
         let boardCellSize = 36.0
         let borderSize = 1.0
@@ -133,28 +112,13 @@ final class ViewController: UIViewController {
     }
     
     override func viewWillLayoutSubviews() {
-        //boardViewController?.collectionView?.reloadData()
         super.viewWillLayoutSubviews()
-        /*
-        if(view.bounds.width < view.bounds.height) {
-            boardViewHeightConstraint!.isActive = false
-            boardViewWidthConstraint!.isActive = true
-        } else {
-            boardViewWidthConstraint!.isActive = false
-            boardViewHeightConstraint!.isActive = true
-        }
-        */
     }
     
     override func viewDidLayoutSubviews() {
-        print("After layoutSubviews in ViewController")
-        print("ViewController's child, UICollectionViewContainer, has frame: \(boardView.frame)'")
+        //print("After layoutSubviews in ViewController")
+        //print("ViewController's child, UICollectionViewContainer, has frame: \(boardView.frame)'")
         super.viewDidLayoutSubviews()
-        
-        // Give the board an appropriate ammount of space on each side so we can pan around
-        
-        //let scrollViewBounds = scrollView.bounds
-        
     }
     
     init(delegate : GameState) {

@@ -160,13 +160,10 @@ class GameController {
             cellsToKeepAlive.append(index)
         }
         
-        //print(cellsToKeepAlive)
         for _ in 0..<numToRemove{
             let rand = Int(arc4random_uniform(UInt32(cellsToKeepAlive.count)))
-            //print(rand)
             cellsToKeepAlive.remove(at: rand)
         }
-        //print(cellsToKeepAlive)
         
         for index in 0..<board.boardArray.count {
             if !cellsToKeepAlive.contains(index) {
@@ -207,7 +204,6 @@ class GameController {
             }
         }
         while(currentCellIndex < boardSize * boardSize) {
-            //print("Current cell : \(currentCellIndex)")
             // If we are rolling back and we have used up all our guesses for this cell, keep going back
             if(rollback && guesses[currentCellIndex] == randomSeedBoardArray[currentCellIndex]) {
                 currentCellIndex -= 1
@@ -230,6 +226,7 @@ class GameController {
             }
         }
         
+        // MARK : Code smell - this should be moved elsewhere - notifications should be implicit
         self.finished = false
         notifiyDelegates()
         return Board(size : boardSize, initArray : guesses)
