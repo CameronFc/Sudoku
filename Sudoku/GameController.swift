@@ -230,6 +230,7 @@ class GameController {
             }
         }
         
+        self.finished = false
         notifiyDelegates()
         return Board(size : boardSize, initArray : guesses)
     }

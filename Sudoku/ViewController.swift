@@ -199,7 +199,11 @@ extension ViewController : UIScrollViewDelegate {
 extension ViewController : GameStateDelegate {
     func gameStateDidChange(finished : Bool) {
         if(finished) {
-            navControllerDelegate?.pushViewController(victoryViewController!, animated: true)
+            if(navControllerDelegate!.viewControllers.contains(victoryViewController!)) {
+                navControllerDelegate?.show(victoryViewController!, sender: true)
+            } else {
+                navControllerDelegate?.pushViewController(victoryViewController!, animated: true)
+            }
         }
     }
 }
