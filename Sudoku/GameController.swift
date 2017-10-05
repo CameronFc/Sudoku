@@ -8,6 +8,13 @@
 
 import Foundation
 
+enum Difficulty : String {
+    case superEasy = "SuperEasy"
+    case easy = "Easy"
+    case normal = "Normal"
+    case hard = "Hard"
+}
+
 class GameController {
     
     // TODO: Remove this and all mutations, move board code to a Board Controller
@@ -129,12 +136,6 @@ class GameController {
         return true
     }
     
-    enum Difficulty {
-        case superEasy
-        case easy
-        case normal
-        case hard
-    }
     
     func generateUnsolvedBoard(difficulty : Difficulty) -> Board {
         let board = generateFullSolvedBoard()
@@ -229,6 +230,7 @@ class GameController {
             }
         }
         
+        notifiyDelegates()
         return Board(size : boardSize, initArray : guesses)
     }
     

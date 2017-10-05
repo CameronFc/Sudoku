@@ -41,7 +41,6 @@ final class ViewController: UIViewController {
         //delegate.newGame()
         scale = 1.0
         
-        
         view.backgroundColor = .cyan
         //viewLayout.itemSize = CGSize(width: 20, height: 20)
         
