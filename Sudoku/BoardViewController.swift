@@ -13,8 +13,6 @@ fileprivate let sectionInsets = UIEdgeInsetsMake(1.0, 1.0, 1.0, 1.0)
 
 final class BoardViewController: UICollectionViewController {
     
-    var board : Board?
-    
     var superScrollView : UIView?
     
     var gameState : GameState?
@@ -42,22 +40,9 @@ final class BoardViewController: UICollectionViewController {
         
         
         collectionView?.allowsMultipleSelection = false
-        
-        
         collectionView?.translatesAutoresizingMaskIntoConstraints = false
-        /*
-        NSLayoutConstraint.activate([
-            (collectionView?.trailingAnchor.constraint(equalTo: view.trailingAnchor))!,
-            (collectionView?.bottomAnchor.constraint(equalTo: view.bottomAnchor))!,
-            (collectionView?.leadingAnchor.constraint(equalTo: view.leadingAnchor))!,
-            (collectionView?.topAnchor.constraint(equalTo: view.topAnchor))!
-            ])
-        */
         collectionView?.layer.borderWidth = 1.0
         collectionView?.layer.cornerRadius = 2.0
-        
-        
-        board = Board(size: 9)
         collectionView?.backgroundColor = .green
 
         // Uncomment the following line to preserve selection between presentations
@@ -96,12 +81,10 @@ final class BoardViewController: UICollectionViewController {
 extension BoardViewController {
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        //return board?.totalItems ?? 0
         return 81
     }
 
@@ -160,12 +143,8 @@ extension BoardViewController {
 extension BoardViewController : UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        //let paddingSpace = 0.0 //sectionInsets.left * (9 + 1)
-        let availableWidth = 326.0//view.frame.width //- paddingSpace
+        let availableWidth = 326.0
         let widthPerItem = CGFloat((availableWidth / 9.0))
-        //print(indexPath.row)
-        
         return CGSize(width : floor(widthPerItem), height : floor(widthPerItem))
     }
     
