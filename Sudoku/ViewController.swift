@@ -8,16 +8,26 @@
 
 import UIKit
 
+// MARK : DIRTY HACK
+class PassThroughScrollView : UIScrollView {
+    
+    // Let touch events propagate to children
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.next?.touchesBegan(touches, with: event)
+        super.touchesBegan(touches, with: event)
+    }
+}
+
 final class ViewController: UIViewController {
     
     var boardView : UIView!
     
-    // The controller we talk to that handles all the business of the app
+// The controller we talk to that handles all the business of the app
     var gameStateDelegate : GameState!
     
     var boardCollectionView : UICollectionView!
     
-    var scrollView : UIScrollView!
+    var scrollView : PassThroughScrollView!
     
     var numberPickerView : UIView!
     
@@ -52,7 +62,7 @@ final class ViewController: UIViewController {
         numberPickerView.setNeedsUpdateConstraints()
         numberPickerView.isHidden = true
         
-        scrollView = UIScrollView()
+        scrollView = PassThroughScrollView()
         boardViewController = BoardViewController(delegate : gameStateDelegate, pickerUIDelegate : pickerUIController!)
         boardView = boardViewController!.view!
         boardCollectionView = boardViewController!.collectionView!
@@ -103,11 +113,18 @@ final class ViewController: UIViewController {
         scrollView.delegate = self
         
         // MARK : Animations
+        /*
         let transition = CATransition()
         transition.duration = 0.5
         transition.timingFunction = CAMediaTimingFunction(name : kCAMediaTimingFunctionEaseInEaseOut)
         transition.type = kCATransitionFromBottom
         navControllerDelegate?.view.layer.add(transition, forKey: nil)
+        */
+    }
+    
+    // 
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        pickerUIController?.hidePicker()
     }
 
     override func didReceiveMemoryWarning() {
