@@ -47,6 +47,7 @@ final class ViewController: UIViewController {
         let numberPickerViewController = NumberPickerViewController(delegate : gameStateDelegate)
         numberPickerView = numberPickerViewController.view!
         pickerUIController = PickerUIController(numberPickerDelegate: numberPickerViewController)
+        numberPickerViewController.pickerUIController = pickerUIController
         let numberPickerBorderWidth = 1.0
         let numberPickerCellWidth = 50.0
         let totalPickerWidth = CGFloat(3 * numberPickerCellWidth + 2 * numberPickerBorderWidth)
@@ -93,7 +94,7 @@ final class ViewController: UIViewController {
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         scrollView.setNeedsUpdateConstraints()
-        scrollView.backgroundColor = .blue
+        scrollView.backgroundColor = appColors.gameBackground
         
         let containerViewBounds = boardView.bounds
         var scrollViewInsets = UIEdgeInsetsMake(0, 0, 0, 0)

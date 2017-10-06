@@ -17,6 +17,8 @@ class NumberPickerViewController: UICollectionViewController {
     
     var selectedBoardCell = 0
     
+    var pickerUIController : PickerUIController?
+    
     var selectedCells = [Int : Bool]() {
         didSet {
             for pair in selectedCells {
@@ -101,6 +103,7 @@ extension NumberPickerViewController {
             return // Don't do anything if the number chosen from the picker is invalid
         }
         
+        print("Changing selected cells")
         selectedCells[indexPath.row] = true
         
         if let _ = collectionView.cellForItem(at: indexPath) as? GridCell {
@@ -109,6 +112,10 @@ extension NumberPickerViewController {
                 gameStateDelegate.changeCellNumber(at: selectedBoardCell, value: nil)
             } else {
                 gameStateDelegate.changeCellNumber(at: selectedBoardCell, value: chosenNumber)
+            }
+            // Remove the picker after a delay
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                self?.pickerUIController?.hidePicker()
             }
         }
     }
