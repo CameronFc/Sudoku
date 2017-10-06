@@ -26,7 +26,7 @@ final class BoardViewController: UICollectionViewController {
                     if(pair.value) {
                         cell.backgroundColor = appColors.selectedCell
                     } else {
-                        cell.backgroundColor = appColors.eggshellWhite
+                        cell.backgroundColor = appColors.cellBackground
                     }
                 }
             }
@@ -112,7 +112,7 @@ extension BoardViewController {
             if(selectedCells[indexPath.row] ?? false) {
                 gridCell.backgroundColor = appColors.selectedCell
             } else {
-                gridCell.backgroundColor = appColors.eggshellWhite
+                gridCell.backgroundColor = appColors.cellBackground
             }
             
             let x = indexPath.row % 9
