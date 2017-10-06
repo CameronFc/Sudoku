@@ -86,10 +86,10 @@ extension NumberPickerViewController {
         }
         
         if let selectedCell = collectionView.cellForItem(at: indexPath) as? GridCell {
-            if(selectedCell.layer.borderColor == UIColor.magenta.cgColor) {
-                selectedCell.layer.borderColor = UIColor.black.cgColor
+            if(selectedCell.backgroundColor == UIColor.magenta) {
+                selectedCell.backgroundColor = UIColor.white
             } else {
-                selectedCell.layer.borderColor = UIColor.magenta.cgColor
+                selectedCell.backgroundColor = UIColor.magenta
             }
             // Choosing the same number removes it
             if(chosenNumber == gameStateDelegate.gameBoard.boardArray[selectedBoardCell]) {
