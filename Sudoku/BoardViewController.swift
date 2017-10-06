@@ -109,7 +109,11 @@ extension BoardViewController {
             } else {
                 gridCell.label.font = UIFont(name: "Helvetica", size: 18)
             }
-            gridCell.backgroundColor = appColors.eggshellWhite
+            if(selectedCells[indexPath.row] ?? false) {
+                gridCell.backgroundColor = appColors.selectedCell
+            } else {
+                gridCell.backgroundColor = appColors.eggshellWhite
+            }
             
             let x = indexPath.row % 9
             let y = indexPath.row / 9
