@@ -58,7 +58,7 @@ final class ViewController: UIViewController {
         boardCollectionView = boardViewController!.collectionView!
         view.addSubview(scrollView)
         scrollView.addSubview(boardView)
-        scrollView.addSubview(numberPickerView)
+        view.addSubview(numberPickerView)
         self.addChildViewController(numberPickerViewController)
         numberPickerViewController.didMove(toParentViewController: self)
         
@@ -152,6 +152,10 @@ extension ViewController : UIScrollViewDelegate {
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         //print("Wow! Just ended zooming!")
+    }
+    
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+        pickerUIController?.hidePicker()
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {

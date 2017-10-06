@@ -75,6 +75,10 @@ extension PickerUIController {
 extension PickerUIController {
     func repositionPicker(center : CGPoint) {
         self.isHidden = false
+        //let oldFrame = numberPickerDelegate.view.frame
+        //print(center)
+        //numberPickerDelegate.view.frame = CGRect(origin : CGPoint(x: 50.0, y: 50.0), size : oldFrame.size)
+            //self.numberPickerDelegate.view.alpha = 1.0
         numberPickerDelegate.view.center = center
         numberPickerDelegate.view.center.y += 50
         numberPickerDelegate.view.alpha = 0.1
