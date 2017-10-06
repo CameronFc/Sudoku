@@ -162,9 +162,16 @@ extension BoardViewController {
            
             // Move the picker to the correct spot and show it if necessary
             if(gameState?.gameBoard.permanents[indexPath.row] == nil) {
-                var newCenter = CGPoint(x : selectedCell.center.x * customZoomScale, y : selectedCell.center.y * customZoomScale)
-                newCenter.y -= 150
-                pickerUIDelegate?.repositionPicker(center: newCenter)
+                //print("The boardview's super bounds is \((view.superview?.bounds.origin))")
+                // Assemble the vector from the mainView's origin to where the center of the picker should spawn
+                var newPickerCenter = view.superview?.bounds.origin ?? CGPoint (x : 0.0 , y: 0.0)
+                newPickerCenter.x *= -1
+                newPickerCenter.y *= -1
+                newPickerCenter.x += selectedCell.center.x * customZoomScale
+                newPickerCenter.y += selectedCell.center.y * customZoomScale
+                newPickerCenter.y -= 130
+                //var newCenter = CGPoint(x : selectedCell.center.x * customZoomScale, y : selectedCell.center.y * customZoomScale)
+                pickerUIDelegate?.repositionPicker(center: newPickerCenter)
             } else {
                 // Hide the picker if we select a permanent or a filled cell
                 pickerUIDelegate?.hidePicker()
