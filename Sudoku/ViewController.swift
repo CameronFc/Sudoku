@@ -122,9 +122,10 @@ final class ViewController: UIViewController {
         */
     }
     
-    // 
+    // Handles touches outside the board
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         pickerUIController?.hidePicker()
+        boardViewController?.deselectAllCells()
     }
 
     override func didReceiveMemoryWarning() {
