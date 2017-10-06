@@ -13,7 +13,7 @@ class VictoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .green
+        view.backgroundColor = .magenta
         
         let label = UILabel()
         view.addSubview(label)

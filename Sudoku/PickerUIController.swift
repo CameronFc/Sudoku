@@ -48,7 +48,11 @@ extension PickerUIController {
         assert(0 <= index && index <= 8)
         cellStatuses[index] = status
         //
-        numberPickerDelegate.setCellBackground(at: index, color: (status == .selectable) ? .red : .gray)
+        if(status == .selectable) {
+            numberPickerDelegate.setCellBackground(at: index, color : appColors.selectableCell)
+        } else {
+            numberPickerDelegate.setCellBackground(at: index, color : appColors.eggshellWhite)
+        }
     }
     
     // Set all selectable cells

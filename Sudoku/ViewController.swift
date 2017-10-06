@@ -32,7 +32,7 @@ final class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .cyan
+        view.backgroundColor = .magenta
         
         let numberPickerViewController = NumberPickerViewController(delegate : gameStateDelegate)
         numberPickerView = numberPickerViewController.view!

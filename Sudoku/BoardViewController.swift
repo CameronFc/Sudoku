@@ -19,6 +19,20 @@ final class BoardViewController: UICollectionViewController {
     
     var pickerUIDelegate : PickerUIController?
     
+    var selectedCells = [Int : Bool]() {
+        didSet {
+            for pair in selectedCells {
+                if let cell = collectionView?.cellForItem(at: IndexPath( row : pair.key, section : 0)) as? GridCell {
+                    if(pair.value) {
+                        cell.backgroundColor = appColors.selectedCell
+                    } else {
+                        cell.backgroundColor = appColors.eggshellWhite
+                    }
+                }
+            }
+        }
+    }
+    
     // Gives us access to scrollView's zoom scale
     public var customZoomScale : CGFloat = 1.0
     
@@ -42,7 +56,7 @@ final class BoardViewController: UICollectionViewController {
         collectionView?.translatesAutoresizingMaskIntoConstraints = false
         collectionView?.layer.borderWidth = 1.0
         collectionView?.layer.cornerRadius = 2.0
-        collectionView?.backgroundColor = .green
+        collectionView?.backgroundColor = .magenta
         
         self.collectionView!.register(GridCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         self.collectionView?.reloadData()
@@ -68,11 +82,8 @@ final class BoardViewController: UICollectionViewController {
 extension BoardViewController {
     
     public func deselectAllCells() {
-        let indexPaths = collectionView!.indexPathsForVisibleItems
-        for indexPath in indexPaths {
-            if let cell = collectionView!.cellForItem(at: indexPath) as? GridCell {
-                cell.backgroundColor = .white
-            }
+        for pair in selectedCells {
+            selectedCells[pair.key] = false
         }
     }
 }
@@ -98,7 +109,7 @@ extension BoardViewController {
             } else {
                 gridCell.label.font = UIFont(name: "Helvetica", size: 18)
             }
-            gridCell.backgroundColor = .white
+            gridCell.backgroundColor = appColors.eggshellWhite
             
             let x = indexPath.row % 9
             let y = indexPath.row / 9
@@ -129,7 +140,7 @@ extension BoardViewController {
             }
             return gridCell
         }
-        
+        assertionFailure("Could not generate board cell properly.")
         return cell
     }
     
@@ -141,11 +152,7 @@ extension BoardViewController {
         deselectAllCells()
         
         if let selectedCell = collectionView.cellForItem(at: indexPath) as? GridCell {
-            if(selectedCell.backgroundColor == UIColor.magenta) {
-                selectedCell.backgroundColor = UIColor.white
-            } else {
-                selectedCell.backgroundColor = UIColor.magenta
-            }
+            selectedCells[indexPath.row] = true
             
             // Set the background color of the picker cells to indicate invalid choices
             var validChoices = gameState!.getValidChoicesFromCell(index: indexPath.row)
@@ -166,8 +173,8 @@ extension BoardViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        if let selectedCell = collectionView.cellForItem(at: indexPath) as? GridCell {
-            selectedCell.layer.borderColor = UIColor.black.cgColor
+        if let _ = collectionView.cellForItem(at: indexPath) as? GridCell {
+            selectedCells[indexPath.row] = false
         }
     }
 }
@@ -216,10 +223,5 @@ extension BoardViewController : GameStateDelegate {
         //print("The gameState is letting us know that it has updated.")
         collectionView?.reloadData()
     }
-}
-
-
-extension BoardViewController : UINavigationControllerDelegate {
-    
 }
 

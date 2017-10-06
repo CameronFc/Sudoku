@@ -27,7 +27,7 @@ class MenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        view.backgroundColor = appColors.menuBackgroundColor
         
         titleLabel = UILabel()
         titleLabel.text = "SUDOKU!"
@@ -50,7 +50,7 @@ class MenuViewController: UIViewController {
         gameMenu.distribution = .fillEqually
         gameMenu.alignment = .fill
         gameMenu.spacing = 5
-        gameMenu.backgroundColor = .cyan
+        gameMenu.backgroundColor = .magenta
         
         gameMenu.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
