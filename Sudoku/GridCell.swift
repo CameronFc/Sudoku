@@ -39,7 +39,7 @@ class GridCell: UICollectionViewCell {
         label.textAlignment = .center
         self.layer.borderWidth = 1.0
         //self.layer.cornerRadius = 2.0
-        backgroundColor = .red
+        backgroundColor = .magenta // Debug Color
         
         // MARK : Code smell
         leftBorder = UIView()

@@ -15,13 +15,28 @@ class NumberPickerViewController: UICollectionViewController {
     
     var gameStateDelegate : GameState!
     
+    var selectedBoardCell = 0
+    
+    var selectedCells = [Int : Bool]() {
+        didSet {
+            for pair in selectedCells {
+                if let cell = collectionView?.cellForItem(at: IndexPath( row : pair.key, section : 0)) as? GridCell {
+                    if(pair.value) {
+                        cell.backgroundColor = appColors.selectedCell
+                    } else {
+                        cell.backgroundColor = appColors.eggshellWhite
+                    }
+                }
+            }
+        }
+    }
+    
     init(delegate : GameState) {
         let numberPickerLayout = UICollectionViewFlowLayout()
         gameStateDelegate = delegate
         super.init(collectionViewLayout: numberPickerLayout)
     }
     
-    var selectedBoardCell = 0
     
     @available (*, unavailable)
     required init?(coder aDecoder: NSCoder) {
@@ -40,7 +55,8 @@ class NumberPickerViewController: UICollectionViewController {
         collectionView?.layer.borderWidth = 1.0
         collectionView?.layer.cornerRadius = 2.0
         
-        collectionView!.backgroundColor = .orange
+        // Needs to be same color as cell border
+        collectionView!.backgroundColor = .black
     }
     
     override func didReceiveMemoryWarning() {
@@ -71,7 +87,7 @@ extension NumberPickerViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         if let gridCell = cell as? GridCell {
             gridCell.label.text = "\(indexPath.row + 1)"
-            gridCell.backgroundColor = .gray
+            gridCell.backgroundColor = appColors.eggshellWhite
             gridCell.layer.cornerRadius = 3.0
         }
         return cell
@@ -85,12 +101,9 @@ extension NumberPickerViewController {
             return // Don't do anything if the number chosen from the picker is invalid
         }
         
-        if let selectedCell = collectionView.cellForItem(at: indexPath) as? GridCell {
-            if(selectedCell.backgroundColor == UIColor.magenta) {
-                selectedCell.backgroundColor = UIColor.white
-            } else {
-                selectedCell.backgroundColor = UIColor.magenta
-            }
+        selectedCells[indexPath.row] = true
+        
+        if let _ = collectionView.cellForItem(at: indexPath) as? GridCell {
             // Choosing the same number removes it
             if(chosenNumber == gameStateDelegate.gameBoard.boardArray[selectedBoardCell]) {
                 gameStateDelegate.changeCellNumber(at: selectedBoardCell, value: nil)
@@ -101,9 +114,7 @@ extension NumberPickerViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        if let selectedCell = collectionView.cellForItem(at: indexPath) as? GridCell {
-            selectedCell.layer.borderColor = UIColor.black.cgColor
-        }
+        selectedCells[indexPath.row] = false
     }
 }
 
