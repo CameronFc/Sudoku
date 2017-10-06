@@ -12,6 +12,11 @@ class GridCell: UICollectionViewCell {
     
     var label : UILabel!
     
+    var leftBorder : UIView!
+    var rightBorder : UIView!
+    var topBorder : UIView!
+    var bottomBorder : UIView!
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -35,6 +40,20 @@ class GridCell: UICollectionViewCell {
         self.layer.borderWidth = 1.0
         //self.layer.cornerRadius = 2.0
         backgroundColor = .red
+        
+        // MARK : Code smell
+        leftBorder = UIView()
+        rightBorder = UIView()
+        topBorder = UIView()
+        bottomBorder = UIView()
+        leftBorder.backgroundColor = .black
+        rightBorder.backgroundColor = .black
+        topBorder.backgroundColor = .black
+        bottomBorder.backgroundColor = .black
+        self.addSubview(leftBorder)
+        self.addSubview(rightBorder)
+        self.addSubview(topBorder)
+        self.addSubview(bottomBorder)
     }
     /*
     // Only override draw() if you perform custom drawing.

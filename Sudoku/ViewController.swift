@@ -67,7 +67,8 @@ final class ViewController: UIViewController {
         boardView.translatesAutoresizingMaskIntoConstraints = false
         let boardCellSize = 36.0
         let borderSize = 1.0
-        let totalBoardSize = CGFloat(boardCellSize * 9 + borderSize * 2)
+        let extraCellSize = 1.0
+        let totalBoardSize = CGFloat(boardCellSize * 9 + borderSize * 2 + 6 * extraCellSize)
         boardView.widthAnchor.constraint(equalToConstant: totalBoardSize).isActive = true
         boardView.heightAnchor.constraint(equalToConstant: totalBoardSize).isActive = true
         

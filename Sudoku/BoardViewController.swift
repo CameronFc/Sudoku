@@ -71,7 +71,7 @@ extension BoardViewController {
         let indexPaths = collectionView!.indexPathsForVisibleItems
         for indexPath in indexPaths {
             if let cell = collectionView!.cellForItem(at: indexPath) as? GridCell {
-                cell.layer.borderColor = UIColor.black.cgColor
+                cell.backgroundColor = .white
             }
         }
     }
@@ -98,20 +98,53 @@ extension BoardViewController {
             } else {
                 gridCell.label.font = UIFont(name: "Helvetica", size: 18)
             }
-            gridCell.layer.borderColor = UIColor.black.cgColor
+            gridCell.backgroundColor = .white
+            
+            let x = indexPath.row % 9
+            let y = indexPath.row / 9
+            let borderWidth = CGFloat(2.0)
+            // Add right borders
+            if( x % 3 == 2 ) {
+                gridCell.rightBorder.frame = CGRect(x: gridCell.frame.width - borderWidth, y: 0 , width: borderWidth, height: gridCell.frame.height)
+            } else {
+                gridCell.rightBorder.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+            }
+            // Add left borders
+            if( x % 3 == 0 ) {
+                gridCell.leftBorder.frame = CGRect(x: 0 , y: 0 , width: borderWidth, height: gridCell.frame.height)
+            } else {
+                gridCell.leftBorder.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+            }
+            // Add top borders
+            if( y % 3 == 0 ) {
+                gridCell.topBorder.frame = CGRect(x: 0 , y: 0 , width: gridCell.frame.height, height: borderWidth)
+            } else {
+                gridCell.topBorder.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+            }
+            // Add bottom borders
+            if( y % 3 == 2 ) {
+                gridCell.bottomBorder.frame = CGRect(x: 0 , y: gridCell.frame.height - borderWidth , width: gridCell.frame.height, height: borderWidth)
+            } else {
+                gridCell.bottomBorder.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+            }
             return gridCell
         }
+        
         return cell
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         //print("Selected \(indexPath.description)")
         //print(collectionView.frame)
+        
+        // Remove all other highlights, just in case
+        deselectAllCells()
+        
         if let selectedCell = collectionView.cellForItem(at: indexPath) as? GridCell {
-            if(selectedCell.layer.borderColor == UIColor.magenta.cgColor) {
-                selectedCell.layer.borderColor = UIColor.black.cgColor
+            if(selectedCell.backgroundColor == UIColor.magenta) {
+                selectedCell.backgroundColor = UIColor.white
             } else {
-                selectedCell.layer.borderColor = UIColor.magenta.cgColor
+                selectedCell.backgroundColor = UIColor.magenta
             }
             
             // Set the background color of the picker cells to indicate invalid choices
@@ -142,9 +175,19 @@ extension BoardViewController {
 extension BoardViewController : UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let availableWidth = 326.0
-        let widthPerItem = CGFloat((availableWidth / 9.0))
-        return CGSize(width : floor(widthPerItem), height : floor(widthPerItem))
+        //let availableWidth = 326.0
+        let widthPerItem = 36.0 // CGFloat((availableWidth / 9.0))
+        var cellWidth = widthPerItem
+        var cellHeight = widthPerItem
+        let x = indexPath.row % 9
+        let y = indexPath.row / 9
+        if(x % 3 == 0 || x % 3 == 2) {
+            cellWidth += 1
+        }
+        if(y % 3 == 0 || y % 3 == 2) {
+            cellHeight += 1
+        }
+        return CGSize(width : cellWidth, height : cellHeight)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
