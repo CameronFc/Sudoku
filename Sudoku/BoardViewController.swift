@@ -13,12 +13,12 @@ fileprivate let sectionInsets = UIEdgeInsetsMake(1.0, 1.0, 1.0, 1.0)
 
 final class BoardViewController: UICollectionViewController {
     
-    var superScrollView : UIView?
-    
     var gameState : GameState?
     
     var pickerUIDelegate : PickerUIController?
     
+    // Definitely belongs in a controller file - view controlers should not manage data!
+    // ViewControllers should never own the true copy of data.
     var selectedCells = [Int : Bool]() {
         didSet {
             for pair in selectedCells {

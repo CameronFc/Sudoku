@@ -12,8 +12,11 @@ class VictoryViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.backgroundColor = .magenta
+        
+        view.backgroundColor = .clear
+        view.isOpaque = false
+        
+        self.modalTransitionStyle = .coverVertical
         
         let label = UILabel()
         view.addSubview(label)
@@ -24,11 +27,17 @@ class VictoryViewController: UIViewController {
         
         label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
+            label.widthAnchor.constraint(equalToConstant: 200),
+            label.heightAnchor.constraint(equalToConstant: 200)
+        ])
+        /*
+        NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             label.topAnchor.constraint(equalTo: view.topAnchor),
             label.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             label.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+        */
         label.setNeedsUpdateConstraints()
         
         // Do any additional setup after loading the view.

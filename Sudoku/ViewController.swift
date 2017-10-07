@@ -70,6 +70,7 @@ final class ViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(boardView)
         view.addSubview(numberPickerView)
+        
         self.addChildViewController(numberPickerViewController)
         numberPickerViewController.didMove(toParentViewController: self)
         
@@ -190,11 +191,15 @@ extension ViewController : UIScrollViewDelegate {
 extension ViewController : GameStateDelegate {
     func gameStateDidChange(finished : Bool) {
         if(finished) {
-            if(navControllerDelegate!.viewControllers.contains(victoryViewController!)) {
-                navControllerDelegate?.show(victoryViewController!, sender: true)
-            } else {
-                navControllerDelegate?.pushViewController(victoryViewController!, animated: false)
-            }
+            //if(navControllerDelegate!.viewControllers.contains(victoryViewController!)) {
+                //navControllerDelegate?.show(victoryViewController!, sender: true)
+            //self.presentingViewController?.providesPresentationContextTransitionStyle = true
+            //self.presentingViewController?.definesPresentationContext = true
+        victoryViewController!.modalPresentationStyle = .overCurrentContext
+                navControllerDelegate?.present(victoryViewController!, animated: true, completion: nil)
+            //} else {
+                //navControllerDelegate?.pushViewController(victoryViewController!, animated: false)
+            //}
         }
     }
 }
