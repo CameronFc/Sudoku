@@ -49,20 +49,23 @@ class MenuViewController: UIViewController {
         gameMenu.axis = .vertical
         gameMenu.distribution = .fillEqually
         gameMenu.alignment = .fill
-        gameMenu.spacing = 5
+        gameMenu.spacing = 8.0
         gameMenu.backgroundColor = .magenta
         
         gameMenu.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             gameMenu.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             gameMenu.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            gameMenu.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier : 0.5)
         ])
         
         let difficulties = [Difficulty.superEasy, .easy, .normal, .hard]
         for difficulty in difficulties {
             let newGameButton = UIButton(type : .system)
             newGameButton.setTitle(difficulty.rawValue, for: .normal)
-            newGameButton.backgroundColor = .green
+            newGameButton.backgroundColor = appColors.cellBackground
+            newGameButton.layer.cornerRadius = 15.0
+            newGameButton.layer.borderWidth = 2.0
             // MARK : SMELLS BAD
             var tag = 0
             switch(difficulty) {

@@ -9,7 +9,7 @@
 import Foundation
 
 enum Difficulty : String {
-    case superEasy = "SuperEasy"
+    case superEasy = "Super Easy"
     case easy = "Easy"
     case normal = "Normal"
     case hard = "Hard"
