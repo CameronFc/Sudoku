@@ -28,7 +28,10 @@ class VictoryViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             label.widthAnchor.constraint(equalToConstant: 200),
-            label.heightAnchor.constraint(equalToConstant: 200)
+            label.heightAnchor.constraint(equalToConstant: 200),
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 44) // Nav bar height
+            
         ])
         /*
         NSLayoutConstraint.activate([

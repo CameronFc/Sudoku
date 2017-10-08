@@ -195,8 +195,14 @@ extension ViewController : GameStateDelegate {
                 //navControllerDelegate?.show(victoryViewController!, sender: true)
             //self.presentingViewController?.providesPresentationContextTransitionStyle = true
             //self.presentingViewController?.definesPresentationContext = true
-        victoryViewController!.modalPresentationStyle = .overCurrentContext
-                navControllerDelegate?.present(victoryViewController!, animated: true, completion: nil)
+        //victoryViewController!.modalPresentationStyle = .overCurrentContext
+                //navControllerDelegate?.present(victoryViewController!, animated: true, completion: nil)
+            let alert = UIAlertController(title: "You Win!", message: "You have completed the game in 0.00s. Congratulations!", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+                self.navControllerDelegate?.popViewController(animated: true)
+            })
+            
+            present(alert, animated: true)
             //} else {
                 //navControllerDelegate?.pushViewController(victoryViewController!, animated: false)
             //}
