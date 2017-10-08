@@ -35,6 +35,13 @@ class MenuViewController: UIViewController {
         titleLabel.font = UIFont(name: "Helvetica", size: 64)
         view.addSubview(titleLabel)
         
+        titleLabel.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+        UIView.animate(withDuration: 0.7, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5, options: [.curveEaseIn], animations: {
+            self.titleLabel.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+        }, completion: { (result : Bool) in
+        
+        })
+        
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
