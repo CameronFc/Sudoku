@@ -18,6 +18,8 @@ class PickerUIController {
     
     var delegate : NumberPickerViewController!
     
+    var boardUIDelegate : BoardUIController!
+    
     fileprivate var cellStatuses : [Int : CellStatus]
     
     var isHidden : Bool {
@@ -79,8 +81,17 @@ extension PickerUIController {
 // External controls for manipulating the pickerView
 extension PickerUIController {
     func repositionPicker(center : CGPoint) {
+        // Assemble the vector from the mainView's origin to where the center of the picker should spawn
+        var newPickerCenter = boardUIDelegate.delegate.view.superview?.bounds.origin ?? CGPoint (x : 0.0 , y: 0.0)
+        newPickerCenter.x *= -1
+        newPickerCenter.y *= -1
+        newPickerCenter.x += center.x * boardUIDelegate.customZoomScale
+        newPickerCenter.y += center.y * boardUIDelegate.customZoomScale
+        newPickerCenter.y -= 130
+        
         self.isHidden = false
-        delegate.view.center = center
+        
+        delegate.view.center = newPickerCenter
         delegate.view.center.y += 50
         delegate.view.alpha = 0.1
         UIView.animate(withDuration: 0.3, delay : 0.0, options : [.curveEaseInOut], animations: { [unowned self] in
