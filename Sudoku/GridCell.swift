@@ -29,7 +29,6 @@ class GridCell: UICollectionViewCell {
     func setupViews() {
         label = UILabel()
         self.addSubview(label)
-        //label.text = "Default"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         label.topAnchor.constraint(equalTo: topAnchor).isActive = true
@@ -38,30 +37,22 @@ class GridCell: UICollectionViewCell {
         label.setNeedsUpdateConstraints()
         label.textAlignment = .center
         self.layer.borderWidth = 1.0
-        //self.layer.cornerRadius = 2.0
-        backgroundColor = .magenta // Debug Color
+        backgroundColor = AppColors.shouldNotBeSeen
         
         // MARK : Code smell
         leftBorder = UIView()
         rightBorder = UIView()
         topBorder = UIView()
         bottomBorder = UIView()
-        leftBorder.backgroundColor = .black
-        rightBorder.backgroundColor = .black
-        topBorder.backgroundColor = .black
-        bottomBorder.backgroundColor = .black
+        leftBorder.backgroundColor = AppColors.cellBorder
+        rightBorder.backgroundColor = AppColors.cellBorder
+        topBorder.backgroundColor = AppColors.cellBorder
+        bottomBorder.backgroundColor = AppColors.cellBorder
         self.addSubview(leftBorder)
         self.addSubview(rightBorder)
         self.addSubview(topBorder)
         self.addSubview(bottomBorder)
     }
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
 }
 
 

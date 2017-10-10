@@ -10,7 +10,7 @@ import UIKit
 
 class MenuViewController: UIViewController {
     
-    var navControllerDelegate : UINavigationController?
+    var navDelegate : UINavigationController?
     
     var titleLabel : UILabel!
     
@@ -95,7 +95,7 @@ class MenuViewController: UIViewController {
         let boardUI = BoardUIController()
         pickerUI.boardUIDelegate = boardUI
         viewController = ViewController(gameStateDelegate : gameController, pickerUIDelegate : pickerUI, boardUIDelegate : boardUI)
-        viewController?.navDelegate = navControllerDelegate
+        viewController?.navDelegate = navDelegate
     }
     
     func handleDifficultyButtonPress(sender : UIButton) {
@@ -116,10 +116,10 @@ class MenuViewController: UIViewController {
         gameController.gameBoard = gameController.generateUnsolvedBoard(difficulty: difficulty)
         gameController.setBoardPermanents() // DON'T REMOVE; REFACTOR LATER
         
-        if(navControllerDelegate!.viewControllers.contains(viewController!)) {
-            navControllerDelegate?.show(viewController!, sender: self)
+        if(navDelegate!.viewControllers.contains(viewController!)) {
+            navDelegate?.show(viewController!, sender: self)
         } else {
-            navControllerDelegate?.pushViewController(viewController!, animated: false)
+            navDelegate?.pushViewController(viewController!, animated: false)
         }
         
     }
