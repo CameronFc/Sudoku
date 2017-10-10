@@ -16,7 +16,7 @@ enum CellStatus {
 
 class PickerUIController {
     
-    let numberPickerDelegate : NumberPickerViewController!
+    var numberPickerDelegate : NumberPickerViewController!
     
     fileprivate var cellStatuses : [Int : CellStatus]
     
@@ -26,8 +26,7 @@ class PickerUIController {
         }
     }
     
-    init(numberPickerDelegate : NumberPickerViewController) {
-        self.numberPickerDelegate = numberPickerDelegate
+    init() {
         self.isHidden = true
         cellStatuses = [Int : CellStatus]()
         for index in 0..<9 {
@@ -49,13 +48,13 @@ extension PickerUIController {
         assert(0 <= index && index <= 8)
         cellStatuses[index] = status
         if(status == .selectable) {
-            numberPickerDelegate.setCellBackground(at: index, color : appColors.selectableCell)
+            numberPickerDelegate.setCellBackground(at: index, color : AppColors.selectableCell)
             if let gridCell = numberPickerDelegate.collectionView?.cellForItem(at: IndexPath(row : index, section : 0)) as? GridCell {
                 gridCell.label.textColor = .black
             }
             
         } else {
-            numberPickerDelegate.setCellBackground(at: index, color : appColors.numberPickerCell)
+            numberPickerDelegate.setCellBackground(at: index, color : AppColors.numberPickerCell)
             if let gridCell = numberPickerDelegate.collectionView?.cellForItem(at: IndexPath(row : index, section : 0)) as? GridCell {
                 gridCell.label.textColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
             }
