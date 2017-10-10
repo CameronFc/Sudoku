@@ -105,7 +105,7 @@ extension PickerUIController {
 extension PickerUIController {
     func repositionPicker(center : CGPoint) {
         // Assemble the vector from the mainView's origin to where the center of the picker should spawn
-        var newPickerCenter = boardUIDelegate.delegate.view.superview?.bounds.origin ?? CGPoint (x : 0.0 , y: 0.0)
+        var newPickerCenter = boardUIDelegate.delegate?.view.superview?.bounds.origin ?? CGPoint (x : 0.0 , y: 0.0)
         newPickerCenter.x *= -1
         newPickerCenter.y *= -1
         newPickerCenter.x += center.x * boardUIDelegate.customZoomScale

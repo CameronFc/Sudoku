@@ -225,7 +225,6 @@ class GameController {
                 }
             }
         }
-        
         // MARK : Code smell - this should be moved elsewhere - notifications should be implicit
         self.finished = false
         notifiyDelegates()
@@ -302,6 +301,3 @@ extension GameState {
 protocol GameStateDelegate {
     func gameStateDidChange(finished : Bool)
 }
-
-
-

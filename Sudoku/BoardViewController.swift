@@ -28,7 +28,6 @@ final class BoardViewController: UICollectionViewController {
         // Subscribe to game state updates
         self.gameStateDelegate.delegates.append(self)
         self.boardUIDelegate.delegate = self
-        
     }
     
     @available (*, unavailable)
@@ -39,7 +38,7 @@ final class BoardViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.collectionView!.register(GridCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        self.collectionView?.register(GridCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         self.collectionView?.reloadData()
     }
     
@@ -66,6 +65,7 @@ extension BoardViewController : UICollectionViewDelegateFlowLayout {
         var cellHeight = widthPerItem
         let x = indexPath.row % 9
         let y = indexPath.row / 9
+        // Make certain cells bigger to account for extra border size around regions
         if(x % 3 == 0 || x % 3 == 2) {
             cellWidth += GameConstants.extraCellSize
         }
