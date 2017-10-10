@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 enum CellStatus {
+    
     case selectable
     case unselectable
 }
@@ -23,12 +24,31 @@ class PickerUIController {
     fileprivate var cellStatuses : [Int : CellStatus]
     
     var isHidden : Bool {
+        
         didSet {
             delegate.view.isHidden = isHidden
         }
     }
     
+    var selectedCells = [Int : Bool]() {
+        
+        didSet {
+            for pair in selectedCells {
+                if let cell = delegate.collectionView?.cellForItem(at: IndexPath( row : pair.key, section : 0)) as? GridCell {
+                    if(pair.value) {
+                        cell.backgroundColor = AppColors.selectedCell
+                    } else {
+                        cell.backgroundColor = AppColors.numberPickerCell
+                    }
+                }
+            }
+        }
+    }
+    
+    var selectedBoardCell = 0
+    
     init() {
+        
         self.isHidden = true
         cellStatuses = [Int : CellStatus]()
         for index in 0..<9 {
@@ -42,11 +62,13 @@ class PickerUIController {
 extension PickerUIController {
     // External accessors becuase property observers for dictionaries suck
     func getCellStatus(at index : Int) -> CellStatus {
+        
         assert(0 <= index && index <= 8)
         return cellStatuses[index]!
     }
     
     func setCellStatus(at index : Int, status : CellStatus) {
+        
         assert(0 <= index && index <= 8)
         cellStatuses[index] = status
         if(status == .selectable) {
@@ -62,9 +84,9 @@ extension PickerUIController {
             }
         }
     }
-    
     // Set all selectable cells
     func setSelectableCells(for indices : [Int]) {
+        
         for index in 0..<cellStatuses.count {
             setCellStatus(at: index, status: .unselectable)
         }
@@ -74,7 +96,8 @@ extension PickerUIController {
     }
     
     func setSelectedBoardCell(at index : Int) {
-        delegate.selectedBoardCell = index
+        
+        selectedBoardCell = index
     }
 }
 
@@ -101,6 +124,7 @@ extension PickerUIController {
     }
     
     func hidePicker() {
+        
         UIView.animate(withDuration: 0.1, delay : 0.0, options : [.curveEaseIn], animations: { [unowned self] in
             self.delegate.view.alpha = 0.0
         }, completion : { (someBool) in

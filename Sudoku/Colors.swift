@@ -19,6 +19,7 @@ fileprivate let customColors = [
 
 struct AppColors {
     static let cellBackground = customColors["eggshellWhite"]!
+    static let cellBorder = UIColor.black
     static let numberPickerCell = UIColor(red: 210.0 / m, green: 204.0 / m, blue: 184.0 / m, alpha: 1.0)
     static let selectedCell = UIColor(red: 255 / m, green: 135 / m, blue: 30 / m, alpha: 1.0)
     static let selectableCell = UIColor(red: 240.0 / m, green: 234.0 / m, blue: 214.0 / m, alpha: 1.0)

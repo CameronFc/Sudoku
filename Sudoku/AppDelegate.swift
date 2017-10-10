@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow()
         let menuViewController = MenuViewController()
         let navController = UINavigationController(rootViewController: menuViewController)
-        menuViewController.navControllerDelegate = navController
+        menuViewController.navDelegate = navController
         window?.rootViewController = navController
         window?.makeKeyAndVisible()
         return true
