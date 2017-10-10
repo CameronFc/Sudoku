@@ -25,6 +25,7 @@ struct AppColors {
     let selectableCell = UIColor(red: 240.0 / m, green: 234.0 / m, blue: 214.0 / m, alpha: 1.0)
     let menuBackgroundColor = UIColor.white
     let gameBackground = customColors["skyBlue"]!
+    let shouldNotBeSeen = UIColor.magenta
 }
 
 let appColors = AppColors()
