@@ -24,9 +24,9 @@ final class BoardViewController: UICollectionViewController {
             for pair in selectedCells {
                 if let cell = collectionView?.cellForItem(at: IndexPath( row : pair.key, section : 0)) as? GridCell {
                     if(pair.value) {
-                        cell.backgroundColor = appColors.selectedCell
+                        cell.backgroundColor = AppColors.selectedCell
                     } else {
-                        cell.backgroundColor = appColors.cellBackground
+                        cell.backgroundColor = AppColors.cellBackground
                     }
                 }
             }
@@ -110,9 +110,9 @@ extension BoardViewController {
                 gridCell.label.font = UIFont(name: "Helvetica", size: 18)
             }
             if(selectedCells[indexPath.row] ?? false) {
-                gridCell.backgroundColor = appColors.selectedCell
+                gridCell.backgroundColor = AppColors.selectedCell
             } else {
-                gridCell.backgroundColor = appColors.cellBackground
+                gridCell.backgroundColor = AppColors.cellBackground
             }
             
             let x = indexPath.row % 9
@@ -190,8 +190,7 @@ extension BoardViewController {
 extension BoardViewController : UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //let availableWidth = 326.0
-        let widthPerItem = 36.0 // CGFloat((availableWidth / 9.0))
+        let widthPerItem = GameConstants.boardCellSize
         var cellWidth = widthPerItem
         var cellHeight = widthPerItem
         let x = indexPath.row % 9

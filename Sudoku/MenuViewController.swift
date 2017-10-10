@@ -27,7 +27,7 @@ class MenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = appColors.menuBackgroundColor
+        view.backgroundColor = AppColors.menuBackgroundColor
         
         titleLabel = UILabel()
         titleLabel.text = "SUDOKU!"
@@ -70,7 +70,7 @@ class MenuViewController: UIViewController {
         for difficulty in difficulties {
             let newGameButton = UIButton(type : .system)
             newGameButton.setTitle(difficulty.rawValue, for: .normal)
-            newGameButton.backgroundColor = appColors.cellBackground
+            newGameButton.backgroundColor = AppColors.cellBackground
             newGameButton.layer.cornerRadius = 15.0
             newGameButton.layer.borderWidth = 2.0
             // MARK : SMELLS BAD
@@ -91,19 +91,12 @@ class MenuViewController: UIViewController {
             gameMenu.addArrangedSubview(newGameButton)
         }
         
-        viewController = ViewController(delegate : gameController)
-        viewController?.navController = navControllerDelegate
-        
-        //navControllerDelegate?.pushViewController(viewController, animated: true)
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        let pickerUI = PickerUIController()
+        viewController = ViewController(gameStateDelegate : gameController, pickerUIDelegate : pickerUI)
+        viewController?.navDelegate = navControllerDelegate
     }
     
     func handleDifficultyButtonPress(sender : UIButton) {
-        //print("Shit! We just pressed one of the buttons!")
         var difficulty = Difficulty.superEasy
         switch(sender.tag) {
         case 0 :
@@ -119,27 +112,15 @@ class MenuViewController: UIViewController {
         }
         // Do any additional setup after loading the view.
         gameController.gameBoard = gameController.generateUnsolvedBoard(difficulty: difficulty)
-        gameController.setBoardPermanents() // DON"T KILL PLEASE
+        gameController.setBoardPermanents() // DON'T REMOVE; REFACTOR LATER
         
         if(navControllerDelegate!.viewControllers.contains(viewController!)) {
             navControllerDelegate?.show(viewController!, sender: self)
         } else {
             navControllerDelegate?.pushViewController(viewController!, animated: false)
         }
-        //navControllerDelegate?.setNavigationBarHidden(true, animated: false)
         
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 

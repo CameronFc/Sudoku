@@ -14,6 +14,7 @@
 		7E53A3141F842A8600FACDA0 /* VictoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E53A3131F842A8600FACDA0 /* VictoryViewController.swift */; };
 		7E53A3161F857E7800FACDA0 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E53A3151F857E7800FACDA0 /* MenuViewController.swift */; };
 		7E53A3181F87FD3400FACDA0 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E53A3171F87FD3400FACDA0 /* Colors.swift */; };
+		7EA256C41F8C473200B12213 /* constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA256C31F8C473200B12213 /* constants.swift */; };
 		7EAE3C1B1F6C32D4006195AB /* MainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAE3C1A1F6C32D4006195AB /* MainController.swift */; };
 		7EAE3C1D1F6C3346006195AB /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAE3C1C1F6C3346006195AB /* Persistence.swift */; };
 		7EAE3C2B1F6C3B65006195AB /* GridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAE3C2A1F6C3B65006195AB /* GridCell.swift */; };
@@ -51,6 +52,7 @@
 		7E53A3131F842A8600FACDA0 /* VictoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VictoryViewController.swift; sourceTree = "<group>"; };
 		7E53A3151F857E7800FACDA0 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		7E53A3171F87FD3400FACDA0 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		7EA256C31F8C473200B12213 /* constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = constants.swift; sourceTree = "<group>"; };
 		7EAE3C1A1F6C32D4006195AB /* MainController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainController.swift; sourceTree = "<group>"; };
 		7EAE3C1C1F6C3346006195AB /* Persistence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		7EAE3C2A1F6C3B65006195AB /* GridCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridCell.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 				7E53A3131F842A8600FACDA0 /* VictoryViewController.swift */,
 				7E53A3151F857E7800FACDA0 /* MenuViewController.swift */,
 				7E53A3171F87FD3400FACDA0 /* Colors.swift */,
+				7EA256C31F8C473200B12213 /* constants.swift */,
 			);
 			path = Sudoku;
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 				7E1498A41F749B9100E593E3 /* NumberPickerViewController.swift in Sources */,
 				7EAE3C1B1F6C32D4006195AB /* MainController.swift in Sources */,
 				7EE6391C1F6B334400BB8221 /* ViewController.swift in Sources */,
+				7EA256C41F8C473200B12213 /* constants.swift in Sources */,
 				7E53A3181F87FD3400FACDA0 /* Colors.swift in Sources */,
 				7E53A3141F842A8600FACDA0 /* VictoryViewController.swift in Sources */,
 				7EE6391A1F6B334400BB8221 /* AppDelegate.swift in Sources */,

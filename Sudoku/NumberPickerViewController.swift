@@ -24,9 +24,9 @@ class NumberPickerViewController: UICollectionViewController {
             for pair in selectedCells {
                 if let cell = collectionView?.cellForItem(at: IndexPath( row : pair.key, section : 0)) as? GridCell {
                     if(pair.value) {
-                        cell.backgroundColor = appColors.selectedCell
+                        cell.backgroundColor = AppColors.selectedCell
                     } else {
-                        cell.backgroundColor = appColors.numberPickerCell
+                        cell.backgroundColor = AppColors.numberPickerCell
                     }
                 }
             }
@@ -60,7 +60,7 @@ class NumberPickerViewController: UICollectionViewController {
         // Needs to be same color as cell border
         collectionView!.backgroundColor = .black
         
-        view.backgroundColor = appColors.shouldNotBeSeen
+        view.backgroundColor = AppColors.shouldNotBeSeen
         view.layer.cornerRadius = 3.0
     }
     
@@ -85,7 +85,7 @@ extension NumberPickerViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         if let gridCell = cell as? GridCell {
             gridCell.label.text = "\(indexPath.row + 1)"
-            gridCell.backgroundColor = appColors.numberPickerCell
+            gridCell.backgroundColor = AppColors.numberPickerCell
             gridCell.layer.cornerRadius = 3.0
         }
         return cell
