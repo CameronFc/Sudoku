@@ -39,7 +39,6 @@ class GridCell: UICollectionViewCell {
         self.layer.borderWidth = 1.0
         backgroundColor = AppColors.shouldNotBeSeen
         
-        // MARK : Code smell
         leftBorder = UIView()
         rightBorder = UIView()
         topBorder = UIView()
