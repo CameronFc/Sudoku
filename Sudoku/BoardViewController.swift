@@ -37,15 +37,17 @@ final class BoardViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView?.allowsMultipleSelection = false
+        self.collectionView!.register(GridCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        self.collectionView?.reloadData()
+    }
+    
+    func setupSubviews() {
+        
         collectionView?.layer.borderWidth = 1.0
         collectionView?.layer.cornerRadius = 2.0
         collectionView?.backgroundColor = .magenta
         
         setupConstraints()
-        self.collectionView!.register(GridCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        self.collectionView?.reloadData()
-        
     }
     
     func setupConstraints() {
@@ -129,15 +131,8 @@ extension BoardViewController {
            
             // Move the picker to the correct spot and show it if necessary
             if(gameStateDelegate.gameBoard.permanents[indexPath.row] == nil) {
-                // Assemble the vector from the mainView's origin to where the center of the picker should spawn
-                var newPickerCenter = view.superview?.bounds.origin ?? CGPoint (x : 0.0 , y: 0.0)
-                newPickerCenter.x *= -1
-                newPickerCenter.y *= -1
-                newPickerCenter.x += selectedCell.center.x * boardUIDelegate.customZoomScale
-                newPickerCenter.y += selectedCell.center.y * boardUIDelegate.customZoomScale
-                newPickerCenter.y -= 130
-                //var newCenter = CGPoint(x : selectedCell.center.x * customZoomScale, y : selectedCell.center.y * customZoomScale)
-                pickerUIDelegate.repositionPicker(center: newPickerCenter)
+                let cellCenter = selectedCell.center
+                pickerUIDelegate.repositionPicker(center: cellCenter)
             } else {
                 // Hide the picker if we select a permanent or a filled cell
                 pickerUIDelegate.hidePicker()
