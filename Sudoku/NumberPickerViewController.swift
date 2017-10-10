@@ -8,8 +8,6 @@
 
 import UIKit
 
-fileprivate let sectionInsets = UIEdgeInsetsMake(1.0, 1.0, 1.0, 1.0)
-
 class NumberPickerViewController: UICollectionViewController {
     
     let reuseIdentifier = "NumberCell"
@@ -50,7 +48,6 @@ class NumberPickerViewController: UICollectionViewController {
         collectionView!.backgroundColor = AppColors.cellBorder
         
         view.backgroundColor = AppColors.shouldNotBeSeen
-        view.layer.cornerRadius = 3.0
     }
 }
 
@@ -64,7 +61,7 @@ extension NumberPickerViewController : UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return sectionInsets
+        return UIEdgeInsetsMake(1.0, 1.0, 1.0, 1.0)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

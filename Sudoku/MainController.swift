@@ -7,13 +7,18 @@
 //
 
 import Foundation
+import UIKit
 
-
-/*
- Must be able to save current board state to disk
-*/ 
 
 final class MainController {
     
+    let navController : UINavigationController
+    
+    init() {
+        let gameController = GameController()
+        let menuViewController = MenuViewController(gameStateDelegate : gameController)
+        navController = UINavigationController(rootViewController: menuViewController)
+        menuViewController.navDelegate = navController
+    }
 }
 

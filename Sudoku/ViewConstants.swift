@@ -17,4 +17,7 @@ struct GameConstants {
     static let boardCellSize = 35.0
     static let totalBoardSize = CGFloat(boardCellSize * 9 + borderSize * 2 + 6 * extraCellSize)
     static let totalPickerWidth = CGFloat(3 * numberPickerCellWidth + 2 * numberPickerBorderWidth)
+    
+    static let menuButtonCornerRadius : CGFloat = 15.0
+    static let menuButtonBorderWidth : CGFloat = 2.0
 }

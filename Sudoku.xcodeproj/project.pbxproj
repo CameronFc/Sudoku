@@ -16,6 +16,7 @@
 		7EA256C41F8C473200B12213 /* ViewConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA256C31F8C473200B12213 /* ViewConstants.swift */; };
 		7EA256CE1F8C552C00B12213 /* BoardUIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA256CD1F8C552C00B12213 /* BoardUIController.swift */; };
 		7EA256D11F8C646000B12213 /* BoardViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA256D01F8C646000B12213 /* BoardViewDataSource.swift */; };
+		7EA256D31F8C6BA700B12213 /* NumberPickerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA256D21F8C6BA700B12213 /* NumberPickerDataSource.swift */; };
 		7EAE3C1B1F6C32D4006195AB /* MainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAE3C1A1F6C32D4006195AB /* MainController.swift */; };
 		7EAE3C2B1F6C3B65006195AB /* GridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAE3C2A1F6C3B65006195AB /* GridCell.swift */; };
 		7EE6391A1F6B334400BB8221 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE639191F6B334400BB8221 /* AppDelegate.swift */; };
@@ -54,6 +55,7 @@
 		7EA256C31F8C473200B12213 /* ViewConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewConstants.swift; sourceTree = "<group>"; };
 		7EA256CD1F8C552C00B12213 /* BoardUIController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardUIController.swift; sourceTree = "<group>"; };
 		7EA256D01F8C646000B12213 /* BoardViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardViewDataSource.swift; sourceTree = "<group>"; };
+		7EA256D21F8C6BA700B12213 /* NumberPickerDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberPickerDataSource.swift; sourceTree = "<group>"; };
 		7EAE3C1A1F6C32D4006195AB /* MainController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainController.swift; sourceTree = "<group>"; };
 		7EAE3C2A1F6C3B65006195AB /* GridCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridCell.swift; sourceTree = "<group>"; };
 		7EE639161F6B334400BB8221 /* Sudoku.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sudoku.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -164,6 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				7EA256D01F8C646000B12213 /* BoardViewDataSource.swift */,
+				7EA256D21F8C6BA700B12213 /* NumberPickerDataSource.swift */,
 			);
 			name = DataSources;
 			sourceTree = "<group>";
@@ -358,6 +361,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7EA256D31F8C6BA700B12213 /* NumberPickerDataSource.swift in Sources */,
 				7E1498A41F749B9100E593E3 /* NumberPickerViewController.swift in Sources */,
 				7EAE3C1B1F6C32D4006195AB /* MainController.swift in Sources */,
 				7EE6391C1F6B334400BB8221 /* ViewController.swift in Sources */,

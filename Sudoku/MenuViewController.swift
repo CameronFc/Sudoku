@@ -10,92 +10,36 @@ import UIKit
 
 class MenuViewController: UIViewController {
     
-    var navDelegate : UINavigationController?
+    var navDelegate : UINavigationController!
+    
+    var gameStateDelegate : GameState
+    
+    var viewController : ViewController?
     
     var titleLabel : UILabel!
     
     var gameMenu : UIStackView!
     
-    var difficultyButtons = [DifficultyButton]()
+    init(gameStateDelegate : GameState) {
+        self.gameStateDelegate = gameStateDelegate
+        super.init(nibName: nil, bundle: nil)
+    }
     
-    var selectedDifficulty = Difficulty.easy
-    
-    let gameController = GameController()
-    
-    var viewController : ViewController?
+    @available (*, unavailable)
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("Not implemented.")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = AppColors.menuBackgroundColor
-        
-        titleLabel = UILabel()
-        titleLabel.text = "SUDOKU!"
-        titleLabel.textAlignment = .center
-        titleLabel.font = UIFont(name: "Helvetica", size: 64)
-        view.addSubview(titleLabel)
-        
-        titleLabel.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
-        UIView.animate(withDuration: 0.7, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5, options: [.curveEaseIn], animations: {
-            self.titleLabel.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-        }, completion: { (result : Bool) in
-        
-        })
-        
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor),
-            titleLabel.heightAnchor.constraint(equalToConstant: 300),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-        
-        
-        gameMenu = UIStackView()
-        view.addSubview(gameMenu)
-        gameMenu.axis = .vertical
-        gameMenu.distribution = .fillEqually
-        gameMenu.alignment = .fill
-        gameMenu.spacing = 8.0
-        gameMenu.backgroundColor = .magenta
-        
-        gameMenu.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            gameMenu.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            gameMenu.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            gameMenu.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier : 0.5)
-        ])
-        
-        let difficulties = [Difficulty.superEasy, .easy, .normal, .hard]
-        for difficulty in difficulties {
-            let newGameButton = UIButton(type : .system)
-            newGameButton.setTitle(difficulty.rawValue, for: .normal)
-            newGameButton.backgroundColor = AppColors.cellBackground
-            newGameButton.layer.cornerRadius = 15.0
-            newGameButton.layer.borderWidth = 2.0
-            // MARK : SMELLS BAD
-            var tag = 0
-            switch(difficulty) {
-            case .superEasy :
-                tag = 0
-            case .easy :
-                tag = 1
-            case .normal :
-                tag = 2
-            case .hard :
-                tag = 3
-            }
-            newGameButton.tag = tag
-            
-            newGameButton.addTarget(self, action: #selector(self.handleDifficultyButtonPress), for: .touchUpInside)
-            gameMenu.addArrangedSubview(newGameButton)
-        }
-        
         let pickerUI = PickerUIController()
         let boardUI = BoardUIController()
         pickerUI.boardUIDelegate = boardUI
-        viewController = ViewController(gameStateDelegate : gameController, pickerUIDelegate : pickerUI, boardUIDelegate : boardUI)
+        viewController = ViewController(gameStateDelegate : gameStateDelegate, pickerUIDelegate : pickerUI, boardUIDelegate : boardUI)
         viewController?.navDelegate = navDelegate
+        
+        setupSubviews()
     }
     
     func handleDifficultyButtonPress(sender : UIButton) {
@@ -113,28 +57,83 @@ class MenuViewController: UIViewController {
             assertionFailure("Something bad went wrong with the buttons!")
         }
         // Do any additional setup after loading the view.
-        gameController.gameBoard = gameController.generateUnsolvedBoard(difficulty: difficulty)
-        gameController.setBoardPermanents() // DON'T REMOVE; REFACTOR LATER
+        gameStateDelegate.gameBoard = gameStateDelegate.generateUnsolvedBoard(difficulty: difficulty)
+        gameStateDelegate.setBoardPermanents() // DON'T REMOVE; REFACTOR LATER
         
-        if(navDelegate!.viewControllers.contains(viewController!)) {
-            navDelegate?.show(viewController!, sender: self)
+        if(navDelegate.viewControllers.contains(viewController!)) {
+            navDelegate.show(viewController!, sender: self)
         } else {
-            navDelegate?.pushViewController(viewController!, animated: false)
+            navDelegate.pushViewController(viewController!, animated: false)
         }
         
     }
-
-}
-
-class DifficultyButton : UIButton {
     
-    override func addTarget(_ target: Any?, action: Selector, for controlEvents: UIControlEvents) {
+    func setupSubviews() {
+        
+        titleLabel = UILabel()
+        gameMenu = UIStackView()
+        
+        view.backgroundColor = AppColors.menuBackgroundColor
+        titleLabel.text = "SUDOKU!"
+        titleLabel.textAlignment = .center
+        titleLabel.font = UIFont(name: "Helvetica", size: 64)
+        view.addSubview(titleLabel)
+        
+        titleLabel.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+        UIView.animate(withDuration: 0.7, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5, options: [.curveEaseIn], animations: {
+            self.titleLabel.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+        }, completion: nil)
+        
+        view.addSubview(gameMenu)
+        gameMenu.axis = .vertical
+        gameMenu.distribution = .fillEqually
+        gameMenu.alignment = .fill
+        gameMenu.spacing = 8.0
+        gameMenu.backgroundColor = AppColors.shouldNotBeSeen
+        
+        let difficulties = [Difficulty.superEasy, .easy, .normal, .hard]
+        for difficulty in difficulties {
+            let newGameButton = UIButton(type : .system)
+            newGameButton.setTitle(difficulty.rawValue, for: .normal)
+            newGameButton.backgroundColor = AppColors.cellBackground
+            newGameButton.layer.cornerRadius = GameConstants.menuButtonCornerRadius
+            newGameButton.layer.borderWidth = GameConstants.menuButtonBorderWidth
+            // Easiest way to attach data to a button press. 
+            // We could use a collectionView or tableView instead.
+            var tag = 0
+            switch(difficulty) {
+            case .superEasy :
+                tag = 0
+            case .easy :
+                tag = 1
+            case .normal :
+                tag = 2
+            case .hard :
+                tag = 3
+            }
+            newGameButton.tag = tag
+            newGameButton.addTarget(self, action: #selector(self.handleDifficultyButtonPress), for: .touchUpInside)
+            gameMenu.addArrangedSubview(newGameButton)
+        }
+        
+        setupConstraints()
+    }
+    
+    func setupConstraints() {
+        
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor),
+            titleLabel.heightAnchor.constraint(equalToConstant: 300),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        
+        gameMenu.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            gameMenu.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            gameMenu.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            gameMenu.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier : 0.5)
+        ])
     }
 }
-
-
-
-
-
-
-

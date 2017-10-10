@@ -266,10 +266,12 @@ extension GameController : GameState {}
 // Exposes game state to views.
 protocol GameState {
     var finished : Bool { get set }
-    var gameBoard : Board! { get }
+    var gameBoard : Board! { get set }
     var delegates : [GameStateDelegate] { get set }
     func getValidChoicesFromCell(index : Int) -> [Int]
     func boardIsSolved() -> Bool
+    func setBoardPermanents()
+    func generateUnsolvedBoard(difficulty : Difficulty) -> Board
 }
 
 extension GameState {
