@@ -22,9 +22,11 @@ final class ViewController: UIViewController {
     
     var gameStateDelegate : GameState
     
-    var pickerUIDelegate : PickerUIController
+    let pickerUIDelegate : PickerUIController
     
-    var navDelegate : UINavigationController!
+    let boardUIDelegate : BoardUIController
+    
+    var navDelegate : UINavigationController! 
     
     var boardViewController : BoardViewController!
     
@@ -34,26 +36,23 @@ final class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = AppColors.shouldNotBeSeen
-        
-        numberPickerViewController = NumberPickerViewController(delegate : gameStateDelegate)
-        numberPickerViewController.pickerUIController = pickerUIDelegate
-        boardViewController = BoardViewController(delegate : gameStateDelegate, pickerUIDelegate : pickerUIDelegate)
-        self.addChildViewController(numberPickerViewController)
-        numberPickerViewController.didMove(toParentViewController: self)
-        
-        self.pickerUIDelegate.numberPickerDelegate = numberPickerViewController
-        
-        pickerUIDelegate.hidePicker()
-        
         setupSubviews()
+        pickerUIDelegate.hidePicker()
     }
     
-    init(gameStateDelegate : GameState, pickerUIDelegate : PickerUIController) {
+    init(gameStateDelegate : GameState, pickerUIDelegate : PickerUIController, boardUIDelegate : BoardUIController) {
         self.gameStateDelegate = gameStateDelegate
         self.pickerUIDelegate = pickerUIDelegate
+        self.boardUIDelegate = boardUIDelegate
         super.init(nibName: nil, bundle: nil)
+        
         self.gameStateDelegate.delegates.append(self)
+        
+        boardViewController = BoardViewController(gameStateDelegate : gameStateDelegate, pickerUIDelegate : pickerUIDelegate, boardUIDelegate : boardUIDelegate)
+        
+        numberPickerViewController = NumberPickerViewController(gameStateDelegate : gameStateDelegate, pickerUIDelegate : pickerUIDelegate)
+        self.addChildViewController(numberPickerViewController)
+        numberPickerViewController.didMove(toParentViewController: self)
     }
     
     @available (*, unavailable)
@@ -62,6 +61,7 @@ final class ViewController: UIViewController {
     }
 }
 
+// MARK : User Interaction
 extension ViewController : UIScrollViewDelegate {
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
@@ -70,7 +70,7 @@ extension ViewController : UIScrollViewDelegate {
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         scrollView.setNeedsLayout()
-        boardViewController.customZoomScale = scrollView.zoomScale
+        boardUIDelegate.customZoomScale = scrollView.zoomScale
     }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
@@ -83,7 +83,14 @@ extension ViewController : UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         pickerUIDelegate.hidePicker()
-        boardViewController.deselectAllCells()
+        boardUIDelegate.deselectAllCells()
+    }
+    
+    // Handles touches outside the board
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        pickerUIDelegate.hidePicker()
+        boardUIDelegate.deselectAllCells()
     }
 }
 
@@ -102,12 +109,15 @@ extension ViewController : GameStateDelegate {
     }
 }
 
+// MARK : View setup
 extension ViewController {
     
     func setupSubviews() {
         
         let boardView = boardViewController.view!
         let numberPickerView = numberPickerViewController.view!
+        
+        view.backgroundColor = AppColors.shouldNotBeSeen
         
         scrollView = PassThroughScrollView()
         scrollView.addSubview(boardView)
@@ -158,10 +168,4 @@ extension ViewController {
         boardView.heightAnchor.constraint(equalToConstant: GameConstants.totalBoardSize).isActive = true
     }
     
-    // Handles touches outside the board
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-        pickerUIDelegate.hidePicker()
-        boardViewController.deselectAllCells()
-    }
 }

@@ -12,38 +12,24 @@ private let reuseIdentifier = "GridCell"
 
 final class BoardViewController: UICollectionViewController {
     
-    var gameStateDelegate : GameState?
+    var gameStateDelegate : GameState
     
-    var pickerUIDelegate : PickerUIController?
+    var pickerUIDelegate : PickerUIController
     
-    // Definitely belongs in a controller file - view controlers should not manage data!
-    // ViewControllers should never own the true copy of data.
-    var selectedCells = [Int : Bool]() {
-        didSet {
-            for pair in selectedCells {
-                if let cell = collectionView?.cellForItem(at: IndexPath( row : pair.key, section : 0)) as? GridCell {
-                    if(pair.value) {
-                        cell.backgroundColor = AppColors.selectedCell
-                    } else {
-                        cell.backgroundColor = AppColors.cellBackground
-                    }
-                }
-            }
-        }
-    }
+    var boardUIDelegate : BoardUIController
     
-    // Gives us access to scrollView's zoom scale
-    public var customZoomScale : CGFloat = 1.0
-    
-    init(delegate : GameState, pickerUIDelegate : PickerUIController) {
+    init(gameStateDelegate : GameState, pickerUIDelegate : PickerUIController, boardUIDelegate : BoardUIController) {
         self.pickerUIDelegate = pickerUIDelegate
-        gameStateDelegate = delegate
+        self.gameStateDelegate = gameStateDelegate
+        self.boardUIDelegate = boardUIDelegate
         let viewLayout = UICollectionViewFlowLayout()
         super.init(collectionViewLayout: viewLayout)
         // Subscribe to game state updates
-        gameStateDelegate?.delegates.append(self)
+        self.gameStateDelegate.delegates.append(self)
+        self.boardUIDelegate.delegate = self
     }
     
+    @available (*, unavailable)
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -52,38 +38,18 @@ final class BoardViewController: UICollectionViewController {
         super.viewDidLoad()
         
         collectionView?.allowsMultipleSelection = false
-        collectionView?.translatesAutoresizingMaskIntoConstraints = false
         collectionView?.layer.borderWidth = 1.0
         collectionView?.layer.cornerRadius = 2.0
         collectionView?.backgroundColor = .magenta
         
+        setupConstraints()
         self.collectionView!.register(GridCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         self.collectionView?.reloadData()
+        
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    override func viewWillLayoutSubviews() {
-        //print("doing viewWillLayoutSubviews in boardController")
-        super.viewWillLayoutSubviews()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-    }
-    
-}
-
-// MARK : Auxillary methods
-extension BoardViewController {
-    
-    public func deselectAllCells() {
-        for pair in selectedCells {
-            selectedCells[pair.key] = false
-        }
+    func setupConstraints() {
+        collectionView?.translatesAutoresizingMaskIntoConstraints = false
     }
 }
 
@@ -101,14 +67,14 @@ extension BoardViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         if let gridCell = cell as? GridCell {
-            let cellText = (gameStateDelegate?.gameBoard?.boardArray[indexPath.row])?.description ?? " "
+            let cellText = (gameStateDelegate.gameBoard?.boardArray[indexPath.row])?.description ?? " "
             gridCell.label.text = cellText
-            if (gameStateDelegate?.gameBoard.permanents[indexPath.row] != nil) {
+            if (gameStateDelegate.gameBoard.permanents[indexPath.row] != nil) {
                 gridCell.label.font = UIFont(name: "Helvetica-Bold", size: 20)
             } else {
                 gridCell.label.font = UIFont(name: "Helvetica", size: 18)
             }
-            if(selectedCells[indexPath.row] ?? false) {
+            if(boardUIDelegate.selectedCells[indexPath.row] ?? false) {
                 gridCell.backgroundColor = AppColors.selectedCell
             } else {
                 gridCell.backgroundColor = AppColors.cellBackground
@@ -149,39 +115,39 @@ extension BoardViewController {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        deselectAllCells()
+        boardUIDelegate.deselectAllCells()
         
         if let selectedCell = collectionView.cellForItem(at: indexPath) as? GridCell {
             
-            selectedCells[indexPath.row] = true
+            boardUIDelegate.selectedCells[indexPath.row] = true
             
             // Set the background color of the picker cells to indicate invalid choices
-            var validChoices = gameStateDelegate!.getValidChoicesFromCell(index: indexPath.row)
+            var validChoices = gameStateDelegate.getValidChoicesFromCell(index: indexPath.row)
             validChoices = validChoices.map { $0 - 1} //Convert items from 1...9 to 0...8; Numbers to cellIndices
-            pickerUIDelegate?.setSelectableCells(for: validChoices)
-            pickerUIDelegate?.setSelectedBoardCell(at: indexPath.row)
+            pickerUIDelegate.setSelectableCells(for: validChoices)
+            pickerUIDelegate.setSelectedBoardCell(at: indexPath.row)
            
             // Move the picker to the correct spot and show it if necessary
-            if(gameStateDelegate?.gameBoard.permanents[indexPath.row] == nil) {
+            if(gameStateDelegate.gameBoard.permanents[indexPath.row] == nil) {
                 // Assemble the vector from the mainView's origin to where the center of the picker should spawn
                 var newPickerCenter = view.superview?.bounds.origin ?? CGPoint (x : 0.0 , y: 0.0)
                 newPickerCenter.x *= -1
                 newPickerCenter.y *= -1
-                newPickerCenter.x += selectedCell.center.x * customZoomScale
-                newPickerCenter.y += selectedCell.center.y * customZoomScale
+                newPickerCenter.x += selectedCell.center.x * boardUIDelegate.customZoomScale
+                newPickerCenter.y += selectedCell.center.y * boardUIDelegate.customZoomScale
                 newPickerCenter.y -= 130
                 //var newCenter = CGPoint(x : selectedCell.center.x * customZoomScale, y : selectedCell.center.y * customZoomScale)
-                pickerUIDelegate?.repositionPicker(center: newPickerCenter)
+                pickerUIDelegate.repositionPicker(center: newPickerCenter)
             } else {
                 // Hide the picker if we select a permanent or a filled cell
-                pickerUIDelegate?.hidePicker()
+                pickerUIDelegate.hidePicker()
             }
         }
     }
     
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         if let _ = collectionView.cellForItem(at: indexPath) as? GridCell {
-            selectedCells[indexPath.row] = false
+            boardUIDelegate.selectedCells[indexPath.row] = false
         }
     }
 }

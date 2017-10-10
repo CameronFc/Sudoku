@@ -92,7 +92,8 @@ class MenuViewController: UIViewController {
         }
         
         let pickerUI = PickerUIController()
-        viewController = ViewController(gameStateDelegate : gameController, pickerUIDelegate : pickerUI)
+        let boardUI = BoardUIController()
+        viewController = ViewController(gameStateDelegate : gameController, pickerUIDelegate : pickerUI, boardUIDelegate : boardUI)
         viewController?.navDelegate = navControllerDelegate
     }
     

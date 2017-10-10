@@ -14,6 +14,7 @@
 		7E53A3161F857E7800FACDA0 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E53A3151F857E7800FACDA0 /* MenuViewController.swift */; };
 		7E53A3181F87FD3400FACDA0 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E53A3171F87FD3400FACDA0 /* Colors.swift */; };
 		7EA256C41F8C473200B12213 /* ViewConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA256C31F8C473200B12213 /* ViewConstants.swift */; };
+		7EA256CE1F8C552C00B12213 /* BoardUIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA256CD1F8C552C00B12213 /* BoardUIController.swift */; };
 		7EAE3C1B1F6C32D4006195AB /* MainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAE3C1A1F6C32D4006195AB /* MainController.swift */; };
 		7EAE3C2B1F6C3B65006195AB /* GridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EAE3C2A1F6C3B65006195AB /* GridCell.swift */; };
 		7EE6391A1F6B334400BB8221 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE639191F6B334400BB8221 /* AppDelegate.swift */; };
@@ -50,6 +51,7 @@
 		7E53A3151F857E7800FACDA0 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		7E53A3171F87FD3400FACDA0 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		7EA256C31F8C473200B12213 /* ViewConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewConstants.swift; sourceTree = "<group>"; };
+		7EA256CD1F8C552C00B12213 /* BoardUIController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardUIController.swift; sourceTree = "<group>"; };
 		7EAE3C1A1F6C32D4006195AB /* MainController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainController.swift; sourceTree = "<group>"; };
 		7EAE3C2A1F6C3B65006195AB /* GridCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridCell.swift; sourceTree = "<group>"; };
 		7EE639161F6B334400BB8221 /* Sudoku.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sudoku.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -132,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				7E53A3111F83E1B700FACDA0 /* PickerUIController.swift */,
+				7EA256CD1F8C552C00B12213 /* BoardUIController.swift */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -354,6 +357,7 @@
 				7E1498A21F741EA300E593E3 /* GameController.swift in Sources */,
 				7E53A3161F857E7800FACDA0 /* MenuViewController.swift in Sources */,
 				7E53A3121F83E1B700FACDA0 /* PickerUIController.swift in Sources */,
+				7EA256CE1F8C552C00B12213 /* BoardUIController.swift in Sources */,
 				7EAE3C2B1F6C3B65006195AB /* GridCell.swift in Sources */,
 				7E110D801F704658006B5626 /* BoardViewController.swift in Sources */,
 			);

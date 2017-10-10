@@ -13,11 +13,11 @@ fileprivate let sectionInsets = UIEdgeInsetsMake(1.0, 1.0, 1.0, 1.0)
 
 class NumberPickerViewController: UICollectionViewController {
     
-    var gameStateDelegate : GameState!
+    var gameStateDelegate : GameState
     
     var selectedBoardCell = 0
     
-    var pickerUIController : PickerUIController?
+    var pickerUIDelegate : PickerUIController
     
     var selectedCells = [Int : Bool]() {
         didSet {
@@ -33,10 +33,13 @@ class NumberPickerViewController: UICollectionViewController {
         }
     }
     
-    init(delegate : GameState) {
+    init(gameStateDelegate : GameState, pickerUIDelegate : PickerUIController) {
         let numberPickerLayout = UICollectionViewFlowLayout()
-        gameStateDelegate = delegate
+        self.gameStateDelegate = gameStateDelegate
+        self.pickerUIDelegate = pickerUIDelegate
         super.init(collectionViewLayout: numberPickerLayout)
+        
+        self.pickerUIDelegate.delegate = self
     }
     
     
@@ -62,11 +65,6 @@ class NumberPickerViewController: UICollectionViewController {
         
         view.backgroundColor = AppColors.shouldNotBeSeen
         view.layer.cornerRadius = 3.0
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 }
 
@@ -110,7 +108,7 @@ extension NumberPickerViewController {
             }
             // Remove the picker after a delay
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                self?.pickerUIController?.hidePicker()
+                self?.pickerUIDelegate.hidePicker()
             }
         }
     }
