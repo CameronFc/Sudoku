@@ -18,140 +18,51 @@ class PassThroughScrollView : UIScrollView {
     }
 }
 
+fileprivate let boardCellSize = 36.0
+fileprivate let borderSize = 1.0
+fileprivate let extraCellSize = 1.0
+fileprivate let totalBoardSize = CGFloat(boardCellSize * 9 + borderSize * 2 + 6 * extraCellSize)
+fileprivate let numberPickerBorderWidth = 1.0
+fileprivate let numberPickerCellWidth = 50.0
+fileprivate let totalPickerWidth = CGFloat(3 * numberPickerCellWidth + 2 * numberPickerBorderWidth)
+
 final class ViewController: UIViewController {
     
-    var boardView : UIView!
-    
-// The controller we talk to that handles all the business of the app
-    var gameStateDelegate : GameState!
-    
-    var boardCollectionView : UICollectionView!
+    var gameState : GameState!
     
     var scrollView : PassThroughScrollView!
     
-    var numberPickerView : UIView!
+    var boardViewController : BoardViewController!
     
-    var boardViewController : BoardViewController?
+    var navController : UINavigationController!
     
-    var navControllerDelegate : UINavigationController?
+    var pickerUIController : PickerUIController!
     
-    var pickerUIController : PickerUIController?
-    
-    var victoryViewController : VictoryViewController?
+    var numberPickerViewController : NumberPickerViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .magenta
+        view.backgroundColor = appColors.shouldNotBeSeen
         
-        let numberPickerViewController = NumberPickerViewController(delegate : gameStateDelegate)
-        numberPickerView = numberPickerViewController.view!
+        numberPickerViewController = NumberPickerViewController(delegate : gameState)
         pickerUIController = PickerUIController(numberPickerDelegate: numberPickerViewController)
         numberPickerViewController.pickerUIController = pickerUIController
-        let numberPickerBorderWidth = 1.0
-        let numberPickerCellWidth = 50.0
-        let totalPickerWidth = CGFloat(3 * numberPickerCellWidth + 2 * numberPickerBorderWidth)
-        numberPickerView.backgroundColor = .magenta
-        numberPickerView.layer.cornerRadius = 3.0
-        
-        //numberPickerView.layer.zPosition = 1 // Always on top
-        numberPickerView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            numberPickerView.widthAnchor.constraint(equalToConstant: totalPickerWidth),
-            numberPickerView.heightAnchor.constraint(equalToConstant: totalPickerWidth),
-        ])
-        numberPickerView.setNeedsUpdateConstraints()
-        numberPickerView.isHidden = true
-        
-        scrollView = PassThroughScrollView()
-        boardViewController = BoardViewController(delegate : gameStateDelegate, pickerUIDelegate : pickerUIController!)
-        boardView = boardViewController!.view!
-        boardCollectionView = boardViewController!.collectionView!
-        view.addSubview(scrollView)
-        scrollView.addSubview(boardView)
-        view.addSubview(numberPickerView)
-        
+        boardViewController = BoardViewController(delegate : gameState, pickerUIDelegate : pickerUIController!)
         self.addChildViewController(numberPickerViewController)
         numberPickerViewController.didMove(toParentViewController: self)
         
-        victoryViewController = VictoryViewController()
+        pickerUIController.hidePicker()
         
-        boardView.translatesAutoresizingMaskIntoConstraints = false
-        let boardCellSize = 36.0
-        let borderSize = 1.0
-        let extraCellSize = 1.0
-        let totalBoardSize = CGFloat(boardCellSize * 9 + borderSize * 2 + 6 * extraCellSize)
-        boardView.widthAnchor.constraint(equalToConstant: totalBoardSize).isActive = true
-        boardView.heightAnchor.constraint(equalToConstant: totalBoardSize).isActive = true
-        
-        boardView.setNeedsUpdateConstraints()
-        boardView.backgroundColor = .yellow
-       
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-        scrollView.setNeedsUpdateConstraints()
-        scrollView.backgroundColor = appColors.gameBackground
-        
-        let containerViewBounds = boardView.bounds
-        var scrollViewInsets = UIEdgeInsetsMake(0, 0, 0, 0)
-        scrollViewInsets.top = 320.0 //containerViewBounds.size.height
-        scrollViewInsets.bottom = 320.0 //containerViewBounds.size.height
-        scrollViewInsets.left = containerViewBounds.size.width/2.0
-        scrollViewInsets.right = containerViewBounds.size.width/2.0
-        scrollView.contentInset = scrollViewInsets
-        scrollView.contentOffset = CGPoint(x : 0.0, y : 160 - view.bounds.height / 2)
-        scrollView.contentSize = CGSize(width: 320, height : 320)
-        
-        view.setNeedsUpdateConstraints()
-        
-        scrollView.minimumZoomScale = 1.0
-        scrollView.maximumZoomScale = 2.0
-        scrollView.bouncesZoom = false
-        scrollView.delegate = self
-        
-        // MARK : Animations
-        /*
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.timingFunction = CAMediaTimingFunction(name : kCAMediaTimingFunctionEaseInEaseOut)
-        transition.type = kCATransitionFromBottom
-        navControllerDelegate?.view.layer.add(transition, forKey: nil)
-        */
-    }
-    
-    // Handles touches outside the board
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        pickerUIController?.hidePicker()
-        boardViewController?.deselectAllCells()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        //print("After layoutSubviews in ViewController")
-        //print("ViewController's child, UICollectionViewContainer, has frame: \(boardView.frame)'")
-        super.viewDidLayoutSubviews()
+        setupSubviews()
     }
     
     init(delegate : GameState) {
-        self.gameStateDelegate = delegate
+        self.gameState = delegate
         super.init(nibName: nil, bundle: nil)
-        gameStateDelegate.delegates.append(self)
+        gameState.delegates.append(self)
     }
     
-    // Need to implement this to inject MainController into this file - But we never use this method!
     @available (*, unavailable)
     required init?(coder aDecoder: NSCoder) {
         fatalError("Not implemented.")
@@ -161,17 +72,12 @@ final class ViewController: UIViewController {
 extension ViewController : UIScrollViewDelegate {
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return boardView
+        return boardViewController.view
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        //print("We just zoomed!")
         scrollView.setNeedsLayout()
         boardViewController?.customZoomScale = scrollView.zoomScale
-    }
-    
-    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        //print("Wow! Just ended zooming!")
     }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
@@ -189,23 +95,79 @@ extension ViewController : UIScrollViewDelegate {
 }
 
 extension ViewController : GameStateDelegate {
+    
     func gameStateDidChange(finished : Bool) {
         if(finished) {
-            //if(navControllerDelegate!.viewControllers.contains(victoryViewController!)) {
-                //navControllerDelegate?.show(victoryViewController!, sender: true)
-            //self.presentingViewController?.providesPresentationContextTransitionStyle = true
-            //self.presentingViewController?.definesPresentationContext = true
-        //victoryViewController!.modalPresentationStyle = .overCurrentContext
-                //navControllerDelegate?.present(victoryViewController!, animated: true, completion: nil)
+            // MARK : Hack
             let alert = UIAlertController(title: "You Win!", message: "You have completed the game in 0.00s. Congratulations!", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-                self.navControllerDelegate?.popViewController(animated: true)
+                self.navController?.popViewController(animated: true)
             })
-            
             present(alert, animated: true)
-            //} else {
-                //navControllerDelegate?.pushViewController(victoryViewController!, animated: false)
-            //}
         }
+    }
+}
+
+extension ViewController {
+    
+    func setupSubviews() {
+        
+        let boardView = boardViewController.view!
+        let numberPickerView = numberPickerViewController.view!
+        
+        scrollView = PassThroughScrollView()
+        scrollView.addSubview(boardView)
+        view.addSubview(scrollView)
+        view.addSubview(numberPickerView)
+        
+        let containerViewBounds = boardView.bounds
+        print(boardView.bounds)
+        var scrollViewInsets = UIEdgeInsetsMake(0, 0, 0, 0)
+        scrollViewInsets.top = 320.0 //containerViewBounds.size.height
+        scrollViewInsets.bottom = 320.0 //containerViewBounds.size.height
+        scrollViewInsets.left = containerViewBounds.size.width/2.0
+        scrollViewInsets.right = containerViewBounds.size.width/2.0
+        scrollView.contentInset = scrollViewInsets
+        scrollView.contentOffset = CGPoint(x : 0.0, y : 160 - view.bounds.height / 2)
+        scrollView.contentSize = CGSize(width: 320, height : 320)
+        
+        scrollView.minimumZoomScale = 1.0
+        scrollView.maximumZoomScale = 2.0
+        scrollView.bouncesZoom = false
+        scrollView.delegate = self
+        scrollView.backgroundColor = appColors.gameBackground
+        
+        setupConstraints()
+    }
+    
+    func setupConstraints() {
+        
+        let boardView = boardViewController.view!
+        let numberPickerView = numberPickerViewController.view!
+        
+        numberPickerView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            numberPickerView.widthAnchor.constraint(equalToConstant: totalPickerWidth),
+            numberPickerView.heightAnchor.constraint(equalToConstant: totalPickerWidth),
+        ])
+        
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        
+        boardView.translatesAutoresizingMaskIntoConstraints = false
+        boardView.widthAnchor.constraint(equalToConstant: totalBoardSize).isActive = true
+        boardView.heightAnchor.constraint(equalToConstant: totalBoardSize).isActive = true
+    }
+    
+    // Handles touches outside the board
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        pickerUIController?.hidePicker()
+        boardViewController?.deselectAllCells()
     }
 }

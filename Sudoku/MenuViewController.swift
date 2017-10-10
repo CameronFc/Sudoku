@@ -92,7 +92,7 @@ class MenuViewController: UIViewController {
         }
         
         viewController = ViewController(delegate : gameController)
-        viewController?.navControllerDelegate = navControllerDelegate
+        viewController?.navController = navControllerDelegate
         
         //navControllerDelegate?.pushViewController(viewController, animated: true)
     }

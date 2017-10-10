@@ -149,13 +149,11 @@ extension BoardViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //print("Selected \(indexPath.description)")
-        //print(collectionView.frame)
         
-        // Remove all other highlights, just in case
         deselectAllCells()
         
         if let selectedCell = collectionView.cellForItem(at: indexPath) as? GridCell {
+            
             selectedCells[indexPath.row] = true
             
             // Set the background color of the picker cells to indicate invalid choices
@@ -166,7 +164,6 @@ extension BoardViewController {
            
             // Move the picker to the correct spot and show it if necessary
             if(gameState?.gameBoard.permanents[indexPath.row] == nil) {
-                //print("The boardview's super bounds is \((view.superview?.bounds.origin))")
                 // Assemble the vector from the mainView's origin to where the center of the picker should spawn
                 var newPickerCenter = view.superview?.bounds.origin ?? CGPoint (x : 0.0 , y: 0.0)
                 newPickerCenter.x *= -1
@@ -230,8 +227,9 @@ extension BoardViewController : UICollectionViewDelegateFlowLayout {
 }
 
 extension BoardViewController : GameStateDelegate {
+    
     func gameStateDidChange(finished : Bool) {
-        //print("The gameState is letting us know that it has updated.")
+        
         collectionView?.reloadData()
     }
 }

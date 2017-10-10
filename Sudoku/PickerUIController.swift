@@ -48,7 +48,6 @@ extension PickerUIController {
     func setCellStatus(at index : Int, status : CellStatus) {
         assert(0 <= index && index <= 8)
         cellStatuses[index] = status
-        //
         if(status == .selectable) {
             numberPickerDelegate.setCellBackground(at: index, color : appColors.selectableCell)
             if let gridCell = numberPickerDelegate.collectionView?.cellForItem(at: IndexPath(row : index, section : 0)) as? GridCell {
@@ -68,7 +67,6 @@ extension PickerUIController {
         for index in 0..<cellStatuses.count {
             setCellStatus(at: index, status: .unselectable)
         }
-        //print(indices)
         for index in indices {
             setCellStatus(at: index, status: .selectable)
         }

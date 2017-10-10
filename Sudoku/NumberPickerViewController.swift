@@ -59,19 +59,15 @@ class NumberPickerViewController: UICollectionViewController {
         
         // Needs to be same color as cell border
         collectionView!.backgroundColor = .black
+        
+        view.backgroundColor = appColors.shouldNotBeSeen
+        view.layer.cornerRadius = 3.0
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        print("Number picker view is going to appear.")
-        super.viewWillAppear(animated)
-    }
-    
-
 }
 
 // Mark : UICollectionViewDataSource
@@ -103,7 +99,6 @@ extension NumberPickerViewController {
             return // Don't do anything if the number chosen from the picker is invalid
         }
         
-        print("Changing selected cells")
         selectedCells[indexPath.row] = true
         
         if let _ = collectionView.cellForItem(at: indexPath) as? GridCell {
