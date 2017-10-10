@@ -18,7 +18,6 @@ class PassThroughScrollView : UIScrollView {
     }
 }
 
-
 final class ViewController: UIViewController {
     
     var gameStateDelegate : GameState

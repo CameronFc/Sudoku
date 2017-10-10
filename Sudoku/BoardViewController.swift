@@ -9,11 +9,10 @@
 import UIKit
 
 private let reuseIdentifier = "GridCell"
-fileprivate let sectionInsets = UIEdgeInsetsMake(1.0, 1.0, 1.0, 1.0)
 
 final class BoardViewController: UICollectionViewController {
     
-    var gameState : GameState?
+    var gameStateDelegate : GameState?
     
     var pickerUIDelegate : PickerUIController?
     
@@ -38,11 +37,11 @@ final class BoardViewController: UICollectionViewController {
     
     init(delegate : GameState, pickerUIDelegate : PickerUIController) {
         self.pickerUIDelegate = pickerUIDelegate
-        gameState = delegate
+        gameStateDelegate = delegate
         let viewLayout = UICollectionViewFlowLayout()
         super.init(collectionViewLayout: viewLayout)
         // Subscribe to game state updates
-        gameState?.delegates.append(self)
+        gameStateDelegate?.delegates.append(self)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -102,9 +101,9 @@ extension BoardViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         if let gridCell = cell as? GridCell {
-            let cellText = (gameState?.gameBoard?.boardArray[indexPath.row])?.description ?? " "
+            let cellText = (gameStateDelegate?.gameBoard?.boardArray[indexPath.row])?.description ?? " "
             gridCell.label.text = cellText
-            if (gameState?.gameBoard.permanents[indexPath.row] != nil) {
+            if (gameStateDelegate?.gameBoard.permanents[indexPath.row] != nil) {
                 gridCell.label.font = UIFont(name: "Helvetica-Bold", size: 20)
             } else {
                 gridCell.label.font = UIFont(name: "Helvetica", size: 18)
@@ -157,13 +156,13 @@ extension BoardViewController {
             selectedCells[indexPath.row] = true
             
             // Set the background color of the picker cells to indicate invalid choices
-            var validChoices = gameState!.getValidChoicesFromCell(index: indexPath.row)
+            var validChoices = gameStateDelegate!.getValidChoicesFromCell(index: indexPath.row)
             validChoices = validChoices.map { $0 - 1} //Convert items from 1...9 to 0...8; Numbers to cellIndices
             pickerUIDelegate?.setSelectableCells(for: validChoices)
             pickerUIDelegate?.setSelectedBoardCell(at: indexPath.row)
            
             // Move the picker to the correct spot and show it if necessary
-            if(gameState?.gameBoard.permanents[indexPath.row] == nil) {
+            if(gameStateDelegate?.gameBoard.permanents[indexPath.row] == nil) {
                 // Assemble the vector from the mainView's origin to where the center of the picker should spawn
                 var newPickerCenter = view.superview?.bounds.origin ?? CGPoint (x : 0.0 , y: 0.0)
                 newPickerCenter.x *= -1
@@ -205,15 +204,15 @@ extension BoardViewController : UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return sectionInsets
+        return UIEdgeInsetsMake(1.0, 1.0, 1.0, 1.0)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0.0 //sectionInsets.left
+        return 0.0 
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0.0 //sectionInsets.left
+        return 0.0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
