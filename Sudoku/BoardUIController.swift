@@ -11,12 +11,12 @@ import UIKit
 
 class BoardUIController {
     
-    var delegate : BoardViewController!
+    weak var delegate : BoardViewController?
     
     var selectedCells = [Int : Bool]() {
         didSet {
             for pair in selectedCells {
-                if let cell = delegate.collectionView?.cellForItem(at: IndexPath( row : pair.key, section : 0)) as? GridCell {
+                if let cell = delegate?.collectionView?.cellForItem(at: IndexPath( row : pair.key, section : 0)) as? GridCell {
                     if(pair.value) {
                         cell.backgroundColor = AppColors.selectedCell
                     } else {
