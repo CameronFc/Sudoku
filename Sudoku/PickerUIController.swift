@@ -74,13 +74,13 @@ extension PickerUIController {
         if(status == .selectable) {
             delegate.setCellBackground(at: index, color : AppColors.selectableCell)
             if let gridCell = delegate.collectionView?.cellForItem(at: IndexPath(row : index, section : 0)) as? GridCell {
-                gridCell.label.textColor = .black
+                gridCell.label?.textColor = .black
             }
             
         } else {
             delegate.setCellBackground(at: index, color : AppColors.numberPickerCell)
             if let gridCell = delegate.collectionView?.cellForItem(at: IndexPath(row : index, section : 0)) as? GridCell {
-                gridCell.label.textColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
+                gridCell.label?.textColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
             }
         }
     }

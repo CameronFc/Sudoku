@@ -24,11 +24,11 @@ extension BoardViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         if let gridCell = cell as? GridCell {
             let cellText = (gameState.gameBoard?.boardArray[indexPath.row])?.description ?? " "
-            gridCell.label.text = cellText
-            if (gameState.gameBoard.permanents[indexPath.row] != nil) {
-                gridCell.label.font = UIFont(name: "Helvetica-Bold", size: 20)
+            gridCell.label?.text = cellText
+            if (gameState.gameBoard?.permanents[indexPath.row] != nil) {
+                gridCell.label?.font = UIFont.fromPreset(GameConstants.bigCellText)
             } else {
-                gridCell.label.font = UIFont(name: "Helvetica", size: 18)
+                gridCell.label?.font = UIFont.fromPreset(GameConstants.normalCellText)
             }
             if(boardUI.selectedCells[indexPath.row] ?? false) {
                 gridCell.backgroundColor = AppColors.selectedCell
@@ -41,27 +41,27 @@ extension BoardViewController {
             let borderWidth = CGFloat(2.0)
             // Add right borders
             if( x % 3 == 2 ) {
-                gridCell.rightBorder.frame = CGRect(x: gridCell.frame.width - borderWidth, y: 0 , width: borderWidth, height: gridCell.frame.height)
+                gridCell.setBorderWidth(.right, width: borderWidth)
             } else {
-                gridCell.rightBorder.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+                gridCell.setBorderWidth(.right, width: 0.0)
             }
             // Add left borders
             if( x % 3 == 0 ) {
-                gridCell.leftBorder.frame = CGRect(x: 0 , y: 0 , width: borderWidth, height: gridCell.frame.height)
+                gridCell.setBorderWidth(.left, width: borderWidth)
             } else {
-                gridCell.leftBorder.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+                gridCell.setBorderWidth(.left, width: 0.0)
             }
             // Add top borders
             if( y % 3 == 0 ) {
-                gridCell.topBorder.frame = CGRect(x: 0 , y: 0 , width: gridCell.frame.height, height: borderWidth)
+                gridCell.setBorderWidth(.top, width: borderWidth)
             } else {
-                gridCell.topBorder.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+                gridCell.setBorderWidth(.top, width: 0.0)
             }
             // Add bottom borders
             if( y % 3 == 2 ) {
-                gridCell.bottomBorder.frame = CGRect(x: 0 , y: gridCell.frame.height - borderWidth , width: gridCell.frame.height, height: borderWidth)
+                gridCell.setBorderWidth(.bottom, width: borderWidth)
             } else {
-                gridCell.bottomBorder.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+                gridCell.setBorderWidth(.bottom, width: 0.0)
             }
             return gridCell
         }
@@ -84,7 +84,7 @@ extension BoardViewController {
             pickerUI.setSelectedBoardCell(at: indexPath.row)
            
             // Move the picker to the correct spot and show it if necessary
-            if(gameState.gameBoard.permanents[indexPath.row] == nil) {
+            if(gameState.gameBoard?.permanents[indexPath.row] == nil) {
                 let cellCenter = selectedCell.center
                 pickerUI.repositionPicker(center: cellCenter)
             } else {

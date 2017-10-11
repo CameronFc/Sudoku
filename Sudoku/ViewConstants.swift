@@ -20,4 +20,13 @@ struct GameConstants {
     
     static let menuButtonCornerRadius : CGFloat = 15.0
     static let menuButtonBorderWidth : CGFloat = 2.0
+    
+    static let bigCellText = (name : "Helvetica-Bold", size: 20)
+    static let normalCellText = (name: "Helvetica", size: 18)
+}
+
+extension UIFont {
+    static func fromPreset(_ input : (name : String, size : Int)) -> UIFont? {
+        return UIFont(name: input.name, size: CGFloat(input.size))
+    }
 }

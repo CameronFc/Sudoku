@@ -18,7 +18,7 @@ enum Difficulty : String {
 class GameController {
     
     // TODO: Remove this and all mutations, move board code to a Board Controller
-    var gameBoard : Board!
+    var gameBoard : Board?
     var finished : Bool
     
     private var boardSize : Int
@@ -31,7 +31,10 @@ class GameController {
         let _ = generateFullSolvedBoard()
     }
     
-    func boardIsFull() -> Bool{
+    func boardIsFull() -> Bool {
+        guard let gameBoard = gameBoard else {
+            return false
+        }
         for item in gameBoard.boardArray {
             guard let _ = item else {
                 return false
@@ -54,6 +57,9 @@ class GameController {
     }
     
     func boardIsSolved() -> Bool {
+        guard let gameBoard = gameBoard else {
+            return false
+        }
         assert(gameBoard.width == 9, "Only implemented for normal-sized boards.")
         for y in 0..<gameBoard.width {
             let subArray = gameBoard.row(y)
@@ -79,6 +85,9 @@ class GameController {
     }
     
     func boardIsNotInvalid() -> Bool {
+        guard let gameBoard = gameBoard else {
+            return false
+        }
         assert(gameBoard.width == 9, "Only implemented for normal-sized boards.")
         for y in 0..<gameBoard.width {
             let subArray = gameBoard.row(y)
@@ -232,6 +241,9 @@ class GameController {
     }
     
     func setBoardPermanents() {
+        guard let gameBoard = gameBoard else {
+            return
+        }
         gameBoard.permanents = [Int : Int]()
         for index in 0..<gameBoard.totalItems {
             if let cellValue = gameBoard.boardArray[index] {
@@ -241,13 +253,16 @@ class GameController {
     }
     
     func getValidChoicesFromCell(index : Int) -> [Int] {
+        guard let gameBoard = gameBoard else {
+            return []
+        }
         // Can't replace permanents
         if let _ = gameBoard.permanents[index] {
             return []
         }
         let rcr = gameBoard.getRowColRegion(from: index)
         let placesToCheck = [gameBoard.column(rcr.row), gameBoard.row(rcr.column), gameBoard.region(rcr.region)]
-        // Take each sesction and remove nils, then flatten for array of all invalid choices.
+        // Take each section and remove nils, then flatten for array of all invalid choices.
         let filteredPlaces = (placesToCheck.map { $0.filter { $0 != nil }}) as! [[Int]]
         var flattened = Set<Int>(filteredPlaces.flatMap { $0 })
         if let currentCellNumber = gameBoard.boardArray[index] {
@@ -265,7 +280,7 @@ extension GameController : GameState {}
 // Exposes game state to views.
 protocol GameState {
     var finished : Bool { get set }
-    var gameBoard : Board! { get set }
+    var gameBoard : Board? { get set }
     var subscribers : [GameStateDelegate] { get set }
     func getValidChoicesFromCell(index : Int) -> [Int]
     func boardIsSolved() -> Bool
@@ -286,6 +301,9 @@ extension GameState {
     }
     
     mutating func changeCellNumber(at index : Int, value : Int?) {
+        guard let gameBoard = gameBoard else {
+            return
+        }
         //print("Trying to change the board state to \(value) @ \(index). Permanent here is \(gameBoard.permanents[index])")
         // Only allow changing non-permanents
         if(gameBoard.permanents[index] == nil) {

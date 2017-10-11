@@ -23,7 +23,7 @@ extension NumberPickerViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         if let gridCell = cell as? GridCell {
-            gridCell.label.text = "\(indexPath.row + 1)"
+            gridCell.label?.text = "\(indexPath.row + 1)"
             gridCell.backgroundColor = AppColors.numberPickerCell
             gridCell.layer.cornerRadius = 3.0
         }
@@ -42,7 +42,7 @@ extension NumberPickerViewController {
         
         if let _ = collectionView.cellForItem(at: indexPath) as? GridCell {
             // Choosing the same number removes it
-            if(chosenNumber == gameState.gameBoard.boardArray[pickerUI.selectedBoardCell]) {
+            if(chosenNumber == gameState.gameBoard?.boardArray[pickerUI.selectedBoardCell]) {
                 gameState.changeCellNumber(at: pickerUI.selectedBoardCell, value: nil)
             } else {
                 gameState.changeCellNumber(at: pickerUI.selectedBoardCell, value: chosenNumber)

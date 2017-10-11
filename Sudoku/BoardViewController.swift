@@ -65,7 +65,7 @@ extension BoardViewController : UICollectionViewDelegateFlowLayout {
         var cellHeight = widthPerItem
         let x = indexPath.row % 9
         let y = indexPath.row / 9
-        // Make certain cells bigger to account for extra border size around regions
+        // Make certain cells bigger to account for thicker borders around regions
         if(x % 3 == 0 || x % 3 == 2) {
             cellWidth += GameConstants.extraCellSize
         }
