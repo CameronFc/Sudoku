@@ -17,7 +17,7 @@ enum CellStatus {
 
 class PickerUIController {
     
-    var delegate : NumberPickerViewController!
+    weak var delegate : NumberPickerViewController!
     
     var boardUI : BoardUIController!
     

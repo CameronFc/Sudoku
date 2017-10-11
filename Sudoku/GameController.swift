@@ -22,12 +22,12 @@ class GameController {
     var finished : Bool
     
     private var boardSize : Int
-    var delegates : [GameStateDelegate] // List of views that subscribe to updates
+    var subscribers : [GameStateDelegate] // List of views that subscribe to updates
     
     init() {
         boardSize = 9
         finished = false
-        delegates = [GameStateDelegate]()
+        subscribers = [GameStateDelegate]()
         let _ = generateFullSolvedBoard()
     }
     
@@ -227,7 +227,7 @@ class GameController {
         }
         // MARK : Code smell - this should be moved elsewhere - notifications should be implicit
         self.finished = false
-        notifiyDelegates()
+        notifySubscribers()
         return Board(size : boardSize, initArray : guesses)
     }
     
@@ -266,7 +266,7 @@ extension GameController : GameState {}
 protocol GameState {
     var finished : Bool { get set }
     var gameBoard : Board! { get set }
-    var delegates : [GameStateDelegate] { get set }
+    var subscribers : [GameStateDelegate] { get set }
     func getValidChoicesFromCell(index : Int) -> [Int]
     func boardIsSolved() -> Bool
     func setBoardPermanents()
@@ -275,10 +275,14 @@ protocol GameState {
 
 extension GameState {
     
-    func notifiyDelegates() {
-        for delegate in delegates {
-            delegate.gameStateDidChange(finished : self.finished)
+    func notifySubscribers() {
+        for subscriber in subscribers {
+            subscriber.gameStateDidChange(finished : self.finished)
         }
+    }
+    
+    mutating func subscribeToUpdates(subscriber : GameStateDelegate) {
+        subscribers.append(subscriber)
     }
     
     mutating func changeCellNumber(at index : Int, value : Int?) {
@@ -293,7 +297,7 @@ extension GameState {
             self.finished = false
         }
         
-        notifiyDelegates()
+        notifySubscribers()
     }
 }
 

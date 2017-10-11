@@ -26,7 +26,7 @@ final class BoardViewController: UICollectionViewController {
         let viewLayout = UICollectionViewFlowLayout()
         super.init(collectionViewLayout: viewLayout)
         // Subscribe to game state updates
-        self.gameState.delegates.append(self)
+        self.gameState.subscribeToUpdates(subscriber: self)
         self.boardUI.delegate = self
     }
     

@@ -46,7 +46,7 @@ final class ViewController: UIViewController {
         self.boardUI = boardUI
         super.init(nibName: nil, bundle: nil)
         
-        self.gameState.delegates.append(self)
+        self.gameState.subscribeToUpdates(subscriber: self)
         
         boardViewController = BoardViewController(gameState : gameState, pickerUI : pickerUI, boardUI : boardUI)
         
@@ -91,6 +91,7 @@ extension ViewController : UIScrollViewDelegate {
         
         pickerUI.hidePicker()
         boardUI.deselectAllCells()
+        super.touchesBegan(touches, with: event)
     }
 }
 
