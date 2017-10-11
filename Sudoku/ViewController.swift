@@ -20,13 +20,13 @@ class PassThroughScrollView : UIScrollView {
 
 final class ViewController: UIViewController {
     
-    var gameStateDelegate : GameState
+    var gameState : GameState
     
-    let pickerUIDelegate : PickerUIController
+    let pickerUI : PickerUIController
     
-    let boardUIDelegate : BoardUIController
+    let boardUI : BoardUIController
     
-    var navDelegate : UINavigationController! 
+    var navController : UINavigationController!
     
     var boardViewController : BoardViewController!
     
@@ -37,20 +37,20 @@ final class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSubviews()
-        pickerUIDelegate.hidePicker()
+        pickerUI.hidePicker()
     }
     
-    init(gameStateDelegate : GameState, pickerUIDelegate : PickerUIController, boardUIDelegate : BoardUIController) {
-        self.gameStateDelegate = gameStateDelegate
-        self.pickerUIDelegate = pickerUIDelegate
-        self.boardUIDelegate = boardUIDelegate
+    init(gameState : GameState, pickerUI : PickerUIController, boardUI : BoardUIController) {
+        self.gameState = gameState
+        self.pickerUI = pickerUI
+        self.boardUI = boardUI
         super.init(nibName: nil, bundle: nil)
         
-        self.gameStateDelegate.delegates.append(self)
+        self.gameState.delegates.append(self)
         
-        boardViewController = BoardViewController(gameStateDelegate : gameStateDelegate, pickerUIDelegate : pickerUIDelegate, boardUIDelegate : boardUIDelegate)
+        boardViewController = BoardViewController(gameState : gameState, pickerUI : pickerUI, boardUI : boardUI)
         
-        numberPickerViewController = NumberPickerViewController(gameStateDelegate : gameStateDelegate, pickerUIDelegate : pickerUIDelegate)
+        numberPickerViewController = NumberPickerViewController(gameState : gameState, pickerUI : pickerUI)
         self.addChildViewController(numberPickerViewController)
         numberPickerViewController.didMove(toParentViewController: self)
     }
@@ -70,27 +70,27 @@ extension ViewController : UIScrollViewDelegate {
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         scrollView.setNeedsLayout()
-        boardUIDelegate.customZoomScale = scrollView.zoomScale
+        boardUI.customZoomScale = scrollView.zoomScale
     }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        pickerUIDelegate.hidePicker()
+        pickerUI.hidePicker()
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        pickerUIDelegate.hidePicker()
+        pickerUI.hidePicker()
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        pickerUIDelegate.hidePicker()
-        boardUIDelegate.deselectAllCells()
+        pickerUI.hidePicker()
+        boardUI.deselectAllCells()
     }
     
     // Handles touches outside the board
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        pickerUIDelegate.hidePicker()
-        boardUIDelegate.deselectAllCells()
+        pickerUI.hidePicker()
+        boardUI.deselectAllCells()
     }
 }
 
@@ -102,7 +102,7 @@ extension ViewController : GameStateDelegate {
             // MARK : Hack
             let alert = UIAlertController(title: "You Win!", message: "You have completed the game in 0.00s. Congratulations!", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-                self.navDelegate?.popViewController(animated: true)
+                self.navController?.popViewController(animated: true)
             })
             present(alert, animated: true)
         }

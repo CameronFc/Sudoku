@@ -32,29 +32,29 @@ extension NumberPickerViewController {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let validChoices = gameStateDelegate.getValidChoicesFromCell(index : pickerUIDelegate.selectedBoardCell)
+        let validChoices = gameState.getValidChoicesFromCell(index : pickerUI.selectedBoardCell)
         let chosenNumber = indexPath.row + 1
         if(!validChoices.contains(chosenNumber)) {
             return // Don't do anything if the number chosen from the picker is invalid
         }
         
-        pickerUIDelegate.selectedCells[indexPath.row] = true
+        pickerUI.selectedCells[indexPath.row] = true
         
         if let _ = collectionView.cellForItem(at: indexPath) as? GridCell {
             // Choosing the same number removes it
-            if(chosenNumber == gameStateDelegate.gameBoard.boardArray[pickerUIDelegate.selectedBoardCell]) {
-                gameStateDelegate.changeCellNumber(at: pickerUIDelegate.selectedBoardCell, value: nil)
+            if(chosenNumber == gameState.gameBoard.boardArray[pickerUI.selectedBoardCell]) {
+                gameState.changeCellNumber(at: pickerUI.selectedBoardCell, value: nil)
             } else {
-                gameStateDelegate.changeCellNumber(at: pickerUIDelegate.selectedBoardCell, value: chosenNumber)
+                gameState.changeCellNumber(at: pickerUI.selectedBoardCell, value: chosenNumber)
             }
             // Remove the picker after a delay
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                self?.pickerUIDelegate.hidePicker()
+                self?.pickerUI.hidePicker()
             }
         }
     }
     
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        pickerUIDelegate.selectedCells[indexPath.row] = false
+        pickerUI.selectedCells[indexPath.row] = false
     }
 }

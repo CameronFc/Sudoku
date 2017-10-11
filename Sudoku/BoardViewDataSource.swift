@@ -23,14 +23,14 @@ extension BoardViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         if let gridCell = cell as? GridCell {
-            let cellText = (gameStateDelegate.gameBoard?.boardArray[indexPath.row])?.description ?? " "
+            let cellText = (gameState.gameBoard?.boardArray[indexPath.row])?.description ?? " "
             gridCell.label.text = cellText
-            if (gameStateDelegate.gameBoard.permanents[indexPath.row] != nil) {
+            if (gameState.gameBoard.permanents[indexPath.row] != nil) {
                 gridCell.label.font = UIFont(name: "Helvetica-Bold", size: 20)
             } else {
                 gridCell.label.font = UIFont(name: "Helvetica", size: 18)
             }
-            if(boardUIDelegate.selectedCells[indexPath.row] ?? false) {
+            if(boardUI.selectedCells[indexPath.row] ?? false) {
                 gridCell.backgroundColor = AppColors.selectedCell
             } else {
                 gridCell.backgroundColor = AppColors.cellBackground
@@ -71,32 +71,32 @@ extension BoardViewController {
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        boardUIDelegate.deselectAllCells()
+        boardUI.deselectAllCells()
         
         if let selectedCell = collectionView.cellForItem(at: indexPath) as? GridCell {
             
-            boardUIDelegate.selectedCells[indexPath.row] = true
+            boardUI.selectedCells[indexPath.row] = true
             
             // Set the background color of the picker cells to indicate invalid choices
-            var validChoices = gameStateDelegate.getValidChoicesFromCell(index: indexPath.row)
+            var validChoices = gameState.getValidChoicesFromCell(index: indexPath.row)
             validChoices = validChoices.map { $0 - 1} //Convert items from 1...9 to 0...8; Numbers to cellIndices
-            pickerUIDelegate.setSelectableCells(for: validChoices)
-            pickerUIDelegate.setSelectedBoardCell(at: indexPath.row)
+            pickerUI.setSelectableCells(for: validChoices)
+            pickerUI.setSelectedBoardCell(at: indexPath.row)
            
             // Move the picker to the correct spot and show it if necessary
-            if(gameStateDelegate.gameBoard.permanents[indexPath.row] == nil) {
+            if(gameState.gameBoard.permanents[indexPath.row] == nil) {
                 let cellCenter = selectedCell.center
-                pickerUIDelegate.repositionPicker(center: cellCenter)
+                pickerUI.repositionPicker(center: cellCenter)
             } else {
                 // Hide the picker if we select a permanent or a filled cell
-                pickerUIDelegate.hidePicker()
+                pickerUI.hidePicker()
             }
         }
     }
     
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         if let _ = collectionView.cellForItem(at: indexPath) as? GridCell {
-            boardUIDelegate.selectedCells[indexPath.row] = false
+            boardUI.selectedCells[indexPath.row] = false
         }
     }
 }

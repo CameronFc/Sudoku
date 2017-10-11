@@ -12,22 +12,22 @@ final class BoardViewController: UICollectionViewController {
     
     let reuseIdentifier = "GridCell"
     
-    var gameStateDelegate : GameState
+    var gameState : GameState
     
-    var pickerUIDelegate : PickerUIController
+    var pickerUI : PickerUIController
     
-    var boardUIDelegate : BoardUIController
+    var boardUI : BoardUIController
     
-    init(gameStateDelegate : GameState, pickerUIDelegate : PickerUIController, boardUIDelegate : BoardUIController) {
+    init(gameState : GameState, pickerUI : PickerUIController, boardUI : BoardUIController) {
         
-        self.pickerUIDelegate = pickerUIDelegate
-        self.gameStateDelegate = gameStateDelegate
-        self.boardUIDelegate = boardUIDelegate
+        self.pickerUI = pickerUI
+        self.gameState = gameState
+        self.boardUI = boardUI
         let viewLayout = UICollectionViewFlowLayout()
         super.init(collectionViewLayout: viewLayout)
         // Subscribe to game state updates
-        self.gameStateDelegate.delegates.append(self)
-        self.boardUIDelegate.delegate = self
+        self.gameState.delegates.append(self)
+        self.boardUI.delegate = self
     }
     
     @available (*, unavailable)

@@ -16,9 +16,9 @@ final class MainController {
     
     init() {
         let gameController = GameController()
-        let menuViewController = MenuViewController(gameStateDelegate : gameController)
+        let menuViewController = MenuViewController(gameState : gameController)
         navController = UINavigationController(rootViewController: menuViewController)
-        menuViewController.navDelegate = navController
+        menuViewController.navController = navController
     }
 }
 

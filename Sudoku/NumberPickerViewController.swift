@@ -12,17 +12,17 @@ class NumberPickerViewController: UICollectionViewController {
     
     let reuseIdentifier = "NumberCell"
     
-    var gameStateDelegate : GameState
+    var gameState : GameState
     
-    var pickerUIDelegate : PickerUIController
+    var pickerUI : PickerUIController
     
-    init(gameStateDelegate : GameState, pickerUIDelegate : PickerUIController) {
+    init(gameState : GameState, pickerUI : PickerUIController) {
         let numberPickerLayout = UICollectionViewFlowLayout()
-        self.gameStateDelegate = gameStateDelegate
-        self.pickerUIDelegate = pickerUIDelegate
+        self.gameState = gameState
+        self.pickerUI = pickerUI
         super.init(collectionViewLayout: numberPickerLayout)
         
-        self.pickerUIDelegate.delegate = self
+        self.pickerUI.delegate = self
     }
     
     

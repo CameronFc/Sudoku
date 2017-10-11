@@ -10,9 +10,9 @@ import UIKit
 
 class MenuViewController: UIViewController {
     
-    var navDelegate : UINavigationController!
+    var navController : UINavigationController!
     
-    var gameStateDelegate : GameState
+    var gameState : GameState
     
     var viewController : ViewController?
     
@@ -20,8 +20,8 @@ class MenuViewController: UIViewController {
     
     var gameMenu : UIStackView!
     
-    init(gameStateDelegate : GameState) {
-        self.gameStateDelegate = gameStateDelegate
+    init(gameState : GameState) {
+        self.gameState = gameState
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -35,9 +35,9 @@ class MenuViewController: UIViewController {
         
         let pickerUI = PickerUIController()
         let boardUI = BoardUIController()
-        pickerUI.boardUIDelegate = boardUI
-        viewController = ViewController(gameStateDelegate : gameStateDelegate, pickerUIDelegate : pickerUI, boardUIDelegate : boardUI)
-        viewController?.navDelegate = navDelegate
+        pickerUI.boardUI = boardUI
+        viewController = ViewController(gameState : gameState, pickerUI : pickerUI, boardUI : boardUI)
+        viewController?.navController = navController
         
         setupSubviews()
     }
@@ -57,13 +57,13 @@ class MenuViewController: UIViewController {
             assertionFailure("Something bad went wrong with the buttons!")
         }
         // Do any additional setup after loading the view.
-        gameStateDelegate.gameBoard = gameStateDelegate.generateUnsolvedBoard(difficulty: difficulty)
-        gameStateDelegate.setBoardPermanents() // DON'T REMOVE; REFACTOR LATER
+        gameState.gameBoard = gameState.generateUnsolvedBoard(difficulty: difficulty)
+        gameState.setBoardPermanents() // DON'T REMOVE; REFACTOR LATER
         
-        if(navDelegate.viewControllers.contains(viewController!)) {
-            navDelegate.show(viewController!, sender: self)
+        if(navController.viewControllers.contains(viewController!)) {
+            navController.show(viewController!, sender: self)
         } else {
-            navDelegate.pushViewController(viewController!, animated: false)
+            navController.pushViewController(viewController!, animated: false)
         }
         
     }
