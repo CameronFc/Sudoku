@@ -10,7 +10,7 @@ import UIKit
 
 class MenuViewController: UIViewController {
     
-    var navController : UINavigationController!
+    var navController : UINavigationController?
     
     var gameState : GameState
     
@@ -60,10 +60,14 @@ class MenuViewController: UIViewController {
         gameState.gameBoard = gameState.generateUnsolvedBoard(difficulty: difficulty)
         gameState.setBoardPermanents() // DON'T REMOVE; REFACTOR LATER
         
-        if(navController.viewControllers.contains(viewController!)) {
-            navController.show(viewController!, sender: self)
+        guard let navController = navController, let viewController = viewController else {
+            return
+        }
+        
+        if(navController.viewControllers.contains(viewController)) {
+            navController.show(viewController, sender: self)
         } else {
-            navController.pushViewController(viewController!, animated: false)
+            navController.pushViewController(viewController, animated: false)
         }
         
     }

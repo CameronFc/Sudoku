@@ -26,11 +26,11 @@ final class ViewController: UIViewController {
     
     let boardUI : BoardUIController
     
-    var navController : UINavigationController!
+    var navController : UINavigationController?
     
-    var boardViewController : BoardViewController!
+    var boardViewController : BoardViewController
     
-    var numberPickerViewController : NumberPickerViewController!
+    var numberPickerViewController : NumberPickerViewController
     
     var scrollView : PassThroughScrollView!
     
@@ -44,13 +44,12 @@ final class ViewController: UIViewController {
         self.gameState = gameState
         self.pickerUI = pickerUI
         self.boardUI = boardUI
+        self.boardViewController = BoardViewController(gameState : gameState, pickerUI : pickerUI, boardUI : boardUI)
+        self.numberPickerViewController = NumberPickerViewController(gameState : gameState, pickerUI : pickerUI)
         super.init(nibName: nil, bundle: nil)
         
         self.gameState.subscribeToUpdates(subscriber: self)
         
-        boardViewController = BoardViewController(gameState : gameState, pickerUI : pickerUI, boardUI : boardUI)
-        
-        numberPickerViewController = NumberPickerViewController(gameState : gameState, pickerUI : pickerUI)
         self.addChildViewController(numberPickerViewController)
         numberPickerViewController.didMove(toParentViewController: self)
     }

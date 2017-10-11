@@ -254,7 +254,7 @@ class GameController {
     
     func getValidChoicesFromCell(index : Int) -> [Int] {
         guard let gameBoard = gameBoard else {
-            return []
+            return [] // Return - Can't do anything without a board
         }
         // Can't replace permanents
         if let _ = gameBoard.permanents[index] {
@@ -262,8 +262,10 @@ class GameController {
         }
         let rcr = gameBoard.getRowColRegion(from: index)
         let placesToCheck = [gameBoard.column(rcr.row), gameBoard.row(rcr.column), gameBoard.region(rcr.region)]
-        // Take each section and remove nils, then flatten for array of all invalid choices.
-        let filteredPlaces = (placesToCheck.map { $0.filter { $0 != nil }}) as! [[Int]]
+        // Take each section and remove nils, then flatten to a single set.
+        guard let filteredPlaces = (placesToCheck.map { $0.filter { $0 != nil }}) as? [[Int]] else {
+            return [] // This should never return here unless someone changes board cells to have a non-Int type.
+        }
         var flattened = Set<Int>(filteredPlaces.flatMap { $0 })
         if let currentCellNumber = gameBoard.boardArray[index] {
             flattened = flattened.subtracting([currentCellNumber])// Choosing the same number is permitted.

@@ -34,7 +34,7 @@ class NumberPickerViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.collectionView!.register(GridCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        self.collectionView?.register(GridCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         collectionView?.reloadData()
         setupSubviews()
     }
@@ -45,7 +45,7 @@ class NumberPickerViewController: UICollectionViewController {
         collectionView?.layer.cornerRadius = 2.0
         
         // Needs to be same color as cell border
-        collectionView!.backgroundColor = AppColors.cellBorder
+        collectionView?.backgroundColor = AppColors.cellBorder
         
         view.backgroundColor = AppColors.shouldNotBeSeen
     }
