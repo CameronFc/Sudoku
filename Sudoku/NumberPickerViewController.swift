@@ -80,29 +80,3 @@ extension NumberPickerViewController : UICollectionViewDelegateFlowLayout {
         return CGSize(width : 0, height : 0)
     }
 }
-
-extension NumberPickerViewController {
-    
-    func setCellBackground(at index : Int, color : UIColor) {
-        // cellForItemAt does not like to play nice with custom indexPaths.. so hack instead!
-        let indexPaths = (collectionView?.indexPathsForVisibleItems)!
-        for indexPath in indexPaths {
-            if indexPath.row != index {
-                continue
-            }
-            if let pickerCell = collectionView?.cellForItem(at: indexPath){
-                pickerCell.backgroundColor = color
-            } else {
-                print("Could not change cell background color.")
-            }
-        }
-    }
-    
-    func setAllCellBackgrounds(color : UIColor) {
-        for cell in collectionView!.visibleCells {
-            if let pickerCell = cell as? GridCell {
-                pickerCell.backgroundColor = color
-            }
-        }
-    }
-}

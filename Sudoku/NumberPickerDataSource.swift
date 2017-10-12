@@ -55,6 +55,6 @@ extension NumberPickerViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        pickerUI.deselectCell(at: indexPath.row)
+        // We handle state management of deselecting cells in pickerUIController.
     }
 }
