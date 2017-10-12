@@ -37,7 +37,7 @@ final class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSubviews()
-        pickerUI.hidePicker()
+        pickerUI.hidePicker(animated : false)
     }
     
     init(gameState : GameState, pickerUI : PickerUIController, boardUI : BoardUIController) {
@@ -73,22 +73,22 @@ extension ViewController : UIScrollViewDelegate {
     }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        pickerUI.hidePicker()
+        pickerUI.hidePicker(animated : true)
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        pickerUI.hidePicker()
+        pickerUI.hidePicker(animated : true)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        pickerUI.hidePicker()
+        pickerUI.hidePicker(animated : true)
         boardUI.deselectAllCells()
     }
     
     // Handles touches outside the board
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        pickerUI.hidePicker()
+        pickerUI.hidePicker(animated : true)
         boardUI.deselectAllCells()
         super.touchesBegan(touches, with: event)
     }

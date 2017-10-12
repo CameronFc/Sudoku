@@ -18,9 +18,9 @@ class BoardUIController {
             for pair in selectedCells {
                 if let cell = delegate?.collectionView?.cellForItem(at: IndexPath( row : pair.key, section : 0)) as? GridCell {
                     if(pair.value) {
-                        cell.backgroundColor = AppColors.selectedCell
+                        cell.backgroundColor = AppColors.selectedCellBackground
                     } else {
-                        cell.backgroundColor = AppColors.cellBackground
+                        cell.backgroundColor = AppColors.normalCellBackground
                     }
                 }
             }

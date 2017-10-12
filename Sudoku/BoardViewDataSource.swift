@@ -31,9 +31,9 @@ extension BoardViewController {
                 gridCell.label?.font = UIFont.fromPreset(GameConstants.normalCellText)
             }
             if(boardUI.selectedCells[indexPath.row] ?? false) {
-                gridCell.backgroundColor = AppColors.selectedCell
+                gridCell.backgroundColor = AppColors.selectedCellBackground
             } else {
-                gridCell.backgroundColor = AppColors.cellBackground
+                gridCell.backgroundColor = AppColors.normalCellBackground
             }
             
             let x = indexPath.row % 9
@@ -81,7 +81,7 @@ extension BoardViewController {
             var validChoices = gameState.getValidChoicesFromCell(index: indexPath.row)
             validChoices = validChoices.map { $0 - 1} //Convert items from 1...9 to 0...8; Numbers to cellIndices
             pickerUI.setSelectableCells(for: validChoices)
-            pickerUI.setSelectedBoardCell(at: indexPath.row)
+            pickerUI.selectedBoardCell = indexPath.row
            
             // Move the picker to the correct spot and show it if necessary
             if(gameState.gameBoard?.permanents[indexPath.row] == nil) {
@@ -89,7 +89,7 @@ extension BoardViewController {
                 pickerUI.repositionPicker(center: cellCenter)
             } else {
                 // Hide the picker if we select a permanent or a filled cell
-                pickerUI.hidePicker()
+                pickerUI.hidePicker(animated : true)
             }
         }
     }

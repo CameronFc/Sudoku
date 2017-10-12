@@ -21,46 +21,29 @@ class PickerUIController {
     
     var boardUI : BoardUIController?
     
-    fileprivate var cellStatuses : [CellStatus]
+    fileprivate var cellStatuses : [CellStatus] // Indicates which cells are selectale
     
-    var isHidden : Bool {
-        
-        didSet {
-            delegate?.view.isHidden = isHidden
-        }
-    }
-    
-    var selectedCells = [Int : Bool]() {
-        
-        didSet {
-            for pair in selectedCells {
-                if let cell = delegate?.collectionView?.cellForItem(at: IndexPath( row : pair.key, section : 0)) as? GridCell {
-                    if(pair.value) {
-                        cell.backgroundColor = AppColors.selectedCell
-                    } else {
-                        cell.backgroundColor = AppColors.numberPickerCell
-                    }
-                }
-            }
-        }
-    }
+    fileprivate var selectedCells : [Bool] // Indicates which cells have a highlight applied
     
     var selectedBoardCell = 0
     
     init() {
         
-        self.isHidden = true
         cellStatuses = [CellStatus]()
+        selectedCells = [Bool]()
+        
         for _ in 0..<9 {
+            selectedCells.append(false)
             cellStatuses.append(.unselectable)
         }
+        
+        hidePicker(animated: false)
     }
 }
 
-
 // State mangement
 extension PickerUIController {
-    // External accessors becuase property observers for dictionaries suck
+    
     func getCellStatus(at index : Int) -> CellStatus {
         
         assert(0 <= index && index <= 8)
@@ -71,20 +54,15 @@ extension PickerUIController {
         
         assert(0 <= index && index <= 8)
         cellStatuses[index] = status
+        
         if(status == .selectable) {
-            delegate?.setCellBackground(at: index, color : AppColors.selectableCell)
-            if let gridCell = delegate?.collectionView?.cellForItem(at: IndexPath(row : index, section : 0)) as? GridCell {
-                gridCell.label?.textColor = .black
-            }
-            
+            changeCellGrayedOut(at: index, grayedOut: false)
         } else {
-            delegate?.setCellBackground(at: index, color : AppColors.numberPickerCell)
-            if let gridCell = delegate?.collectionView?.cellForItem(at: IndexPath(row : index, section : 0)) as? GridCell {
-                gridCell.label?.textColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1.0)
-            }
+            changeCellGrayedOut(at: index, grayedOut: true)
         }
     }
-    // Set all selectable cells
+    
+    // selectMultipleCells
     func setSelectableCells(for indices : [Int]) {
         
         for index in 0..<cellStatuses.count {
@@ -95,15 +73,55 @@ extension PickerUIController {
         }
     }
     
-    func setSelectedBoardCell(at index : Int) {
+    func selectCell(at index : Int) {
         
-        selectedBoardCell = index
+        changeCellHighlight(at: index, highlighted: true)
+    }
+    
+    func deselectCell(at index : Int) {
+        
+        changeCellHighlight(at: index, highlighted: false)
+    }
+    
+    func getPickerCell(at index : Int) -> GridCell? {
+        
+        return delegate?.collectionView?.cellForItem(at: IndexPath( row : index, section : 0)) as? GridCell
+    }
+}
+
+// Controls for changing view appearance
+extension PickerUIController {
+    
+    func changeCellHighlight(at index : Int, highlighted : Bool) {
+        
+        if let cell = getPickerCell(at: index) {
+            if(highlighted) {
+                cell.backgroundColor = AppColors.selectedCellBackground
+            } else {
+                cell.backgroundColor = AppColors.normalCellBackground
+            }
+        }
+    }
+    
+    func changeCellGrayedOut(at index : Int, grayedOut : Bool) {
+        
+        if let cell = getPickerCell(at: index) {
+            if(grayedOut) {
+                cell.backgroundColor = AppColors.unselectableCellBackground
+                cell.label?.textColor = AppColors.cellGrayText
+            } else {
+                cell.backgroundColor = AppColors.normalCellBackground
+                cell.label?.textColor = AppColors.cellText
+            }
+        }
     }
 }
 
 // External controls for manipulating the pickerView
 extension PickerUIController {
+    
     func repositionPicker(center : CGPoint) {
+        
         // Assemble the vector from the mainView's origin to where the center of the picker should spawn
         var newPickerCenter = boardUI?.delegate?.view.superview?.bounds.origin ?? CGPoint (x : 0.0 , y: 0.0)
         newPickerCenter.x *= -1
@@ -112,23 +130,36 @@ extension PickerUIController {
         newPickerCenter.y += center.y * (boardUI?.customZoomScale ?? 1.0)
         newPickerCenter.y -= 130
         
-        self.isHidden = false
-        
         delegate?.view.center = newPickerCenter
-        delegate?.view.center.y += 50
-        delegate?.view.alpha = 0.1
-        UIView.animate(withDuration: 0.3, delay : 0.0, options : [.curveEaseInOut], animations: { [unowned self] in
-            self.delegate?.view.center.y -= 50
-            self.delegate?.view.alpha = 1.0
-            }, completion : nil)
+        showPicker(animated: true)
     }
     
-    func hidePicker() {
+    func showPicker(animated : Bool) {
         
-        UIView.animate(withDuration: 0.1, delay : 0.0, options : [.curveEaseIn], animations: { [unowned self] in
-            self.delegate?.view.alpha = 0.0
-        }, completion : { (someBool) in
-            self.isHidden = true
-        })
+        delegate?.view.isHidden = false
+        
+        if(!animated) {
+            delegate?.view.alpha = 1.0
+        } else {
+            delegate?.view.center.y += 50
+            delegate?.view.alpha = 0.1
+            UIView.animate(withDuration: 0.3, delay : 0.0, options : [.curveEaseInOut], animations: { [unowned self] in
+                self.delegate?.view.center.y -= 50
+                self.delegate?.view.alpha = 1.0
+            }, completion : nil)
+        }
+    }
+    
+    func hidePicker(animated : Bool) {
+        
+        if(animated) {
+            UIView.animate(withDuration: 0.1, delay : 0.0, options : [.curveEaseIn], animations: { [unowned self] in
+                self.delegate?.view.alpha = 0.0
+            }, completion : { (someBool) in
+                self.delegate?.view.isHidden = true
+            })
+        } else {
+            delegate?.view.isHidden = true
+        }
     }
 }

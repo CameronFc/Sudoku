@@ -77,7 +77,7 @@ class MenuViewController: UIViewController {
         titleLabel = UILabel()
         gameMenu = UIStackView()
         
-        view.backgroundColor = AppColors.menuBackgroundColor
+        view.backgroundColor = AppColors.menuBackground
         titleLabel.text = "SUDOKU!"
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont(name: "Helvetica", size: 64)
@@ -99,7 +99,7 @@ class MenuViewController: UIViewController {
         for difficulty in difficulties {
             let newGameButton = UIButton(type : .system)
             newGameButton.setTitle(difficulty.rawValue, for: .normal)
-            newGameButton.backgroundColor = AppColors.cellBackground
+            newGameButton.backgroundColor = AppColors.normalCellBackground
             newGameButton.layer.cornerRadius = GameConstants.menuButtonCornerRadius
             newGameButton.layer.borderWidth = GameConstants.menuButtonBorderWidth
             // Easiest way to attach data to a button press. 

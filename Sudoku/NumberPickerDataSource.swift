@@ -24,7 +24,7 @@ extension NumberPickerViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
         if let gridCell = cell as? GridCell {
             gridCell.label?.text = "\(indexPath.row + 1)"
-            gridCell.backgroundColor = AppColors.numberPickerCell
+            gridCell.backgroundColor = AppColors.normalCellBackground
             gridCell.layer.cornerRadius = 3.0
         }
         return cell
@@ -38,7 +38,7 @@ extension NumberPickerViewController {
             return // Don't do anything if the number chosen from the picker is invalid
         }
         
-        pickerUI.selectedCells[indexPath.row] = true
+        pickerUI.selectCell(at: indexPath.row)
         
         if let _ = collectionView.cellForItem(at: indexPath) as? GridCell {
             // Choosing the same number removes it
@@ -49,12 +49,12 @@ extension NumberPickerViewController {
             }
             // Remove the picker after a delay
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                self?.pickerUI.hidePicker()
+                self?.pickerUI.hidePicker(animated : true)
             }
         }
     }
     
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        pickerUI.selectedCells[indexPath.row] = false
+        pickerUI.deselectCell(at: indexPath.row)
     }
 }
