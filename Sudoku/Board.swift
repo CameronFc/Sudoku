@@ -37,6 +37,8 @@ final class Board {
         for _ in 0..<(totalItems - initArray.count) {
             boardArray.append(nil)
         }
+        // Automatically set board permanents when any board is generated.
+        BoardMethods.setBoardPermanents(self)
     }
     
     private func at(_ x : Int, _ y : Int) -> Int? {

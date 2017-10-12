@@ -8,8 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		7E110D801F704658006B5626 /* BoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E110D7F1F704658006B5626 /* BoardViewController.swift */; };
-		7E1498A21F741EA300E593E3 /* GameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1498A11F741EA300E593E3 /* GameController.swift */; };
+		7E1498A21F741EA300E593E3 /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1498A11F741EA300E593E3 /* GameState.swift */; };
 		7E1498A41F749B9100E593E3 /* NumberPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1498A31F749B9100E593E3 /* NumberPickerViewController.swift */; };
+		7E52E6E31F9022A4003345D9 /* BoardMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E52E6E21F9022A4003345D9 /* BoardMethods.swift */; };
 		7E53A3121F83E1B700FACDA0 /* PickerUIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E53A3111F83E1B700FACDA0 /* PickerUIController.swift */; };
 		7E53A3161F857E7800FACDA0 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E53A3151F857E7800FACDA0 /* MenuViewController.swift */; };
 		7E53A3181F87FD3400FACDA0 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E53A3171F87FD3400FACDA0 /* Colors.swift */; };
@@ -47,8 +48,9 @@
 
 /* Begin PBXFileReference section */
 		7E110D7F1F704658006B5626 /* BoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardViewController.swift; sourceTree = "<group>"; };
-		7E1498A11F741EA300E593E3 /* GameController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameController.swift; sourceTree = "<group>"; };
+		7E1498A11F741EA300E593E3 /* GameState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
 		7E1498A31F749B9100E593E3 /* NumberPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberPickerViewController.swift; sourceTree = "<group>"; };
+		7E52E6E21F9022A4003345D9 /* BoardMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardMethods.swift; sourceTree = "<group>"; };
 		7E53A3111F83E1B700FACDA0 /* PickerUIController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerUIController.swift; sourceTree = "<group>"; };
 		7E53A3151F857E7800FACDA0 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		7E53A3171F87FD3400FACDA0 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -121,7 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				7EAE3C1A1F6C32D4006195AB /* MainController.swift */,
-				7E1498A11F741EA300E593E3 /* GameController.swift */,
+				7E1498A11F741EA300E593E3 /* GameState.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -130,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				7EE639471F6B386200BB8221 /* Board.swift */,
+				7E52E6E21F9022A4003345D9 /* BoardMethods.swift */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -370,7 +373,8 @@
 				7E53A3181F87FD3400FACDA0 /* Colors.swift in Sources */,
 				7EE6391A1F6B334400BB8221 /* AppDelegate.swift in Sources */,
 				7EE639481F6B386200BB8221 /* Board.swift in Sources */,
-				7E1498A21F741EA300E593E3 /* GameController.swift in Sources */,
+				7E52E6E31F9022A4003345D9 /* BoardMethods.swift in Sources */,
+				7E1498A21F741EA300E593E3 /* GameState.swift in Sources */,
 				7E53A3161F857E7800FACDA0 /* MenuViewController.swift in Sources */,
 				7E53A3121F83E1B700FACDA0 /* PickerUIController.swift in Sources */,
 				7EA256CE1F8C552C00B12213 /* BoardUIController.swift in Sources */,

@@ -167,6 +167,9 @@ extension ViewController {
         scrollView.delegate = self
         scrollView.backgroundColor = AppColors.gameBackground
         
+        let undoButton = UIBarButtonItem(title: "Undo", style: .plain, target: self, action: nil)
+        navController?.topViewController?.navigationItem.rightBarButtonItem = undoButton
+        
         setupConstraints()
     }
     

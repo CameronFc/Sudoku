@@ -1,41 +1,21 @@
 //
-//  GameController.swift
+//  BoardMethods.swift
 //  Sudoku
 //
-//  Created by Cameron Francis on 2017-09-21.
+//  Created by Cameron Francis on 2017-10-12.
 //  Copyright © 2017 Cameron Francis. All rights reserved.
 //
 
+// This class holds _all_ static methods for board generation and validation.
+
 import Foundation
 
-enum Difficulty : String {
-    case superEasy = "Super Easy"
-    case easy = "Easy"
-    case normal = "Normal"
-    case hard = "Hard"
-}
-
-class GameController {
+class BoardMethods {
     
-    // TODO: Remove this and all mutations, move board code to a Board Controller
-    var gameBoard : Board?
-    var finished : Bool
+    static let boardSize = 9
     
-    private var boardSize : Int
-    var subscribers : [GameStateDelegate] // List of views that subscribe to updates
-    
-    init() {
-        boardSize = 9
-        finished = false
-        subscribers = [GameStateDelegate]()
-        let _ = generateFullSolvedBoard()
-    }
-    
-    func boardIsFull() -> Bool {
-        guard let gameBoard = gameBoard else {
-            return false
-        }
-        for item in gameBoard.boardArray {
+    static func boardIsFull(_ board : Board) -> Bool {
+        for item in board.boardArray {
             guard let _ = item else {
                 return false
             }
@@ -43,12 +23,12 @@ class GameController {
         return true
     }
     
-    func randomBoardNumber() -> Int {
+    static func randomBoardNumber() -> Int {
         let rand = Int(arc4random_uniform(UInt32(boardSize)) + 1)
         return rand
     }
     
-    func generateRandomUnverifiedBoard() -> Board {
+    static func generateRandomUnverifiedBoard() -> Board {
         let board = Board(size : boardSize)
         for index in 0..<board.totalItems {
             board.boardArray[index] = randomBoardNumber()
@@ -56,27 +36,24 @@ class GameController {
         return board
     }
     
-    func boardIsSolved() -> Bool {
-        guard let gameBoard = gameBoard else {
-            return false
-        }
-        assert(gameBoard.width == 9, "Only implemented for normal-sized boards.")
-        for y in 0..<gameBoard.width {
-            let subArray = gameBoard.row(y)
+    static func boardIsSolved(_ board : Board) -> Bool {
+        assert(board.width == 9, "Only implemented for normal-sized boards.")
+        for y in 0..<board.width {
+            let subArray = board.row(y)
             if (!isValid(subArray: subArray)) {
                 return false
             }
         }
         
-        for x in 0..<gameBoard.width {
-            let subArray = gameBoard.column(x)
+        for x in 0..<board.width {
+            let subArray = board.column(x)
             if (!isValid(subArray: subArray)) {
                 return false
             }
         }
         
-        for region in 0..<gameBoard.width {
-            let subArray = gameBoard.region(region)
+        for region in 0..<board.width {
+            let subArray = board.region(region)
             if (!isValid(subArray: subArray)) {
                 return false
             }
@@ -84,27 +61,24 @@ class GameController {
         return true
     }
     
-    func boardIsNotInvalid() -> Bool {
-        guard let gameBoard = gameBoard else {
-            return false
-        }
-        assert(gameBoard.width == 9, "Only implemented for normal-sized boards.")
-        for y in 0..<gameBoard.width {
-            let subArray = gameBoard.row(y)
+    static func boardIsNotInvalid(_ board : Board) -> Bool {
+        assert(board.width == 9, "Only implemented for normal-sized boards.")
+        for y in 0..<board.width {
+            let subArray = board.row(y)
             if (!isNotInvalid(subArray: subArray)) {
                 return false
             }
         }
         
-        for x in 0..<gameBoard.width {
-            let subArray = gameBoard.column(x)
+        for x in 0..<board.width {
+            let subArray = board.column(x)
             if (!isNotInvalid(subArray: subArray)) {
                 return false
             }
         }
         
-        for region in 0..<gameBoard.width {
-            let subArray = gameBoard.region(region)
+        for region in 0..<board.width {
+            let subArray = board.region(region)
             if (!isNotInvalid(subArray: subArray)) {
                 return false
             }
@@ -113,7 +87,7 @@ class GameController {
         
     }
     
-    func isValid(subArray : [Int?]) -> Bool {
+    static func isValid(subArray : [Int?]) -> Bool {
         assert(boardSize == 9, "Only implemented for normal-sized boards.")
         guard let intArray = subArray as? [Int] else {
             return false
@@ -129,7 +103,7 @@ class GameController {
         }
     }
     
-    func isNotInvalid(subArray : [Int?]) -> Bool {
+    static func isNotInvalid(subArray : [Int?]) -> Bool {
         assert(boardSize == 9, "Only implemented for normal-sized boards.")
         assert(subArray.count == 9, "Did not pass a length-9 array to validation checker")
         var boolArray = [false,false,false,false,false,false,false,false,false]
@@ -146,7 +120,7 @@ class GameController {
     }
     
     
-    func generateUnsolvedBoard(difficulty : Difficulty) -> Board {
+    static func generateUnsolvedBoard(difficulty : Difficulty) -> Board {
         let board = generateFullSolvedBoard()
         let range : (low : Int, high : Int)
         
@@ -180,10 +154,12 @@ class GameController {
             }
         }
         
+        // Note that the board permanents have changed
+        BoardMethods.setBoardPermanents(board)
         return board
     }
     
-    func generateFullSolvedBoard() -> Board {
+    static func generateFullSolvedBoard() -> Board {
         
         var randomSeedBoardArray = [Int]()
         for _ in 0..<boardSize*boardSize {
@@ -212,6 +188,7 @@ class GameController {
                 }
             }
         }
+        var board : Board
         while(currentCellIndex < boardSize * boardSize) {
             // If we are rolling back and we have used up all our guesses for this cell, keep going back
             if(rollback && guesses[currentCellIndex] == randomSeedBoardArray[currentCellIndex]) {
@@ -220,8 +197,8 @@ class GameController {
             }
             guesses[currentCellIndex] = ((guesses[currentCellIndex]) % (boardSize)) + 1
             //let guess = guesses[currentCellIndex]
-            gameBoard = Board(size : 9, initArray : Array(guesses[0...currentCellIndex]))
-            if(boardIsNotInvalid()) {
+            board = Board(size : 9, initArray : Array(guesses[0...currentCellIndex]))
+            if(boardIsNotInvalid(board)) {
                 currentCellIndex += 1
                 continue
             } else {
@@ -234,40 +211,31 @@ class GameController {
                 }
             }
         }
-        // MARK : Code smell - this should be moved elsewhere - notifications should be implicit
-        self.finished = false
-        notifySubscribers()
         return Board(size : boardSize, initArray : guesses)
     }
     
-    func setBoardPermanents() {
-        guard let gameBoard = gameBoard else {
-            return
-        }
-        gameBoard.permanents = [Int : Int]()
-        for index in 0..<gameBoard.totalItems {
-            if let cellValue = gameBoard.boardArray[index] {
-                gameBoard.permanents[index] = cellValue
+    static func setBoardPermanents(_ board : Board) {
+        board.permanents = [Int : Int]()
+        for index in 0..<board.totalItems {
+            if let cellValue = board.boardArray[index] {
+                board.permanents[index] = cellValue
             }
         }
     }
     
-    func getValidChoicesFromCell(index : Int) -> [Int] {
-        guard let gameBoard = gameBoard else {
-            return [] // Return - Can't do anything without a board
-        }
+    static func getValidChoicesFromCell(board : Board, index : Int) -> [Int] {
         // Can't replace permanents
-        if let _ = gameBoard.permanents[index] {
+        if let _ = board.permanents[index] {
             return []
         }
-        let rcr = gameBoard.getRowColRegion(from: index)
-        let placesToCheck = [gameBoard.column(rcr.row), gameBoard.row(rcr.column), gameBoard.region(rcr.region)]
+        let rcr = board.getRowColRegion(from: index)
+        let placesToCheck = [board.column(rcr.row), board.row(rcr.column), board.region(rcr.region)]
         // Take each section and remove nils, then flatten to a single set.
         guard let filteredPlaces = (placesToCheck.map { $0.filter { $0 != nil }}) as? [[Int]] else {
             return [] // This should never return here unless someone changes board cells to have a non-Int type.
         }
         var flattened = Set<Int>(filteredPlaces.flatMap { $0 })
-        if let currentCellNumber = gameBoard.boardArray[index] {
+        if let currentCellNumber = board.boardArray[index] {
             flattened = flattened.subtracting([currentCellNumber])// Choosing the same number is permitted.
         }
         var validChoices : Set = [1,2,3,4,5,6,7,8,9]
@@ -275,52 +243,4 @@ class GameController {
         validChoices = validChoices.subtracting(validChoices.intersection(flattened))
         return Array(validChoices)
     }
-}
-
-extension GameController : GameState {}
-
-// Exposes game state to views.
-protocol GameState {
-    var finished : Bool { get set }
-    var gameBoard : Board? { get set }
-    var subscribers : [GameStateDelegate] { get set }
-    func getValidChoicesFromCell(index : Int) -> [Int]
-    func boardIsSolved() -> Bool
-    func setBoardPermanents()
-    func generateUnsolvedBoard(difficulty : Difficulty) -> Board
-}
-
-extension GameState {
-    
-    func notifySubscribers() {
-        for subscriber in subscribers {
-            subscriber.gameStateDidChange(finished : self.finished)
-        }
-    }
-    
-    mutating func subscribeToUpdates(subscriber : GameStateDelegate) {
-        subscribers.append(subscriber)
-    }
-    
-    mutating func changeCellNumber(at index : Int, value : Int?) {
-        guard let gameBoard = gameBoard else {
-            return
-        }
-        // Only allow changing non-permanents
-        if(gameBoard.permanents[index] == nil) {
-            gameBoard.boardArray[index] = value
-        }
-        if(boardIsSolved()) {
-            self.finished = true
-        } else {
-            self.finished = false
-        }
-        
-        notifySubscribers()
-    }
-}
-
-// Views subscribe to the gameController through this protocol to be notified of updates to the gameState.
-protocol GameStateDelegate {
-    func gameStateDidChange(finished : Bool)
 }

@@ -15,10 +15,11 @@ final class MainController {
     let navController : UINavigationController
     
     init() {
-        let gameController = GameController()
-        let menuViewController = MenuViewController(gameState : gameController)
+        let gameState = GameState()
+        let menuViewController = MenuViewController(gameState : gameState)
         navController = UINavigationController(rootViewController: menuViewController)
         menuViewController.navController = navController
+        
     }
 }
 

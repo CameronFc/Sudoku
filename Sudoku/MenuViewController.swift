@@ -57,8 +57,7 @@ class MenuViewController: UIViewController {
             assertionFailure("Something bad went wrong with the buttons!")
         }
         // Do any additional setup after loading the view.
-        gameState.gameBoard = gameState.generateUnsolvedBoard(difficulty: difficulty)
-        gameState.setBoardPermanents() // DON'T REMOVE; REFACTOR LATER
+        gameState.generateUnsolvedBoard(difficulty: difficulty)
         
         guard let navController = navController, let viewController = viewController else {
             return
