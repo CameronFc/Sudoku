@@ -16,6 +16,7 @@ class PassThroughScrollView : UIScrollView {
         self.next?.touchesBegan(touches, with: event)
         super.touchesBegan(touches, with: event)
     }
+    
 }
 
 final class ViewController: UIViewController {
@@ -88,8 +89,16 @@ extension ViewController : UIScrollViewDelegate {
     // Handles touches outside the board
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        pickerUI.hidePicker(animated : true)
-        boardUI.deselectAllCells()
+        if(touches.first?.tapCount == 1) {
+            // This is executed if we tap once or more!
+            // So this code will also execute during a double-tap
+            pickerUI.hidePicker(animated : true)
+            boardUI.deselectAllCells()
+        }
+        if(touches.first?.tapCount == 2) {
+            centerBoardView(animated : true)
+        }
+        
         super.touchesBegan(touches, with: event)
     }
 }
@@ -105,6 +114,26 @@ extension ViewController : GameStateDelegate {
                 self.navController?.popViewController(animated: true)
             })
             present(alert, animated: true)
+        }
+    }
+}
+
+extension ViewController {
+    
+    func centerBoardView(animated : Bool) {
+        // Change contestOffsets to center the board
+        let center = CGPoint(
+                x : -(view.bounds.width - GameConstants.totalBoardSize) / 2,
+                y : (GameConstants.totalBoardSize / 2) - view.bounds.height / 2)
+        
+        if(animated) {
+            UIView.animate(withDuration: 0.20, delay: 0.0, options: [.curveEaseInOut], animations: {
+                self.scrollView.contentOffset = center
+            }, completion: nil)
+            scrollView.setZoomScale(1.0, animated: true)
+        } else {
+            scrollView.contentOffset = center
+            scrollView.setZoomScale(1.0, animated: false)
         }
     }
 }
@@ -130,9 +159,6 @@ extension ViewController {
         scrollViewInsets.left = GameConstants.totalBoardSize / 2
         scrollViewInsets.right = GameConstants.totalBoardSize / 2
         scrollView.contentInset = scrollViewInsets
-        scrollView.contentOffset = CGPoint(
-            x : -(view.bounds.width - GameConstants.totalBoardSize) / 2,
-            y : (GameConstants.totalBoardSize / 2) - view.bounds.height / 2)
         scrollView.contentSize = CGSize(width: GameConstants.totalBoardSize, height : GameConstants.totalBoardSize)
         
         scrollView.minimumZoomScale = 1.0
@@ -166,6 +192,12 @@ extension ViewController {
         boardView.translatesAutoresizingMaskIntoConstraints = false
         boardView.widthAnchor.constraint(equalToConstant: GameConstants.totalBoardSize).isActive = true
         boardView.heightAnchor.constraint(equalToConstant: GameConstants.totalBoardSize).isActive = true
+        
+        centerBoardView(animated: false)
+        // MARK : Dirty scroll hack. We add +64.0 to the scrollview.bounds/scrollView.contentOffset
+        // because the addition of the navigation bar and status bar shift the bounds up 64.0
+        // sometime after this method ends.
+        scrollView.contentOffset.y += 64.0
     }
     
 }

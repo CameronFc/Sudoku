@@ -306,7 +306,6 @@ extension GameState {
         guard let gameBoard = gameBoard else {
             return
         }
-        //print("Trying to change the board state to \(value) @ \(index). Permanent here is \(gameBoard.permanents[index])")
         // Only allow changing non-permanents
         if(gameBoard.permanents[index] == nil) {
             gameBoard.boardArray[index] = value

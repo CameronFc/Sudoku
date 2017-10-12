@@ -69,7 +69,6 @@ class MenuViewController: UIViewController {
         } else {
             navController.pushViewController(viewController, animated: false)
         }
-        
     }
     
     func setupSubviews() {
