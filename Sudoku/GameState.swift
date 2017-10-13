@@ -27,7 +27,7 @@ class GameState {
     var finished : Bool
     
     var subscribers : [GameStateDelegate] // List of views that subscribe to updates
-    fileprivate var moveStack = [(index : Int, value : Int)]() // Stack of moves for use in undoing player moves
+    fileprivate var moveStack = [(index : Int, oldValue : Int?, newValue : Int?)]() // Stack of moves for use in undoing player moves
     
     init() {
         finished = false
@@ -39,8 +39,10 @@ class GameState {
 // Convenience methods to modify the state
 extension GameState {
     
-    func generateUnsolvedBoard(difficulty: Difficulty) {
+    func startNewGame(at difficulty: Difficulty) {
         gameBoard = BoardMethods.generateUnsolvedBoard(difficulty: difficulty)
+        finished = false
+        moveStack.removeAll()
         notifySubscribers()
     }
     
@@ -62,6 +64,8 @@ extension GameState {
         guard let gameBoard = gameBoard else {
             return
         }
+        //Save the old value to add to the stack later
+        let oldValue : Int? = gameBoard.boardArray[index]
         // Only allow changing non-permanents
         if(gameBoard.permanents[index] == nil) {
             gameBoard.boardArray[index] = value
@@ -72,7 +76,21 @@ extension GameState {
             self.finished = false
         }
         
+        let currentMove = (index : index, oldValue : oldValue, newValue : value)
+        moveStack.append(currentMove)
+        
         notifySubscribers()
+    }
+    
+    // Returns the cells index of the last move, if it exists
+    func undoLastMove() -> Int? {
+        // Check is stack is empty and unwrap
+        guard let lastMove = moveStack.popLast() else {
+            return nil
+        }
+        gameBoard?.boardArray[lastMove.index] = lastMove.oldValue
+        notifySubscribers()
+        return lastMove.index
     }
 }
 

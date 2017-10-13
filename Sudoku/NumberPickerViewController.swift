@@ -25,7 +25,6 @@ class NumberPickerViewController: UICollectionViewController {
         self.pickerUI.delegate = self
     }
     
-    
     @available (*, unavailable)
     required init?(coder aDecoder: NSCoder) {
         fatalError("Not yet implemented.")

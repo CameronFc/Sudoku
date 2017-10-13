@@ -167,10 +167,18 @@ extension ViewController {
         scrollView.delegate = self
         scrollView.backgroundColor = AppColors.gameBackground
         
-        let undoButton = UIBarButtonItem(title: "Undo", style: .plain, target: self, action: nil)
+        let undoButton = UIBarButtonItem(title: "Undo", style: .plain, target: self, action: #selector(undoLastMove))
         navController?.topViewController?.navigationItem.rightBarButtonItem = undoButton
         
         setupConstraints()
+    }
+    
+    func undoLastMove() {
+        // If there are any moves to undo, get the cell index of that move
+        if let index = gameState.undoLastMove() {
+            boardUI.deselectAllCells()
+            boardUI.selectCell(at: index)
+        }
     }
     
     func setupConstraints() {
@@ -202,5 +210,4 @@ extension ViewController {
         // sometime after this method ends.
         scrollView.contentOffset.y += 64.0
     }
-    
 }

@@ -30,7 +30,8 @@ extension BoardViewController {
             } else {
                 gridCell.label?.font = UIFont.fromPreset(GameConstants.normalCellText)
             }
-            if(boardUI.selectedCells[indexPath.row] ?? false) {
+            
+            if(boardUI.selectedCells[indexPath.row]) {
                 gridCell.backgroundColor = AppColors.selectedCellBackground
             } else {
                 gridCell.backgroundColor = AppColors.normalCellBackground
@@ -75,7 +76,7 @@ extension BoardViewController {
         
         if let selectedCell = collectionView.cellForItem(at: indexPath) as? GridCell {
             
-            boardUI.selectedCells[indexPath.row] = true
+            boardUI.selectCell(at: indexPath.row)
             
             // Set the background color of the picker cells to indicate invalid choices
             var validChoices = gameState.getValidChoicesFromCell(index: indexPath.row)
@@ -95,8 +96,6 @@ extension BoardViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        if let _ = collectionView.cellForItem(at: indexPath) as? GridCell {
-            boardUI.selectedCells[indexPath.row] = false
-        }
+        //Deselection state management is done by BoardUIController.
     }
 }
