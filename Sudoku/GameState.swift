@@ -21,20 +21,93 @@ enum Difficulty : String {
     case hard = "Hard"
 }
 
-class GameState {
+struct GameStatePropertyKey {
+    static let gameBoard = "gameBoard"
+    static let finished = "finished"
+    static let moveStack = "moveStack"
+}
+
+class GameState : NSObject {
+    
+    static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first! // MARK: Force unwrapping
+    static let ArchiveURL = DocumentsDirectory.appendingPathComponent("gameState")
     
     var gameBoard : Board?
-    var finished : Bool
+    var finished : Bool = false
     
     var subscribers : [GameStateDelegate] // List of views that subscribe to updates
-    fileprivate var moveStack = [(index : Int, oldValue : Int?, newValue : Int?)]() // Stack of moves for use in undoing player moves
+    //typealias MoveType = (index : Int, oldValue : Int?, newValue : Int?)
     
-    init() {
-        finished = false
-        subscribers = [GameStateDelegate]()
-        gameBoard = BoardMethods.generateFullSolvedBoard()
+    class Move : NSObject, NSCoding {
+        let index : Int
+        let oldValue : Int?
+        let newValue : Int?
+        
+        init(_ index : Int, _ oldValue : Int?, _ newValue : Int?) {
+            self.index = index
+            self.oldValue = oldValue
+            self.newValue = newValue
+            super.init()
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            index = aDecoder.decodeInteger(forKey: "index")
+            oldValue = aDecoder.decodeObject(forKey: "oldValue") as? Int
+            newValue = aDecoder.decodeObject(forKey : "newValue") as? Int
+        }
+        
+        func encode(with aCoder: NSCoder) {
+            aCoder.encode(index, forKey : "index")
+            aCoder.encode(oldValue, forKey : "oldValue")
+            aCoder.encode(newValue, forKey : "newValue")
+        }
     }
     
+    fileprivate var moveStack = [Move]() // Stack of moves for use in undoing player moves
+    
+    override init() {
+        subscribers = [GameStateDelegate]()
+        gameBoard = BoardMethods.generateFullSolvedBoard()
+        super.init()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        
+        guard let gameBoard = aDecoder.decodeObject(forKey: GameStatePropertyKey.gameBoard) as? Board else {
+            print("Could not load board from previously saved game.")
+            return nil
+        }
+        guard let moveStack = aDecoder.decodeObject(forKey: GameStatePropertyKey.moveStack) as? [Move] else {
+            print("Could not load move stack from previous game.")
+            return nil
+        }
+        self.gameBoard = gameBoard
+        finished = aDecoder.decodeBool(forKey: GameStatePropertyKey.finished)
+        self.moveStack = moveStack
+        // We can't easily save the subscriber list because we are going to
+        // remake those viewControllers anyway - so start with an empty subscriber list on load.
+        self.subscribers = [GameStateDelegate]() 
+        
+        super.init()
+    }
+}
+
+extension GameState : NSCoding {
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(gameBoard, forKey: GameStatePropertyKey.gameBoard)
+        aCoder.encode(finished, forKey: GameStatePropertyKey.finished)
+        aCoder.encode(moveStack, forKey: GameStatePropertyKey.moveStack)
+    }
+    
+    func saveGame() {
+        let wasSuccessful = NSKeyedArchiver.archiveRootObject(self, toFile: GameState.ArchiveURL.path)
+        if(wasSuccessful) {
+            print("Successfully saved.")
+        } else {
+            print("There was an error in saving the game.")
+        }
+    }
 }
 // Convenience methods to modify the state
 extension GameState {
@@ -44,6 +117,7 @@ extension GameState {
         finished = false
         moveStack.removeAll()
         notifySubscribers()
+        saveGame()
     }
     
     func getValidChoicesFromCell(index: Int) -> [Int] {
@@ -76,10 +150,11 @@ extension GameState {
             self.finished = false
         }
         
-        let currentMove = (index : index, oldValue : oldValue, newValue : value)
+        let currentMove = Move(index, oldValue, value)
         moveStack.append(currentMove)
         
         notifySubscribers()
+        saveGame()
     }
     
     // Returns the cells index of the last move, if it exists
@@ -90,6 +165,7 @@ extension GameState {
         }
         gameBoard?.boardArray[lastMove.index] = lastMove.oldValue
         notifySubscribers()
+        saveGame()
         return lastMove.index
     }
 }

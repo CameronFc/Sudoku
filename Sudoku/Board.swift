@@ -7,29 +7,47 @@
 //
 
 import UIKit
+import Foundation
 
-final class Board {
+struct PropertyKey{
+    static let boardArray = "boardArray"
+    static let permanents = "permanents"
+}
+
+final class Board : NSObject, NSCoding {
     
-    let width : Int
+    let width = 9
     var totalItems : Int {
         return (width * width)
     }
     var boardArray : [Int?]
     var permanents : [Int : Int] // Index, Value
     
-    init(size : Int) {
+    required init?(coder aDecoder: NSCoder) {
+        guard let boardArray = aDecoder.decodeObject(forKey: PropertyKey.boardArray) as? [Int?],
+            let permanents = aDecoder.decodeObject(forKey: PropertyKey.permanents) as? [Int : Int] else {
+            print("Failed to resture board state from save.")
+            return nil
+        }
+        self.boardArray = boardArray
+        self.permanents = permanents
+    }
+    
+    override init() {
         boardArray = [Int?]()
-        width = size
         permanents = [Int : Int]()
+        super.init()
+        
         for _ in 0..<totalItems {
             boardArray.append(nil)
         }
     }
     
-    init(size : Int, initArray : [Int?]) {
+    init(initArray : [Int?]) {
         boardArray = [Int?]()
-        width = size
         permanents = [Int : Int]()
+        super.init()
+        
         if(initArray.count > totalItems) {
             assert(false, "Can't pass \(initArray.count) items to board with total size \(totalItems)")
         }
@@ -40,7 +58,17 @@ final class Board {
         // Automatically set board permanents when any board is generated.
         BoardMethods.setBoardPermanents(self)
     }
-    
+}
+// NSCoding
+extension Board {
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(boardArray, forKey: PropertyKey.boardArray)
+        aCoder.encode(permanents, forKey: PropertyKey.permanents)
+    }
+}
+// Board model methods
+extension Board {
+
     private func at(_ x : Int, _ y : Int) -> Int? {
         guard x < boardArray.count
             && x >= 0
@@ -90,7 +118,7 @@ final class Board {
         )
     }
     
-    func description() -> String {
+    func boardDescription() -> String {
         var out = ""
         for index in 0..<totalItems {
             if let x = boardArray[index] {

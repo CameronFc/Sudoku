@@ -29,7 +29,7 @@ class BoardMethods {
     }
     
     static func generateRandomUnverifiedBoard() -> Board {
-        let board = Board(size : boardSize)
+        let board = Board()
         for index in 0..<board.totalItems {
             board.boardArray[index] = randomBoardNumber()
         }
@@ -197,7 +197,7 @@ class BoardMethods {
             }
             guesses[currentCellIndex] = ((guesses[currentCellIndex]) % (boardSize)) + 1
             //let guess = guesses[currentCellIndex]
-            board = Board(size : 9, initArray : Array(guesses[0...currentCellIndex]))
+            board = Board(initArray : Array(guesses[0...currentCellIndex]))
             if(boardIsNotInvalid(board)) {
                 currentCellIndex += 1
                 continue
@@ -211,7 +211,7 @@ class BoardMethods {
                 }
             }
         }
-        return Board(size : boardSize, initArray : guesses)
+        return Board(initArray : guesses)
     }
     
     static func setBoardPermanents(_ board : Board) {

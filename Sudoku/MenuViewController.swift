@@ -12,7 +12,7 @@ class MenuViewController: UIViewController {
     
     var navController : UINavigationController?
     
-    var gameState : GameState
+    var gameState : GameState! // Mark: Forced unwrapping
     
     var viewController : ViewController?
     
@@ -20,9 +20,22 @@ class MenuViewController: UIViewController {
     
     var gameMenu : UIStackView!
     
-    init(gameState : GameState) {
-        self.gameState = gameState
+    var wasLoaded = false // was loaded from Disk
+    
+    init() {
         super.init(nibName: nil, bundle: nil)
+        // Mark : Hack - this is kinda backwards, set properties first..
+        self.gameState = startGame()
+    }
+    
+    func startGame() -> GameState {
+        
+        if let gameState = NSKeyedUnarchiver.unarchiveObject(withFile: GameState.ArchiveURL.path) as? GameState {
+            wasLoaded = true
+            return gameState
+        } else {
+            return GameState()
+        }
     }
     
     @available (*, unavailable)
@@ -146,5 +159,17 @@ class MenuViewController: UIViewController {
             gameMenu.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             gameMenu.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier : 0.5)
         ])
+        
+        // Mark : Dirty hacks
+        guard let navController = navController, let viewController = viewController else {
+            return
+        }
+        if(wasLoaded) {
+            if(navController.viewControllers.contains(viewController)) {
+                navController.show(viewController, sender: self)
+            } else {
+                navController.pushViewController(viewController, animated: false)
+            }
+        }
     }
 }
