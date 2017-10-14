@@ -42,6 +42,12 @@ class MenuViewController: UIViewController {
         setupSubviews()
     }
     
+    func segueBackToGame() {
+        if let viewController = viewController {
+            navController?.show(viewController, sender: self)
+        }
+    }
+    
     func handleDifficultyButtonPress(sender : UIButton) {
         var difficulty = Difficulty.superEasy
         switch(sender.tag) {
@@ -62,6 +68,9 @@ class MenuViewController: UIViewController {
         guard let navController = navController, let viewController = viewController else {
             return
         }
+        // Add the resume button after clicking one of the difficulty buttons
+        let existingGameButton = UIBarButtonItem(title: "Resume", style: .done, target: self, action: #selector(segueBackToGame))
+        navController.topViewController?.navigationItem.rightBarButtonItem = existingGameButton
         
         if(navController.viewControllers.contains(viewController)) {
             navController.show(viewController, sender: self)
