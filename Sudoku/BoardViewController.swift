@@ -9,7 +9,7 @@
 // This ViewController is the visual representation of the sudoku board.
 // This file is responsible for laying out cells on the board
 // Most methods that interact with the board, or handle touch events, 
-// are located elsewhere.
+
 
 import UIKit
 
@@ -45,6 +45,8 @@ final class BoardViewController: UICollectionViewController {
         
         self.collectionView?.register(GridCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         self.collectionView?.reloadData()
+        setupSubviews()
+        setupConstraints()
     }
     
     func setupSubviews() {
@@ -52,8 +54,6 @@ final class BoardViewController: UICollectionViewController {
         collectionView?.layer.borderWidth = GameConstants.boardViewBorderWidth
         collectionView?.layer.cornerRadius = GameConstants.boardViewCornerRadius
         collectionView?.backgroundColor = AppColors.shouldNotBeSeen
-        
-        setupConstraints()
     }
     
     func setupConstraints() {

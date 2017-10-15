@@ -52,6 +52,8 @@ class MenuViewController: UIViewController {
         viewController?.navController = navController
         
         setupSubviews()
+        setupConstraints()
+        transitionIfLoaded()
     }
     
     func segueBackToGame() {
@@ -154,8 +156,6 @@ extension MenuViewController {
             newGameButton.addTarget(self, action: #selector(self.handleDifficultyButtonPress), for: .touchUpInside)
             gameMenu.addArrangedSubview(newGameButton)
         }
-        
-        setupConstraints()
     }
     
     func setupConstraints() {
@@ -174,8 +174,6 @@ extension MenuViewController {
             gameMenu.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             gameMenu.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier : 0.5)
         ])
-        
-        transitionIfLoaded()
     }
 }
 // Loading from old game

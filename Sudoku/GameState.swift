@@ -145,6 +145,10 @@ extension GameState {
         saveGame()
         return lastMove.index
     }
+    
+    func moveStackIsEmpty() -> Bool {
+        return moveStack.isEmpty
+    }
 }
 // Pub-Sub methods
 extension GameState {
