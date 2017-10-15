@@ -28,49 +28,23 @@ struct GameStatePropertyKey {
 }
 
 class GameState : NSObject {
-    
-    static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first! // MARK: Force unwrapping
+    // MARK: Force unwrapping. Should be safe.
+    static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first! 
     static let ArchiveURL = DocumentsDirectory.appendingPathComponent("gameState")
     
     var gameBoard : Board?
     var finished : Bool = false
     
     var subscribers : [GameStateDelegate] // List of views that subscribe to updates
-    //typealias MoveType = (index : Int, oldValue : Int?, newValue : Int?)
-    
-    class Move : NSObject, NSCoding {
-        let index : Int
-        let oldValue : Int?
-        let newValue : Int?
-        
-        init(_ index : Int, _ oldValue : Int?, _ newValue : Int?) {
-            self.index = index
-            self.oldValue = oldValue
-            self.newValue = newValue
-            super.init()
-        }
-        
-        required init?(coder aDecoder: NSCoder) {
-            index = aDecoder.decodeInteger(forKey: "index")
-            oldValue = aDecoder.decodeObject(forKey: "oldValue") as? Int
-            newValue = aDecoder.decodeObject(forKey : "newValue") as? Int
-        }
-        
-        func encode(with aCoder: NSCoder) {
-            aCoder.encode(index, forKey : "index")
-            aCoder.encode(oldValue, forKey : "oldValue")
-            aCoder.encode(newValue, forKey : "newValue")
-        }
-    }
     
     fileprivate var moveStack = [Move]() // Stack of moves for use in undoing player moves
-    
+    // Init with fully solved board by default
     override init() {
         subscribers = [GameStateDelegate]()
         gameBoard = BoardMethods.generateFullSolvedBoard()
         super.init()
     }
-    
+    // Load from disk
     required init?(coder aDecoder: NSCoder) {
         
         guard let gameBoard = aDecoder.decodeObject(forKey: GameStatePropertyKey.gameBoard) as? Board else {
@@ -91,7 +65,7 @@ class GameState : NSObject {
         super.init()
     }
 }
-
+// Persistence related methods
 extension GameState : NSCoding {
     
     func encode(with aCoder: NSCoder) {
@@ -113,6 +87,7 @@ extension GameState : NSCoding {
 extension GameState {
     
     func startNewGame(at difficulty: Difficulty) {
+        
         gameBoard = BoardMethods.generateUnsolvedBoard(difficulty: difficulty)
         finished = false
         moveStack.removeAll()
@@ -128,6 +103,7 @@ extension GameState {
     }
     
     func boardIsSolved() -> Bool {
+        
         guard let gameBoard = gameBoard else {
             return false
         }
@@ -135,6 +111,7 @@ extension GameState {
     }
     
     func changeCellNumber(at index : Int, value : Int?) {
+        
         guard let gameBoard = gameBoard else {
             return
         }
@@ -169,7 +146,7 @@ extension GameState {
         return lastMove.index
     }
 }
-
+// Pub-Sub methods
 extension GameState {
     
     func notifySubscribers() {
@@ -182,8 +159,42 @@ extension GameState {
         subscribers.append(subscriber)
     }
 }
-
 // Views subscribe to the gameController through this protocol to be notified of updates to the gameState.
 protocol GameStateDelegate {
+    
     func gameStateDidChange(finished : Bool)
+}
+// Makes game moves a nested class. This makes serialization easier.
+extension GameState {
+    
+    private struct PropertyKeys {
+        static let index = "index"
+        static let oldValue = "oldValue"
+        static let newValue = "newValue"
+    }
+    
+    class Move : NSObject, NSCoding {
+        let index : Int
+        let oldValue : Int?
+        let newValue : Int?
+        
+        init(_ index : Int, _ oldValue : Int?, _ newValue : Int?) {
+            self.index = index
+            self.oldValue = oldValue
+            self.newValue = newValue
+            super.init()
+        }
+        
+        required init?(coder aDecoder: NSCoder) {
+            index = aDecoder.decodeInteger(forKey: PropertyKeys.index)
+            oldValue = aDecoder.decodeObject(forKey: PropertyKeys.oldValue) as? Int
+            newValue = aDecoder.decodeObject(forKey : PropertyKeys.newValue ) as? Int
+        }
+        
+        func encode(with aCoder: NSCoder) {
+            aCoder.encode(index, forKey : PropertyKeys.index)
+            aCoder.encode(oldValue, forKey : PropertyKeys.oldValue)
+            aCoder.encode(newValue, forKey : PropertyKeys.newValue)
+        }
+    }
 }

@@ -28,16 +28,12 @@ class MenuViewController: UIViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
         // Mark : Hack - this is kinda backwards, set properties first..
-        self.gameState = startGame()
-    }
-    
-    func startGame() -> GameState {
-        
         if let gameState = NSKeyedUnarchiver.unarchiveObject(withFile: GameState.ArchiveURL.path) as? GameState {
             wasLoaded = true
-            return gameState
+            self.gameState = gameState
         } else {
-            return GameState()
+            wasLoaded = false
+            self.gameState = GameState()
         }
     }
     
@@ -64,6 +60,20 @@ class MenuViewController: UIViewController {
         }
     }
     
+    func toggleResumeButton(enabled : Bool) {
+        
+        if(enabled) {
+            // Add the resume button after clicking one of the difficulty buttons
+            let existingGameButton = UIBarButtonItem(title: "Resume", style: .done, target: self, action: #selector(segueBackToGame))
+            navController?.topViewController?.navigationItem.rightBarButtonItem = existingGameButton
+        } else {
+            navController?.topViewController?.navigationItem.rightBarButtonItem = nil
+        }
+    }
+}
+// Handling touch events
+extension MenuViewController {
+    
     func handleDifficultyButtonPress(sender : UIButton) {
         var difficulty = Difficulty.superEasy
         switch(sender.tag) {
@@ -84,9 +94,8 @@ class MenuViewController: UIViewController {
         guard let navController = navController, let viewController = viewController else {
             return
         }
-        // Add the resume button after clicking one of the difficulty buttons
-        let existingGameButton = UIBarButtonItem(title: "Resume", style: .done, target: self, action: #selector(segueBackToGame))
-        navController.topViewController?.navigationItem.rightBarButtonItem = existingGameButton
+        
+        toggleResumeButton(enabled: true)
         
         if(navController.viewControllers.contains(viewController)) {
             navController.show(viewController, sender: self)
@@ -94,7 +103,10 @@ class MenuViewController: UIViewController {
             navController.pushViewController(viewController, animated: false)
         }
     }
-    
+}
+// View initalization
+extension MenuViewController {
+
     func setupSubviews() {
         
         titleLabel = UILabel()
@@ -163,16 +175,27 @@ class MenuViewController: UIViewController {
             gameMenu.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier : 0.5)
         ])
         
-        // Mark : Dirty hacks
+        transitionIfLoaded()
+    }
+}
+// Loading from old game
+extension MenuViewController {
+
+    func transitionIfLoaded() {
+        
         guard let navController = navController, let viewController = viewController else {
             return
         }
         if(wasLoaded) {
+            toggleResumeButton(enabled: true)
             if(navController.viewControllers.contains(viewController)) {
                 navController.show(viewController, sender: self)
             } else {
                 navController.pushViewController(viewController, animated: false)
             }
+        } else {
+            print("Was not loaded!! :(")
         }
+        
     }
 }

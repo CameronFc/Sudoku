@@ -14,13 +14,11 @@ import UIKit
 
 // MARK : DIRTY HACK
 class PassThroughScrollView : UIScrollView {
-    
     // Let touch events propagate to children
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.next?.touchesBegan(touches, with: event)
         super.touchesBegan(touches, with: event)
     }
-    
 }
 
 final class ViewController: UIViewController {
@@ -64,8 +62,7 @@ final class ViewController: UIViewController {
         fatalError("Not implemented.")
     }
 }
-
-// MARK : User Interaction
+//ScrollView zooming and dragging.
 extension ViewController : UIScrollViewDelegate {
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
@@ -89,7 +86,9 @@ extension ViewController : UIScrollViewDelegate {
         pickerUI.hidePicker(animated : true)
         boardUI.deselectAllCells()
     }
-    
+}
+// Touch events
+extension ViewController {
     // Handles touches outside the board
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
@@ -105,14 +104,21 @@ extension ViewController : UIScrollViewDelegate {
         
         super.touchesBegan(touches, with: event)
     }
+    // Method selected by Undo button
+    func undoLastMove() {
+        // If there are any moves to undo, get the cell index of that move
+        if let index = gameState.undoLastMove() {
+            boardUI.deselectAllCells()
+            boardUI.selectCell(at: index)
+        }
+    }
 }
-
+// Responding to game state changes
 extension ViewController : GameStateDelegate {
     
     func gameStateDidChange(finished : Bool) {
         
         if(finished) {
-            // MARK : Hack
             let alert = UIAlertController(title: "You Win!", message: "You have completed the game in 0.00s. Congratulations!", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
                 self.navController?.popViewController(animated: true)
@@ -121,27 +127,27 @@ extension ViewController : GameStateDelegate {
         }
     }
 }
-
+// Animations
 extension ViewController {
     
     func centerBoardView(animated : Bool) {
-        // Change contestOffsets to center the board
+        // Change contentOffsets to center the board
         let center = CGPoint(
                 x : -(view.bounds.width - GameConstants.totalBoardSize) / 2,
                 y : (GameConstants.totalBoardSize / 2) - view.bounds.height / 2)
         
         if(animated) {
             UIView.animate(withDuration: 0.20, delay: 0.0, options: [.curveEaseInOut], animations: {
+                self.scrollView.setZoomScale(1.0, animated: true)
+            }, completion: { (someBoolean) in
                 self.scrollView.contentOffset = center
-            }, completion: nil)
-            scrollView.setZoomScale(1.0, animated: true)
+            })
         } else {
             scrollView.contentOffset = center
             scrollView.setZoomScale(1.0, animated: false)
         }
     }
 }
-
 // MARK : View setup
 extension ViewController {
     
@@ -175,14 +181,6 @@ extension ViewController {
         navController?.topViewController?.navigationItem.rightBarButtonItem = undoButton
         
         setupConstraints()
-    }
-    
-    func undoLastMove() {
-        // If there are any moves to undo, get the cell index of that move
-        if let index = gameState.undoLastMove() {
-            boardUI.deselectAllCells()
-            boardUI.selectCell(at: index)
-        }
     }
     
     func setupConstraints() {
