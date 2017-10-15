@@ -9,16 +9,15 @@
 import Foundation
 import UIKit
 
-
 final class MainController {
     
     let navController : UINavigationController
     
     init() {
+        
         let menuViewController = MenuViewController()
         navController = UINavigationController(rootViewController: menuViewController)
         menuViewController.navController = navController
-        
     }
 }
 

@@ -103,7 +103,7 @@ extension GameState : NSCoding {
     func saveGame() {
         let wasSuccessful = NSKeyedArchiver.archiveRootObject(self, toFile: GameState.ArchiveURL.path)
         if(wasSuccessful) {
-            print("Successfully saved.")
+            //print("Successfully saved.")
         } else {
             print("There was an error in saving the game.")
         }

@@ -6,6 +6,9 @@
 //  Copyright © 2017 Cameron Francis. All rights reserved.
 //
 
+// This class is an interface for other ViewControllers to access the NumberPickerView.
+// It defines methods for changing the view, and also for chaning UI state related to it.
+
 import Foundation
 import UIKit
 

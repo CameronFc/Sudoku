@@ -7,6 +7,7 @@
 //
 
 // This class holds _all_ static methods for board generation and validation.
+// Any method that manipulates or validates a board model is in this file.
 
 import Foundation
 

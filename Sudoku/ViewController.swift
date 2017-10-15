@@ -6,6 +6,10 @@
 //  Copyright © 2017 Cameron Francis. All rights reserved.
 //
 
+// This ViewController is what the player sees when they are playing
+// the game. It manages a scrollview that contains the boardView.
+// It also is parent to the NumberPickerViewController.
+
 import UIKit
 
 // MARK : DIRTY HACK

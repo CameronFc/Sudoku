@@ -6,6 +6,9 @@
 //  Copyright © 2017 Cameron Francis. All rights reserved.
 //
 
+// This file describes all UIColors used in the app. 
+// UIColor.<whatever> should not be used anywhere else in the app!
+
 import Foundation
 import UIKit
 

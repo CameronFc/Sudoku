@@ -6,6 +6,8 @@
 //  Copyright © 2017 Cameron Francis. All rights reserved.
 //
 
+// This file handles board touch events, and the creation of cells.
+
 import Foundation
 import UIKit
 

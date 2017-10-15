@@ -6,6 +6,8 @@
 //  Copyright © 2017 Cameron Francis. All rights reserved.
 //
 
+// This file handles NumberPicker touch events, and the creation of cells in it.
+
 import Foundation
 import UIKit
 
@@ -55,6 +57,6 @@ extension NumberPickerViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        // We handle state management of deselecting cells in pickerUIController.
+        // We handle state management of 'deselecting' cells in pickerUIController.
     }
 }

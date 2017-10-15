@@ -6,6 +6,10 @@
 //  Copyright © 2017 Cameron Francis. All rights reserved.
 //
 
+// This data model represents a 9x9 Sudoku board.
+// It implements methods for interfacing with the board,
+// like getting different rows, columns, and regions.
+
 import UIKit
 import Foundation
 

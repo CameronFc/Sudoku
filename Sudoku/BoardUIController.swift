@@ -6,6 +6,11 @@
 //  Copyright © 2017 Cameron Francis. All rights reserved.
 //
 
+// This class is responsible for handling state-related methods concerning the 
+// board view. It is also an interface that other viewControllers use 
+// to access the board view. It can modify both the game-related UI state
+// and the properties of the board view.
+
 import Foundation
 import UIKit
 

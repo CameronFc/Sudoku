@@ -6,6 +6,9 @@
 //  Copyright © 2017 Cameron Francis. All rights reserved.
 //
 
+// This ViewController is seen when the user launches the app without having a saved game,
+// or if they go back to the main menu.
+
 import UIKit
 
 class MenuViewController: UIViewController {

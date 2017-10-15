@@ -14,7 +14,7 @@
 		7E53A3121F83E1B700FACDA0 /* PickerUIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E53A3111F83E1B700FACDA0 /* PickerUIController.swift */; };
 		7E53A3161F857E7800FACDA0 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E53A3151F857E7800FACDA0 /* MenuViewController.swift */; };
 		7E53A3181F87FD3400FACDA0 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E53A3171F87FD3400FACDA0 /* Colors.swift */; };
-		7EA256C41F8C473200B12213 /* ViewConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA256C31F8C473200B12213 /* ViewConstants.swift */; };
+		7EA256C41F8C473200B12213 /* GameConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA256C31F8C473200B12213 /* GameConstants.swift */; };
 		7EA256CE1F8C552C00B12213 /* BoardUIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA256CD1F8C552C00B12213 /* BoardUIController.swift */; };
 		7EA256D11F8C646000B12213 /* BoardViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA256D01F8C646000B12213 /* BoardViewDataSource.swift */; };
 		7EA256D31F8C6BA700B12213 /* NumberPickerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EA256D21F8C6BA700B12213 /* NumberPickerDataSource.swift */; };
@@ -54,7 +54,7 @@
 		7E53A3111F83E1B700FACDA0 /* PickerUIController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerUIController.swift; sourceTree = "<group>"; };
 		7E53A3151F857E7800FACDA0 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		7E53A3171F87FD3400FACDA0 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
-		7EA256C31F8C473200B12213 /* ViewConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewConstants.swift; sourceTree = "<group>"; };
+		7EA256C31F8C473200B12213 /* GameConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameConstants.swift; sourceTree = "<group>"; };
 		7EA256CD1F8C552C00B12213 /* BoardUIController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardUIController.swift; sourceTree = "<group>"; };
 		7EA256D01F8C646000B12213 /* BoardViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardViewDataSource.swift; sourceTree = "<group>"; };
 		7EA256D21F8C6BA700B12213 /* NumberPickerDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberPickerDataSource.swift; sourceTree = "<group>"; };
@@ -149,7 +149,7 @@
 		7EA256CB1F8C544A00B12213 /* Properties */ = {
 			isa = PBXGroup;
 			children = (
-				7EA256C31F8C473200B12213 /* ViewConstants.swift */,
+				7EA256C31F8C473200B12213 /* GameConstants.swift */,
 				7E53A3171F87FD3400FACDA0 /* Colors.swift */,
 			);
 			name = Properties;
@@ -368,7 +368,7 @@
 				7E1498A41F749B9100E593E3 /* NumberPickerViewController.swift in Sources */,
 				7EAE3C1B1F6C32D4006195AB /* MainController.swift in Sources */,
 				7EE6391C1F6B334400BB8221 /* ViewController.swift in Sources */,
-				7EA256C41F8C473200B12213 /* ViewConstants.swift in Sources */,
+				7EA256C41F8C473200B12213 /* GameConstants.swift in Sources */,
 				7EA256D11F8C646000B12213 /* BoardViewDataSource.swift in Sources */,
 				7E53A3181F87FD3400FACDA0 /* Colors.swift in Sources */,
 				7EE6391A1F6B334400BB8221 /* AppDelegate.swift in Sources */,

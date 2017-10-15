@@ -6,6 +6,10 @@
 //  Copyright © 2017 Cameron Francis. All rights reserved.
 //
 
+// GridCell is used by both the BoardView and NumberPicker for collection view
+// cells. It has methods to decorate the cell with directional borders
+// of different attributes.
+
 import UIKit
 
 enum BorderDirection {

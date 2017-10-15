@@ -6,6 +6,10 @@
 //  Copyright © 2017 Cameron Francis. All rights reserved.
 //
 
+// This ViewController is what the user sees when they want to enter
+// a number onto the board. This file only deals with managing
+// the size of cells on the picker.
+
 import UIKit
 
 class NumberPickerViewController: UICollectionViewController {
@@ -40,9 +44,8 @@ class NumberPickerViewController: UICollectionViewController {
     
     func setupSubviews() {
         
-        collectionView?.layer.borderWidth = 1.0
-        collectionView?.layer.cornerRadius = 2.0
-        
+        collectionView?.layer.borderWidth = GameConstants.pickerViewBorderWidth
+        collectionView?.layer.cornerRadius = GameConstants.pickerViewCornerRadius
         // Needs to be same color as cell border
         collectionView?.backgroundColor = AppColors.cellBorder
         
