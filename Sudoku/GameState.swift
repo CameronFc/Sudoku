@@ -25,6 +25,7 @@ struct GameStatePropertyKey {
     static let gameBoard = "gameBoard"
     static let finished = "finished"
     static let moveStack = "moveStack"
+    static let gameTime = "gameTime"
 }
 
 class GameState : NSObject {
@@ -34,14 +35,17 @@ class GameState : NSObject {
     
     var gameBoard : Board?
     var finished : Bool = false
+    var gameTime : Int
+    var gameTimer : Timer?
     
-    var subscribers : [GameStateDelegate] // List of views that subscribe to updates
+    var subscribers = [GameStateDelegate]() // List of views that subscribe to updates
+    var timerSubscribers = [TimerSubscriber]()
     
     fileprivate var moveStack = [Move]() // Stack of moves for use in undoing player moves
     // Init with fully solved board by default
     override init() {
-        subscribers = [GameStateDelegate]()
         gameBoard = BoardMethods.generateFullSolvedBoard()
+        gameTime = 0
         super.init()
     }
     // Load from disk
@@ -57,10 +61,10 @@ class GameState : NSObject {
         }
         self.gameBoard = gameBoard
         finished = aDecoder.decodeBool(forKey: GameStatePropertyKey.finished)
+        gameTime = aDecoder.decodeInteger(forKey: GameStatePropertyKey.gameTime)
         self.moveStack = moveStack
         // We can't easily save the subscriber list because we are going to
         // remake those viewControllers anyway - so start with an empty subscriber list on load.
-        self.subscribers = [GameStateDelegate]() 
         
         super.init()
     }
@@ -72,6 +76,7 @@ extension GameState : NSCoding {
         aCoder.encode(gameBoard, forKey: GameStatePropertyKey.gameBoard)
         aCoder.encode(finished, forKey: GameStatePropertyKey.finished)
         aCoder.encode(moveStack, forKey: GameStatePropertyKey.moveStack)
+        aCoder.encode(gameTime, forKey: GameStatePropertyKey.gameTime)
     }
     
     func saveGame() {
@@ -91,6 +96,7 @@ extension GameState {
         gameBoard = BoardMethods.generateUnsolvedBoard(difficulty: difficulty)
         finished = false
         moveStack.removeAll()
+        gameTime = 0
         notifySubscribers()
         saveGame()
     }
@@ -149,6 +155,34 @@ extension GameState {
     func moveStackIsEmpty() -> Bool {
         return moveStack.isEmpty
     }
+}
+// Timer methods
+extension GameState {
+    
+    func startTimer() {
+        gameTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+        RunLoop.current.add(gameTimer!, forMode: .commonModes)
+    }
+    
+    func updateTimer() {
+        gameTime = gameTime + 1
+        notifyTimerSubs()
+        saveGame() // This could be really slow, ideally we should have a separate method for saving the gameTimer
+    }
+    
+    func stopTimer() {
+        gameTimer?.invalidate()
+    }
+    
+    func notifyTimerSubs() {
+        for sub in timerSubscribers {
+            sub.handleTimerUpdate()
+        }
+    }
+}
+// The timer view in the nav bar should conform to this protocol.
+protocol TimerSubscriber {
+    func handleTimerUpdate()
 }
 // Pub-Sub methods
 extension GameState {

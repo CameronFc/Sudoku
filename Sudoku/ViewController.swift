@@ -42,7 +42,26 @@ final class ViewController: UIViewController {
         setupSubviews()
         setupConstraints()
         pickerUI.hidePicker(animated : false)
-        autoSetUndoButton() 
+        autoSetUndoButton()
+        handleTimerUpdate()
+        
+        let app = UIApplication.shared
+        NotificationCenter.default
+            .addObserver(self, selector: #selector(applicationWillResignActive(notification:)), name: NSNotification.Name
+                .UIApplicationWillResignActive, object: app)
+        NotificationCenter.default
+            .addObserver(self, selector: #selector(applicationDidBecomeActive(notification:)), name: NSNotification.Name
+                .UIApplicationDidBecomeActive, object: app)
+    }
+    // Gets called when app goes into background
+    func applicationWillResignActive(notification : NSNotification) {
+        //print("App resigned being active.")
+        gameState.stopTimer()
+    }
+    
+    func applicationDidBecomeActive(notification : NSNotification) {
+        //print("App entered foreground.")
+        gameState.startTimer()
     }
     
     init(gameState : GameState, pickerUI : PickerUIController, boardUI : BoardUIController) {
@@ -54,6 +73,7 @@ final class ViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         
         self.gameState.subscribeToUpdates(subscriber: self)
+        self.gameState.timerSubscribers.append(self)
         
         self.addChildViewController(numberPickerViewController)
         numberPickerViewController.didMove(toParentViewController: self)
@@ -62,6 +82,17 @@ final class ViewController: UIViewController {
     @available (*, unavailable)
     required init?(coder aDecoder: NSCoder) {
         fatalError("Not implemented.")
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        // Start the timer when we see the game.
+        gameState.stopTimer()
+        super.viewWillDisappear(animated)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        gameState.startTimer()
+        super.viewDidAppear(animated)
     }
 }
 //ScrollView zooming and dragging.
@@ -136,7 +167,15 @@ extension ViewController : GameStateDelegate {
         autoSetUndoButton()
         
         if(finished) {
-            let alert = UIAlertController(title: "You Win!", message: "You have completed the game in 0.00s. Congratulations!", preferredStyle: .alert)
+            gameState.stopTimer()
+            let gameTimes = getGameTimes()
+            // Don't bother to show hours/minutes if the player completed the game in minutes/seconds
+            let hoursString = (gameTimes.hours > 0) ? "\(gameTimes.hours)h " : ""
+            let minutesString = (gameTimes.minutes > 0) ? "\(gameTimes.minutes)m " : ""
+            let secondsString = "\(gameTimes.seconds)s"
+            let timeString = hoursString + minutesString + secondsString
+            let message = "You have completed the game in \(timeString). Congratulations!"
+            let alert = UIAlertController(title: "You Win!", message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
                 self.navController?.popViewController(animated: true)
             })
@@ -225,5 +264,22 @@ extension ViewController {
         // because the addition of the navigation bar and status bar shift the bounds up 64.0
         // sometime after this method ends.
         scrollView.contentOffset.y += 64.0
+    }
+}
+// GameTimer related methods
+extension ViewController : TimerSubscriber {
+    
+    func handleTimerUpdate() {
+        
+        let gameTimes = getGameTimes()
+        navigationController?.topViewController?.title = String(format: "%01i:%02i:%02i", gameTimes.hours, gameTimes.minutes, gameTimes.seconds)
+    }
+    
+    func getGameTimes() -> (hours : Int, minutes : Int, seconds : Int) {
+        
+        let seconds = gameState.gameTime % 60
+        let minutes = (gameState.gameTime / 60 ) % 60
+        let hours = (gameState.gameTime / (60 * 60))
+        return (hours : hours, minutes : minutes, seconds : seconds)
     }
 }
