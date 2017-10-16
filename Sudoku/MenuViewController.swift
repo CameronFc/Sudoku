@@ -56,7 +56,7 @@ class MenuViewController: UIViewController {
         transitionIfLoaded()
     }
     
-    func segueBackToGame() {
+    @objc func segueBackToGame() {
         if let viewController = viewController {
             navController?.show(viewController, sender: self)
         }
@@ -76,7 +76,7 @@ class MenuViewController: UIViewController {
 // Handling touch events
 extension MenuViewController {
     
-    func handleDifficultyButtonPress(sender : UIButton) {
+    @objc func handleDifficultyButtonPress(sender : UIButton) {
         var difficulty = Difficulty.superEasy
         switch(sender.tag) {
         case 0 :

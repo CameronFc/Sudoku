@@ -164,7 +164,7 @@ extension GameState {
         RunLoop.current.add(gameTimer!, forMode: .commonModes)
     }
     
-    func updateTimer() {
+    @objc func updateTimer() {
         gameTime = gameTime + 1
         notifyTimerSubs()
         saveGame() // This could be really slow, ideally we should have a separate method for saving the gameTimer
@@ -202,37 +202,33 @@ protocol GameStateDelegate {
     
     func gameStateDidChange(finished : Bool)
 }
-// Makes game moves a nested class. This makes serialization easier.
-extension GameState {
+private struct PropertyKeys {
+    static let index = "index"
+    static let oldValue = "oldValue"
+    static let newValue = "newValue"
+}
+// This used to be nested but apparently swift 4.0 does not like that
+class Move : NSObject, NSCoding {
+    let index : Int
+    let oldValue : Int?
+    let newValue : Int?
     
-    private struct PropertyKeys {
-        static let index = "index"
-        static let oldValue = "oldValue"
-        static let newValue = "newValue"
+    init(_ index : Int, _ oldValue : Int?, _ newValue : Int?) {
+        self.index = index
+        self.oldValue = oldValue
+        self.newValue = newValue
+        super.init()
     }
     
-    class Move : NSObject, NSCoding {
-        let index : Int
-        let oldValue : Int?
-        let newValue : Int?
-        
-        init(_ index : Int, _ oldValue : Int?, _ newValue : Int?) {
-            self.index = index
-            self.oldValue = oldValue
-            self.newValue = newValue
-            super.init()
-        }
-        
-        required init?(coder aDecoder: NSCoder) {
-            index = aDecoder.decodeInteger(forKey: PropertyKeys.index)
-            oldValue = aDecoder.decodeObject(forKey: PropertyKeys.oldValue) as? Int
-            newValue = aDecoder.decodeObject(forKey : PropertyKeys.newValue ) as? Int
-        }
-        
-        func encode(with aCoder: NSCoder) {
-            aCoder.encode(index, forKey : PropertyKeys.index)
-            aCoder.encode(oldValue, forKey : PropertyKeys.oldValue)
-            aCoder.encode(newValue, forKey : PropertyKeys.newValue)
-        }
+    required init?(coder aDecoder: NSCoder) {
+        index = aDecoder.decodeInteger(forKey: PropertyKeys.index)
+        oldValue = aDecoder.decodeObject(forKey: PropertyKeys.oldValue) as? Int
+        newValue = aDecoder.decodeObject(forKey : PropertyKeys.newValue ) as? Int
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(index, forKey : PropertyKeys.index)
+        aCoder.encode(oldValue, forKey : PropertyKeys.oldValue)
+        aCoder.encode(newValue, forKey : PropertyKeys.newValue)
     }
 }

@@ -54,12 +54,12 @@ final class ViewController: UIViewController {
                 .UIApplicationDidBecomeActive, object: app)
     }
     // Gets called when app goes into background
-    func applicationWillResignActive(notification : NSNotification) {
+    @objc func applicationWillResignActive(notification : NSNotification) {
         //print("App resigned being active.")
         gameState.stopTimer()
     }
     
-    func applicationDidBecomeActive(notification : NSNotification) {
+    @objc func applicationDidBecomeActive(notification : NSNotification) {
         //print("App entered foreground.")
         gameState.startTimer()
     }
@@ -138,7 +138,7 @@ extension ViewController {
         super.touchesBegan(touches, with: event)
     }
     // Method selected by Undo button
-    func undoLastMove() {
+    @objc func undoLastMove() {
         // If there are any moves to undo, get the cell index of that move
         if let index = gameState.undoLastMove() {
             boardUI.deselectAllCells()
@@ -150,11 +150,11 @@ extension ViewController {
         // Grayed-out button with no action if there are no moves to undo. Blue otherwise.
         if(gameState.moveStackIsEmpty()) {
             let undoButton = UIBarButtonItem(title: "Undo", style: .plain, target: self, action: nil)
-            undoButton.setTitleTextAttributes([NSForegroundColorAttributeName : UIColor.gray], for: .normal)
+            undoButton.setTitleTextAttributes([NSAttributedStringKey.foregroundColor : UIColor.gray], for: .normal)
             navController?.topViewController?.navigationItem.rightBarButtonItem = undoButton
         } else {
             let undoButton = UIBarButtonItem(title: "Undo", style: .plain, target: self, action: #selector(undoLastMove))
-            undoButton.setTitleTextAttributes([NSForegroundColorAttributeName : UIColor.blue], for: .normal)
+            undoButton.setTitleTextAttributes([NSAttributedStringKey.foregroundColor : UIColor.blue], for: .normal)
             navController?.topViewController?.navigationItem.rightBarButtonItem = undoButton
         }
     }
@@ -232,8 +232,6 @@ extension ViewController {
         scrollView.bouncesZoom = false
         scrollView.delegate = self
         scrollView.backgroundColor = AppColors.gameBackground
-        
-        
     }
     
     func setupConstraints() {
