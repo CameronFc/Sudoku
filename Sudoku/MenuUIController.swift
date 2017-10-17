@@ -42,16 +42,12 @@ class MenuUIController {
     // Loading from old game
     func transitionIfLoaded() {
         
-        guard let navController = delegate?.navController, let viewController = delegate?.viewController else {
-            return
-        }
         if(wasLoaded) {
-            //toggleResumeButton(enabled: true)
-            if(navController.viewControllers.contains(viewController)) {
-                navController.show(viewController, sender: self)
-            } else {
-                navController.pushViewController(viewController, animated: false)
+            if(delegate?.gameState.finished ?? true) { // Assume finished
+                // Don't bother to transition if the loaded game is finished!
+                return
             }
+            transitionToGame()
         } else {
             print("Did not load from a previous game.")
         }
@@ -63,10 +59,8 @@ class MenuUIController {
         guard let viewController = delegate?.viewController, let navController = delegate?.navController else {
             return
         }
-        //if(delegate?.navController.viewControllers.contains(viewController) ?? false) {
-            //navController.show(viewController, sender: self)
-        //} else {
-            navController.pushViewController(viewController, animated: false)
-        //}
+        let backButton = UIBarButtonItem(title: "Menu", style: .plain, target: nil, action: nil)
+        delegate?.navigationItem.backBarButtonItem = backButton
+        navController.pushViewController(viewController, animated: false)
     }
 }
