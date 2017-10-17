@@ -17,13 +17,7 @@ class MenuUIController {
     weak var delegate : MenuViewController?
     
     var wasLoaded = false // was loaded from Disk
-    
-    @objc func segueBackToGame() {
-        if let viewController = delegate?.viewController {
-            delegate?.navController?.show(viewController, sender: self)
-        }
-    }
-    
+
     func toggleResumeButton(enabled : Bool) {
         // MARK : Dirty hack. This will only change the status of the current nav bar right item,
         // not necessarily the undo button.
@@ -54,7 +48,7 @@ class MenuUIController {
         
     }
     
-    func transitionToGame() {
+    @objc func transitionToGame() {
         
         guard let viewController = delegate?.viewController, let navController = delegate?.navController else {
             return

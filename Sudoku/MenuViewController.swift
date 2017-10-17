@@ -73,23 +73,29 @@ class MenuViewController: UIViewController {
 // Handling touch events
 extension MenuViewController {
     
-    @objc func handleDifficultyButtonPress(sender : UIButton) {
-        var difficulty = Difficulty.superEasy
-        switch(sender.tag) {
-        case 0 :
-            difficulty = .superEasy
-        case 1 :
-            difficulty = .easy
-        case 2 :
-            difficulty = .normal
-        case 3 :
-            difficulty = .hard
-        default :
-            assertionFailure("Something bad went wrong with the buttons!")
-        }
-        
+    func handleDifficultyButtonPress(difficulty : Difficulty) {
         gameState.startNewGame(at: difficulty)
         menuUI.transitionToGame()
+    }
+    // Displays the alertview allowing user to select new game difficulty
+    @objc func showGameDifficulties() {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Super Easy", style: .default) { [weak self] _ in
+            self?.handleDifficultyButtonPress(difficulty: .superEasy)
+        })
+        alert.addAction(UIAlertAction(title: "Easy", style: .default) { [weak self] _ in
+            self?.handleDifficultyButtonPress(difficulty: .easy)
+        })
+        alert.addAction(UIAlertAction(title: "Normal", style: .default) { [weak self] _ in
+            self?.handleDifficultyButtonPress(difficulty: .normal)
+        })
+        alert.addAction(UIAlertAction(title: "Hard", style: .default) { [weak self] _ in
+            self?.handleDifficultyButtonPress(difficulty: .hard)
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            alert.dismiss(animated: true, completion: nil)
+        })
+        present(alert, animated: true)
     }
 }
 // View initalization
@@ -118,32 +124,15 @@ extension MenuViewController {
         gameMenu.spacing = 8.0
         gameMenu.backgroundColor = AppColors.shouldNotBeSeen
         
-        let difficulties = [Difficulty.superEasy, .easy, .normal, .hard]
-        for difficulty in difficulties {
-            let newGameButton = UIButton(type : .system)
-            newGameButton.setTitle(difficulty.rawValue, for: .normal)
-            newGameButton.backgroundColor = AppColors.normalCellBackground
-            newGameButton.layer.cornerRadius = GameConstants.menuButtonCornerRadius
-            newGameButton.layer.borderWidth = GameConstants.menuButtonBorderWidth
-            // Easiest way to attach data to a button press. 
-            // We could use a collectionView or tableView instead.
-            var tag = 0
-            switch(difficulty) {
-            case .superEasy :
-                tag = 0
-            case .easy :
-                tag = 1
-            case .normal :
-                tag = 2
-            case .hard :
-                tag = 3
-            }
-            newGameButton.tag = tag
-            newGameButton.addTarget(self, action: #selector(self.handleDifficultyButtonPress), for: .touchUpInside)
-            gameMenu.addArrangedSubview(newGameButton)
-        }
+        let newGameButton = UIButton(type : .system)
+        newGameButton.setTitle("New Game", for: .normal)
+        newGameButton.backgroundColor = AppColors.normalCellBackground
+        newGameButton.layer.cornerRadius = GameConstants.menuButtonCornerRadius
+        newGameButton.layer.borderWidth = GameConstants.menuButtonBorderWidth
+        newGameButton.addTarget(self, action: #selector(self.showGameDifficulties), for: .touchUpInside)
+        gameMenu.addArrangedSubview(newGameButton)
         // Add the resume button
-        let existingGameButton = UIBarButtonItem(title: "Resume", style: .done, target: menuUI, action: #selector(menuUI.segueBackToGame))
+        let existingGameButton = UIBarButtonItem(title: "Resume", style: .done, target: menuUI, action: #selector(menuUI.transitionToGame))
         navController?.topViewController?.navigationItem.rightBarButtonItem = existingGameButton
         menuUI.toggleResumeButton(enabled: false)
     }
