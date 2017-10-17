@@ -24,7 +24,6 @@ final class BoardViewController: UICollectionViewController {
     var boardUI : BoardUIController
     
     init(gameState : GameState, pickerUI : PickerUIController, boardUI : BoardUIController) {
-        
         self.pickerUI = pickerUI
         self.gameState = gameState
         self.boardUI = boardUI

@@ -33,4 +33,5 @@ struct AppColors {
     static let menuBackground = UIColor.white
     static let gameBackground = CustomColors.skyBlue
     static let shouldNotBeSeen = UIColor.magenta
+    static let transparent = UIColor.clear
 }

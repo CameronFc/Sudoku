@@ -76,6 +76,7 @@ extension BoardViewController {
         
         boardUI.deselectAllCells()
         
+
         if let selectedCell = collectionView.cellForItem(at: indexPath) as? GridCell {
             
             boardUI.selectCell(at: indexPath.row)

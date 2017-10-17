@@ -38,7 +38,9 @@ class NumberPickerViewController: UICollectionViewController {
         super.viewDidLoad()
         
         self.collectionView?.register(GridCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        // Scrolling must be disabled, otherwise the picker cells will be displaced by the nav bar.
         collectionView?.reloadData()
+        collectionView?.isScrollEnabled = false
         setupSubviews()
     }
     
@@ -49,7 +51,7 @@ class NumberPickerViewController: UICollectionViewController {
         // Needs to be same color as cell border
         collectionView?.backgroundColor = AppColors.cellBorder
         
-        view.backgroundColor = AppColors.shouldNotBeSeen
+        view.backgroundColor = AppColors.transparent
     }
 }
 
