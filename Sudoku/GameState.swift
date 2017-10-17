@@ -160,8 +160,11 @@ extension GameState {
 extension GameState {
     
     func startTimer() {
-        gameTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
-        RunLoop.current.add(gameTimer!, forMode: .commonModes)
+        // Don't start a new timer if one exists already.
+        if(gameTimer != nil) {
+            gameTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+            RunLoop.current.add(gameTimer!, forMode: .commonModes)
+        }
     }
     
     @objc func updateTimer() {
@@ -172,6 +175,7 @@ extension GameState {
     
     func stopTimer() {
         gameTimer?.invalidate()
+        gameTimer = nil
     }
     
     func notifyTimerSubs() {

@@ -15,6 +15,8 @@ class MenuViewController: UIViewController {
     
     var navController : UINavigationController?
     
+    let menuUI : MenuUIController
+    
     var gameState : GameState! // Mark: Forced unwrapping
     
     var viewController : ViewController?
@@ -23,18 +25,19 @@ class MenuViewController: UIViewController {
     
     var gameMenu : UIStackView!
     
-    var wasLoaded = false // was loaded from Disk
-    
     init() {
+        menuUI = MenuUIController()
         super.init(nibName: nil, bundle: nil)
         // Mark : Hack - this is kinda backwards, set properties first..
         if let gameState = NSKeyedUnarchiver.unarchiveObject(withFile: GameState.ArchiveURL.path) as? GameState {
-            wasLoaded = true
+            menuUI.wasLoaded = true
             self.gameState = gameState
         } else {
-            wasLoaded = false
+            menuUI.wasLoaded = false
             self.gameState = GameState()
         }
+        
+        menuUI.delegate = self
     }
     
     @available (*, unavailable)
@@ -53,25 +56,19 @@ class MenuViewController: UIViewController {
         
         setupSubviews()
         setupConstraints()
-        transitionIfLoaded()
+        menuUI.transitionIfLoaded()
     }
     
-    @objc func segueBackToGame() {
-        if let viewController = viewController {
-            navController?.show(viewController, sender: self)
-        }
-    }
-    
-    func toggleResumeButton(enabled : Bool) {
-        
-        if(enabled) {
-            // Add the resume button after clicking one of the difficulty buttons
-            let existingGameButton = UIBarButtonItem(title: "Resume", style: .done, target: self, action: #selector(segueBackToGame))
-            navController?.topViewController?.navigationItem.rightBarButtonItem = existingGameButton
+    override func viewWillAppear(_ animated: Bool) {
+        //print("Menu view will appear.")
+        if(gameState.finished) {
+            menuUI.toggleResumeButton(enabled: false)
         } else {
-            navController?.topViewController?.navigationItem.rightBarButtonItem = nil
+            menuUI.toggleResumeButton(enabled: true)
         }
+        super.viewDidAppear(animated)
     }
+
 }
 // Handling touch events
 extension MenuViewController {
@@ -92,18 +89,7 @@ extension MenuViewController {
         }
         
         gameState.startNewGame(at: difficulty)
-        
-        guard let navController = navController, let viewController = viewController else {
-            return
-        }
-        
-        toggleResumeButton(enabled: true)
-        
-        if(navController.viewControllers.contains(viewController)) {
-            navController.show(viewController, sender: self)
-        } else {
-            navController.pushViewController(viewController, animated: false)
-        }
+        menuUI.transitionToGame()
     }
 }
 // View initalization
@@ -156,6 +142,10 @@ extension MenuViewController {
             newGameButton.addTarget(self, action: #selector(self.handleDifficultyButtonPress), for: .touchUpInside)
             gameMenu.addArrangedSubview(newGameButton)
         }
+        // Add the resume button
+        let existingGameButton = UIBarButtonItem(title: "Resume", style: .done, target: menuUI, action: #selector(menuUI.segueBackToGame))
+        navController?.topViewController?.navigationItem.rightBarButtonItem = existingGameButton
+        menuUI.toggleResumeButton(enabled: false)
     }
     
     func setupConstraints() {
@@ -176,24 +166,4 @@ extension MenuViewController {
         ])
     }
 }
-// Loading from old game
-extension MenuViewController {
 
-    func transitionIfLoaded() {
-        
-        guard let navController = navController, let viewController = viewController else {
-            return
-        }
-        if(wasLoaded) {
-            toggleResumeButton(enabled: true)
-            if(navController.viewControllers.contains(viewController)) {
-                navController.show(viewController, sender: self)
-            } else {
-                navController.pushViewController(viewController, animated: false)
-            }
-        } else {
-            print("Was not loaded!! :(")
-        }
-        
-    }
-}

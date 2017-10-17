@@ -94,6 +94,11 @@ final class ViewController: UIViewController {
         gameState.startTimer()
         super.viewDidAppear(animated)
     }
+    // Make sure the undo button is in it's correct state when we switch view controllers
+    override func viewWillAppear(_ animated: Bool) {
+        autoSetUndoButton()
+        super.viewWillAppear(animated)
+    }
 }
 //ScrollView zooming and dragging.
 extension ViewController : UIScrollViewDelegate {
@@ -149,13 +154,15 @@ extension ViewController {
     func autoSetUndoButton() {
         // Grayed-out button with no action if there are no moves to undo. Blue otherwise.
         if(gameState.moveStackIsEmpty()) {
-            let undoButton = UIBarButtonItem(title: "Undo", style: .plain, target: self, action: nil)
-            undoButton.setTitleTextAttributes([NSAttributedStringKey.foregroundColor : UIColor.gray], for: .normal)
-            navController?.topViewController?.navigationItem.rightBarButtonItem = undoButton
+            if let undoButton = navController?.topViewController?.navigationItem.rightBarButtonItem {
+                undoButton.isEnabled = false
+                //print("Disabling undo button. it has title \(undoButton.title)")
+            }
         } else {
-            let undoButton = UIBarButtonItem(title: "Undo", style: .plain, target: self, action: #selector(undoLastMove))
-            undoButton.setTitleTextAttributes([NSAttributedStringKey.foregroundColor : UIColor.blue], for: .normal)
-            navController?.topViewController?.navigationItem.rightBarButtonItem = undoButton
+            if let undoButton = navController?.topViewController?.navigationItem.rightBarButtonItem {
+                undoButton.isEnabled = true
+                //print("Enabling undo button. it has title \(undoButton.title)")
+            }
         }
     }
 }
@@ -232,6 +239,9 @@ extension ViewController {
         scrollView.bouncesZoom = false
         scrollView.delegate = self
         scrollView.backgroundColor = AppColors.gameBackground
+        
+        let undoButton = UIBarButtonItem(title: "Undo", style: .plain, target: self, action: #selector(undoLastMove))
+        navigationController?.topViewController?.navigationItem.rightBarButtonItem = undoButton
     }
     
     func setupConstraints() {
