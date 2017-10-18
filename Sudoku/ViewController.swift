@@ -154,15 +154,9 @@ extension ViewController {
     func autoSetUndoButton() {
         // Grayed-out button with no action if there are no moves to undo. Blue otherwise.
         if(gameState.moveStackIsEmpty()) {
-            if let undoButton = navController?.topViewController?.navigationItem.rightBarButtonItem {
-                undoButton.isEnabled = false
-                //print("Disabling undo button. it has title \(undoButton.title)")
-            }
+            navigationItem.rightBarButtonItem?.isEnabled = false
         } else {
-            if let undoButton = navController?.topViewController?.navigationItem.rightBarButtonItem {
-                undoButton.isEnabled = true
-                //print("Enabling undo button. it has title \(undoButton.title)")
-            }
+            navigationItem.rightBarButtonItem?.isEnabled = true
         }
     }
 }

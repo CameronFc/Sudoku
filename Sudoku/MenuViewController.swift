@@ -149,8 +149,8 @@ extension MenuViewController {
         
         gameMenu.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
+            gameMenu.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: -50.0),
             gameMenu.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            gameMenu.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             gameMenu.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier : 0.5)
         ])
     }

@@ -19,18 +19,10 @@ class MenuUIController {
     var wasLoaded = false // was loaded from Disk
 
     func toggleResumeButton(enabled : Bool) {
-        // MARK : Dirty hack. This will only change the status of the current nav bar right item,
-        // not necessarily the undo button.
         if(enabled) {
-            if let button = delegate?.navController?.topViewController?.navigationItem.rightBarButtonItem {
-                button.isEnabled = true
-                //print("Enabling the resume button")
-            }
+            delegate?.navigationItem.rightBarButtonItem?.isEnabled = true
         } else {
-            if let button = delegate?.navController?.topViewController?.navigationItem.rightBarButtonItem {
-                button.isEnabled = false
-                //print("Disabling the resume button")
-            }
+            delegate?.navigationItem.rightBarButtonItem?.isEnabled = false
         }
     }
     // Loading from old game

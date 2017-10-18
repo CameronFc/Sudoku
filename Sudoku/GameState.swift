@@ -65,7 +65,6 @@ class GameState : NSObject {
         self.moveStack = moveStack
         // We can't easily save the subscriber list because we are going to
         // remake those viewControllers anyway - so start with an empty subscriber list on load.
-        
         super.init()
     }
 }
@@ -161,7 +160,7 @@ extension GameState {
     
     func startTimer() {
         // Don't start a new timer if one exists already.
-        if(gameTimer != nil) {
+        if(gameTimer == nil) {
             gameTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
             RunLoop.current.add(gameTimer!, forMode: .commonModes)
         }
