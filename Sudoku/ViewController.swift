@@ -178,6 +178,7 @@ extension ViewController : GameStateDelegate {
             let message = "You have completed the game in \(timeString). Congratulations!"
             let alert = UIAlertController(title: "You Win!", message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+                alert.dismiss(animated: true, completion: nil)
                 self.navController?.popToRootViewController(animated: true)
             })
             present(alert, animated: true)
