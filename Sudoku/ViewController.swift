@@ -43,6 +43,7 @@ final class ViewController: UIViewController {
         setupConstraints()
         pickerUI.hidePicker(animated : false)
         autoSetUndoButton()
+        autoChangeNavBarTransparency()
         handleTimerUpdate()
         
         let app = UIApplication.shared
@@ -86,18 +87,33 @@ final class ViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         // Start the timer when we see the game.
-        gameState.stopTimer()
         super.viewWillDisappear(animated)
+        gameState.stopTimer()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        gameState.startTimer()
         super.viewDidAppear(animated)
+        gameState.startTimer()
     }
     // Make sure the undo button is in it's correct state when we switch view controllers
     override func viewWillAppear(_ animated: Bool) {
-        autoSetUndoButton()
         super.viewWillAppear(animated)
+        autoSetUndoButton()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        autoChangeNavBarTransparency()
+    }
+    
+    func autoChangeNavBarTransparency() {
+        if UIDevice.current.orientation.isLandscape {
+            navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+            navigationController?.navigationBar.shadowImage = UIImage()
+        } else {
+            navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+            navigationController?.navigationBar.shadowImage = nil
+        }
     }
 }
 //ScrollView zooming and dragging.
