@@ -46,7 +46,7 @@ class GridCell: UICollectionViewCell {
         label.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         label.setNeedsUpdateConstraints()
         label.textAlignment = .center
-        self.layer.borderWidth = 1.0
+        self.layer.borderWidth = GameConstants.cellBorderWidth
         backgroundColor = AppColors.shouldNotBeSeen
         
         leftBorder = UIView()

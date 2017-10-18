@@ -14,15 +14,17 @@ import Foundation
 import UIKit
 
 struct GameConstants {
-    static private let borderSize = 1.0
     static private let numberPickerBorderWidth = 1.0
     static private let numberPickerCellWidth = 50.0
-    static let extraCellSize = 1.0
-    static let boardCellSize = 34.0
-    static let totalBoardSize = CGFloat(boardCellSize * 9 + borderSize * 2 + 6 * extraCellSize)
+    static let extraCellSize = 1.0 // How much a cell contributes to it's region border, if it has one
+    static let boardCellSize = 34.0 // Internal size of a cell (does not include borders)
+    // The game board is 9 cell widths across. 6 of these cells are extra-sized to account for
+    // large borders on the regions and board edges.
+    static let totalBoardSize = CGFloat(boardCellSize * 9 + 6 * extraCellSize) + (boardViewBorderWidth * 2)
     static let totalPickerWidth = CGFloat(3 * numberPickerCellWidth + 2 * numberPickerBorderWidth)
+    static let cellBorderWidth = CGFloat(1.0) // Default cell border width.
     
-    static let boardViewBorderWidth : CGFloat = 1.0
+    static let boardViewBorderWidth : CGFloat = 2.0
     static let boardViewCornerRadius : CGFloat = 2.0
     
     static let pickerViewBorderWidth : CGFloat = 1.0

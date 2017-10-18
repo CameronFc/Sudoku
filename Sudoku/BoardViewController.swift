@@ -80,7 +80,8 @@ extension BoardViewController : UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(1.0, 1.0, 1.0, 1.0)
+        let k = GameConstants.boardViewBorderWidth
+        return UIEdgeInsetsMake(k,k,k,k)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
