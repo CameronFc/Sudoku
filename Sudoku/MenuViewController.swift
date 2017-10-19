@@ -57,16 +57,63 @@ class MenuViewController: UIViewController {
         setupSubviews()
         setupConstraints()
         menuUI.transitionIfLoaded()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         //print("Menu view will appear.")
         if(gameState.finished) {
             menuUI.toggleResumeButton(enabled: false)
         } else {
             menuUI.toggleResumeButton(enabled: true)
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        for i in 0..<10 {
+            let numberLabel = UILabel()
+            numberLabel.text = "\(i)"
+            numberLabel.font = UIFont.fromPreset(GameConstants.normalCellText)
+            numberLabel.textAlignment = .center
+            
+            view.addSubview(numberLabel)
+            numberLabel.frame = CGRect(x: view.bounds.width / 2, y: view.bounds.height / 2, width: 20.0, height: 20.0)
+            numberLabel.bounds = CGRect(x: -10.0, y: -10.0, width: 20.0, height: 20.0)
+
+            let rx = (Double(arc4random_uniform(1000)) - 500.0) / 1000.0
+            let ry = (Double(arc4random_uniform(1000)) - 500.0) / 1000.0
+            let xvec = CGFloat(rx) * (view.bounds.width)
+            let yvec = CGFloat(ry) * (view.bounds.height)
+            
+            numberLabel.backgroundColor = .magenta
+            // MARK : DIRTY HACK
+            func inline () {
+                UIView.animate(withDuration: 1.0, delay: 0.0, options : [.curveLinear], animations: {
+                    let rx = CGFloat(Float(arc4random()) / Float(UINT32_MAX))
+                    let ry = CGFloat(Float(arc4random()) / Float(UINT32_MAX))
+                    let rz = CGFloat(Float(arc4random()) / Float(UINT32_MAX))
+                    let transform = CATransform3DRotate(numberLabel.layer.transform, (3.14), rx, ry, rz)
+                    numberLabel.layer.transform = transform
+                    numberLabel.center.y += 50
+                }, completion : { [weak self] (result) in
+                    if let frame = self?.view.frame {
+                            if(numberLabel.center.y > frame.height) {
+                                numberLabel.center.y -= (frame.height * 1.2)
+                            }
+                    }
+                    inline()
+                })
+            }
+            inline()
+            UIView.animate(withDuration: 1.0, animations: {
+                numberLabel.center.x -= xvec
+                numberLabel.center.y -= yvec
+            })
+        }
+ 
     }
 
 }
